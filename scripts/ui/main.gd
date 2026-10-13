@@ -154,7 +154,12 @@ func build_ui() -> void:
  body.add_child(side_panel)
  var side := VBoxContainer.new()
  side.add_theme_constant_override("separation",14)
- side_panel.add_child(side)
+ var side_scroll := ScrollContainer.new()
+ side_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+ side_panel.add_child(side_scroll)
+ side.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ side.custom_minimum_size.x = 270
+ side_scroll.add_child(side)
  side.add_child(label("慢慢工作，轻轻收获",11,true))
  status_title = label("准备出发",23)
  side.add_child(status_title)
@@ -390,6 +395,10 @@ func render_collection() -> void:
   chosen.disabled = Game.blocked
 
 func ui_smoke() -> void:
+ await get_tree().process_frame
+ await get_tree().process_frame
+ var layout_root: Control = get_child(0).get_child(0)
+ assert(layout_root.get_combined_minimum_size().y + 48 <= get_window().size.y)
  # Isolated in-memory UI check; no save writes or Windows sampling.
  Game.state = Game.model.fresh_state()
  refresh()
