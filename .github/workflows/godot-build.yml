@@ -19,32 +19,13 @@ jobs:
           include-templates: true
       - name: Import and verify Godot project
         shell: pwsh
-        run: |
-          $godotExe = Join-Path $env:USERPROFILE 'godot/Godot_v4.6.1-stable_win64_console.exe'
-          function Invoke-GodotCheck([string[]]$GodotArgs) {
-            $output = & $godotExe @GodotArgs 2>&1
-            $code = $LASTEXITCODE
-            $output | ForEach-Object { Write-Host $_ }
-            if ($code -ne 0 -or ($output -join "`n") -match '(?m)^(SCRIPT ERROR:|ERROR:)') {
-              throw "Godot validation failed ($code)"
-            }
-          }
-          Invoke-GodotCheck -GodotArgs @('--headless','--editor','--import','--quit')
-          Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_tests.gd','--','--tests')
-          Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke')
+        run: ./scripts/ci_verify.ps1
       - name: Test Windows focus helper
         shell: powershell
         run: ./tests/windows_focus_smoke.ps1
       - name: Export Windows executable
         shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force build/windows | Out-Null
-          $godotExe = Join-Path $env:USERPROFILE 'godot/Godot_v4.6.1-stable_win64_console.exe'
-          $output = & $godotExe --headless --export-release 'Windows Desktop' build/windows/DesktopFishing.exe 2>&1
-          $code = $LASTEXITCODE
-          $output | ForEach-Object { Write-Host $_ }
-          if ($code -ne 0 -or ($output -join "`n") -match '(?m)^(SCRIPT ERROR:|ERROR:)') { throw 'Export failed' }
-          Copy-Item README.md build/windows/README.md
+        run: ./scripts/ci_verify.ps1 -ExportOnly
       - name: Smoke-test exported game
         shell: pwsh
         run: |
