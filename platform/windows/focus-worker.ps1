@@ -13,6 +13,7 @@ public static class FishingFocus {
  [StructLayout(LayoutKind.Sequential)] public struct LASTINPUTINFO { public uint cbSize; public uint dwTime; }
  [DllImport("user32.dll")] static extern bool GetLastInputInfo(ref LASTINPUTINFO info);
  [DllImport("kernel32.dll")] static extern uint GetTickCount();
+ [DllImport("kernel32.dll")] public static extern ulong GetTickCount64();
  [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
  [DllImport("user32.dll")] static extern uint GetWindowThreadProcessId(IntPtr window, out uint process);
  [DllImport("user32.dll", SetLastError=true)] static extern IntPtr OpenInputDesktop(uint flags, bool inherit, uint access);
@@ -51,19 +52,31 @@ public static class FishingFocus {
 }
 '@
 $sequence = 0
+$epoch = 0
+$previousTick = [FishingFocus]::GetTickCount64()
+$previousState = ""
 $encoding = New-Object System.Text.UTF8Encoding($false)
 try {
  while ($null -ne (Get-Process -Id $ParentProcessId -ErrorAction SilentlyContinue)) {
   $sequence++
   $idle = [FishingFocus]::IdleSeconds()
+  $foreground = [FishingFocus]::Foreground($ParentProcessId)
+  $locked = [FishingFocus]::Locked()
+  $tick = [FishingFocus]::GetTickCount64()
+  # Preserve observed interruptions even when Godot misses an intermediate sample.
+  $signature = "$foreground/$locked/$($idle -lt 0)/$($idle -gt 300)/$($idle -gt 600)/$($idle -gt 1200)"
+  if ($signature -ne $previousState -or ($tick - $previousTick) -gt 2000) { $epoch++ }
+  $previousState = $signature
+  $previousTick = $tick
   $state = @{
    token = $Token
    sequence = $sequence
+   epoch = $epoch
    sampled_at = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() / 1000.0
    supported = $idle -ge 0
    idle_seconds = $idle
-   foreground = [FishingFocus]::Foreground($ParentProcessId)
-   locked = [FishingFocus]::Locked()
+   foreground = $foreground
+   locked = $locked
   }
   $json = $state | ConvertTo-Json -Compress
   try {

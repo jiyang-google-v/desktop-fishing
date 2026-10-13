@@ -6,7 +6,7 @@ const STATUS := {
  "ready":["准备出发","放钩后切换到其他工作窗口，鱼钩会随专注慢慢下潜。"],
  "foreground":["暂歇片刻","游戏在前台，进度已保留。切到其他窗口后继续。"],
  "working":["正在探索深海","安心工作，休息时回来收杆，揭晓这次相遇。"],
- "idle":["等待你回来","键鼠空闲超过 10 分钟，已暂停并保留深度。"],
+ "idle":["等待你回来","键鼠空闲已超时，已暂停并保留深度。"],
  "locked":["海面暂时安静","锁屏、断开会话或安全桌面期间暂停计时。"],
  "unsupported":["专注检测暂不可用","检测失败时保守暂停；专注计时仅支持 Windows。"],
  "pending":["遇见一位新朋友","收进鱼缸或放生后，即可再次放钩。"],
@@ -26,6 +26,9 @@ var book_button: Button
 var tank_button: Button
 var catch_box: VBoxContainer
 var notice: Label
+var idle_select: OptionButton
+var saved_label: Label
+var diagnostic_dialog: AcceptDialog
 var collection: Window
 var collection_title: Label
 var collection_description: Label
@@ -197,16 +200,47 @@ func build_ui() -> void:
  var side_spacer := Control.new()
  side_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
  side.add_child(side_spacer)
- paragraph("游戏前台暂停。后台且最近 10 分钟有键鼠操作时下潜。锁屏、休眠与退出期间不累计。",side,11)
+ paragraph("空闲宽限",side,11)
+ idle_select = OptionButton.new()
+ for minutes in [5,10,20]:
+  idle_select.add_item("%d 分钟" % minutes,minutes)
+ side.add_child(idle_select)
+ idle_select.item_selected.connect(func(index): handle(Game.set_idle_minutes(idle_select.get_item_id(index))))
+ saved_label = paragraph("",side,11)
+ var maintenance := HBoxContainer.new()
+ side.add_child(maintenance)
+ button("检测与诊断",maintenance,show_diagnostics)
+ button("保存退出",maintenance,Game.request_exit)
+ paragraph("游戏前台暂停。后台且键鼠空闲未超时才下潜。锁屏、休眠与退出期间不累计。F8 保存退出（游戏窗口内）。",side,11)
  var footer := HBoxContainer.new()
  root.add_child(footer)
- var version := label("桌面钓鱼 · 0.3.0 Godot 功能试玩版",11,true)
+ var version := label("桌面钓鱼 · 0.3.1 Godot 功能试玩版",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
  footer.add_child(label("不记录按键内容或窗口标题",11,true))
  build_dialogs()
 
+func _input(event: InputEvent) -> void:
+ if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F8:
+  Game.request_exit()
+
+func show_diagnostics() -> void:
+ diagnostic_dialog.dialog_text = Game.diagnostic_text() + "\n\n检测异常会自动重试；恢复后不补计中断时间。"
+ diagnostic_dialog.popup_centered(Vector2i(460,360))
+
 func build_dialogs() -> void:
+ diagnostic_dialog = AcceptDialog.new()
+ diagnostic_dialog.title = "运行诊断"
+ diagnostic_dialog.ok_button_text = "关闭"
+ diagnostic_dialog.add_button("复制诊断",false,"copy")
+ diagnostic_dialog.add_button("重试检测",false,"retry")
+ diagnostic_dialog.custom_action.connect(func(action):
+  if action == "copy":
+   DisplayServer.clipboard_set(Game.diagnostic_text())
+  elif action == "retry":
+   Game.retry_detection()
+   show_diagnostics())
+ add_child(diagnostic_dialog)
  collection = Window.new()
  collection.title = "收藏"
  collection.theme = theme
@@ -280,6 +314,11 @@ func refresh() -> void:
  var status: Array = STATUS.get(reason,STATUS.ready)
  status_title.text = status[0]
  status_text.text = status[1]
+ if reason == "idle":
+  status_text.text = "键鼠空闲超过 %d 分钟，已暂停并保留深度。" % s.idle_minutes
+ idle_select.select(idle_select.get_item_index(s.idle_minutes))
+ idle_select.disabled = Game.blocked
+ saved_label.text = "最近保存：" + Game.last_saved + (" · 保存失败" if Game.save_failed else "")
  var depth: float = Game.model.depth_for(s.focus_seconds)
  depth_text.text = "%.1f 米" % depth
  time_text.text = "%02d:%02d" % [int(s.focus_seconds)/60,int(s.focus_seconds)%60]
@@ -443,5 +482,18 @@ func ui_smoke() -> void:
  assert(not collection.visible)
  for suffix in ["", ".bak", ".tmp"]:
   DirAccess.remove_absolute(ProjectSettings.globalize_path(test_path + suffix))
+ collection.hide()
+ idle_select.select(idle_select.get_item_index(20))
+ idle_select.item_selected.emit(idle_select.selected)
+ assert(Game.state.idle_minutes == 20)
+ show_diagnostics()
+ assert(diagnostic_dialog.visible)
+ assert(diagnostic_dialog.dialog_text.contains("20 分钟"))
+ diagnostic_dialog.hide()
+ for suffix in ["", ".bak", ".tmp"]:
+  DirAccess.remove_absolute(ProjectSettings.globalize_path(test_path + suffix))
+ if "--capture-ui" in OS.get_cmdline_user_args():
+  await RenderingServer.frame_post_draw
+  get_viewport().get_texture().get_image().save_png("user://stage1-ui.png")
  print("Godot UI smoke: cast, reel, keep, book, full-tank cancel and replacement passed")
  get_tree().quit()

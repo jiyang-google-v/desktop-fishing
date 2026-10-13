@@ -1,5 +1,6 @@
 extends RefCounted
 
+const Policy = preload("res://scripts/core/focus_policy.gd")
 const MAX_SECONDS := 3000.0
 const MAX_DEPTH := 200.0
 const IDLE_SECONDS := 600.0
@@ -15,16 +16,16 @@ func new_id() -> String:
  return Crypto.new().generate_random_bytes(16).hex_encode()
 
 func fresh_state() -> Dictionary:
- return {"version":3,"cast":false,"session_id":"","focus_seconds":0.0,"encyclopedia":{},"aquarium":[],"pending_catch":{}}
+ return {"version":3,"idle_minutes":10,"cast":false,"session_id":"","focus_seconds":0.0,"encyclopedia":{},"aquarium":[],"pending_catch":{}}
 
 func depth_for(seconds: float) -> float:
  return clampf(seconds * 4.0 / 60.0,0.0,MAX_DEPTH)
 
-func can_accrue(status: Dictionary) -> bool:
+func can_accrue(status: Dictionary, idle_minutes: int = 10) -> bool:
  var idle = status.get("idle_seconds",-1.0)
  if not (idle is float or idle is int):
   return false
- return status.get("supported",false) and not status.get("foreground",true) and not status.get("locked",true) and is_finite(float(idle)) and idle >= 0 and idle <= IDLE_SECONDS
+ return status.get("supported",false) and not status.get("foreground",true) and not status.get("locked",true) and is_finite(float(idle)) and idle >= 0 and idle <= Policy.idle_minutes(idle_minutes) * 60
 
 func eligible_fish(depth: float, night: bool) -> Array:
  return roster.filter(func(f): return depth >= f.minDepth and depth <= f.maxDepth and (f.time != "night" or night))
@@ -119,12 +120,23 @@ func clean_catch(value, camel_case: bool = false) -> Dictionary:
 func restore(data) -> Dictionary:
  if not data is Dictionary:
   return {"ok":false,"reason":"corrupt"}
+ if not data.has("version"):
+  return {"ok":false,"reason":"corrupt"}
  var raw_version = data.get("version",0)
  if not (raw_version is float or raw_version is int) or float(raw_version) not in [1.0,2.0,3.0]:
   return {"ok":false,"reason":"version"}
  var version: int = int(raw_version)
+ if version == 3:
+  for key in ["cast","session_id","focus_seconds","encyclopedia","aquarium","pending_catch"]:
+   if not data.has(key):
+    return {"ok":false,"reason":"corrupt"}
+  if not data.cast is bool or not data.session_id is String or not data.encyclopedia is Dictionary or not data.aquarium is Array or not data.pending_catch is Dictionary:
+   return {"ok":false,"reason":"corrupt"}
+  if not (data.focus_seconds is int or data.focus_seconds is float) or not is_finite(float(data.focus_seconds)):
+   return {"ok":false,"reason":"corrupt"}
  var camel: bool = version < 3
  var s: Dictionary = fresh_state()
+ s.idle_minutes = Policy.idle_minutes(data.get("idle_minutes",10))
  s.focus_seconds = finite_number(data.get("focusSeconds" if camel else "focus_seconds",0),MAX_SECONDS)
  var book = data.get("encyclopedia",{})
  if book is Dictionary:

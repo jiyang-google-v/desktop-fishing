@@ -1,6 +1,6 @@
 # Desktop Fishing · 桌面钓鱼
 
-**Godot 4.6.1 + GDScript，0.3.0 Windows 功能试玩版。** 当前工程已移除 Electron、Node.js 和网页 UI 实现。
+**Godot 4.6.1 + GDScript，0.3.1 Windows 功能试玩版。** 当前工程已移除 Electron、Node.js 和网页 UI 实现。
 
 ## 下载直接试玩
 
@@ -23,11 +23,20 @@ godot --path .
 手动放钩 → 切换到其他工作窗口 → 每有效专注分钟下潜 4 米 → 回来手动收杆 → 按深度/本地昼夜抽取鱼获 → 图鉴登记 → 收进精选鱼缸或放生。
 
 - 最大 200 米，14 个稳定生物 ID（其中水母/墨鱼为扩展种）。
-- 游戏前台、锁屏、远程会话断开、超过 10 分钟无键鼠输入及检测失败时暂停。
+- 游戏前台、锁屏、远程会话断开、超过所选空闲宽限（默认 10 分钟，可选 5/10/20 分钟）无键鼠输入及检测失败时暂停。
 - 最多 6 条精选鱼，每条都有独立 ID 和体长。满缸时选择替换并确认；取消保留原鱼和待安置鱼获。
 - 同一鱼获不能重复领取；未安置鱼获必须处理后再放钩。
 - 图鉴记录发现次数和最大体长。放生不删除图鉴。
 - 退出后恢复会话或待安置鱼获；退出、休眠间隔不补计。
+
+## 第一阶段稳定性版本
+
+- 检测失败、锁屏、前台和空闲分别显示暂停原因；查询进程异常退出或停止更新会自动重启，恢复时不补计。
+- 主界面可选择 5 / 10 / 20 分钟空闲宽限，设置与游戏进度一起保存。
+- “检测与诊断”提供最小状态、最近保存时间、复制诊断和手动重试。
+- “保存退出”、窗口关闭与游戏窗口内 F8 都先保存；保存失败取消退出并提示。F8 不是全局快捷键。
+- 损坏或不完整的当前存档可恢复备份，修复主存档时保留有效备份。未知版本保持保护状态。
+- [Windows 实机验收清单](docs/WINDOWS_STAGE1_ACCEPTANCE.md) 随下载包提供；真实锁屏、休眠和整日使用仍待验收。
 
 ## 工程结构
 
@@ -45,6 +54,7 @@ godot --path .
 godot --headless --editor --import --quit
 godot --headless --script res://tests/run_tests.gd -- --tests
 godot --headless --quit-after 180 -- --tests --ui-smoke
+godot --headless --script res://tests/run_windows_focus.gd -- --tests
 powershell -NoProfile -File tests/windows_focus_smoke.ps1
 ```
 

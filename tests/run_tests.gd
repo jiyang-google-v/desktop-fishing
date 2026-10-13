@@ -1,5 +1,7 @@
 extends SceneTree
 
+const Policy = preload("res://scripts/core/focus_policy.gd")
+const Sample = preload("res://scripts/core/focus_sample.gd")
 const Model = preload("res://scripts/core/fishing_model.gd")
 const Clock = preload("res://scripts/core/focus_clock.gd")
 const Store = preload("res://scripts/core/save_store.gd")
@@ -85,6 +87,57 @@ func run() -> void:
  check(clock.advance(1,1,true,7) == 0, "Repeated native sample does not accrue")
  check(clock.advance(1,1,true,8) == 0, "Require continuity after repeated sample")
  check(clock.advance(1,1,true,9) == 1, "New continuous samples resume")
+ check(clock.advance(1,1,true,2) == 0, "Native sequence rollback pauses")
+ check(clock.advance(1,1,true,3) == 0, "Rollback requires fresh continuity")
+ check(not m.restore({"version":3}).ok, "Incomplete current save is corrupt")
+ var game = root.get_node("Game")
+ game.state = m.fresh_state()
+ m.cast_line(game.state)
+ game.focus_status = {"supported":false,"foreground":true,"locked":true,"idle_seconds":-1}
+ check(game.pause_reason() == "unsupported", "Detection error is not hidden by foreground fallback")
+ var test_state: Dictionary = m.fresh_state()
+ m.cast_line(test_state)
+ var active := {"supported":true,"foreground":false,"locked":false,"idle_seconds":0}
+ for minutes in [5,10,20]:
+  test_state.idle_minutes = minutes
+  active.idle_seconds = minutes * 60
+  check(Policy.reason(test_state,active,false,false) == "working", "Idle exact boundary %d" % minutes)
+  active.idle_seconds += 0.1
+  check(Policy.reason(test_state,active,false,false) == "idle", "Idle pauses %d" % minutes)
+  active.idle_seconds = 0
+  check(Policy.reason(test_state,active,false,false) == "working", "Input resumes %d" % minutes)
+ check(Policy.reason(test_state,active,false,true) == "foreground", "Any focused game UI pauses")
+ active.locked = true
+ check(Policy.reason(test_state,active,false,false) == "locked", "Lock reason")
+ active.supported = false
+ check(Policy.reason(test_state,active,false,true) == "unsupported", "Detection failure priority")
+ check(Policy.reason(test_state,active,true,false) == "blocked", "Save block priority")
+ var old_save: Dictionary = test_state.duplicate(true)
+ old_save.erase("idle_minutes")
+ check(m.restore(old_save).state.idle_minutes == 10, "Existing save defaults to 10 minutes")
+ test_state.idle_minutes = 20
+ check(m.restore(test_state).state.idle_minutes == 20, "Setting round trip")
+ test_state.idle_minutes = 11
+ check(m.restore(test_state).state.idle_minutes == 10, "Invalid setting falls back")
+ var sample := {"token":"test","supported":true,"foreground":false,"locked":false,"idle_seconds":0,"sampled_at":100.0,"sequence":2,"epoch":1}
+ check(not Sample.validate(sample,"test",101).is_empty(), "Valid native sample")
+ for field in ["supported","foreground","locked","idle_seconds","sampled_at","sequence","epoch"]:
+  var malformed: Dictionary = sample.duplicate()
+  malformed.erase(field)
+  check(Sample.validate(malformed,"test",101).is_empty(), "Missing native field " + field)
+ check(Sample.validate(sample,"wrong",101).is_empty(), "Foreign worker token rejected")
+ check(Sample.validate(sample,"test",104).is_empty(), "Stale native data rejected")
+ check(Sample.validate(sample,"test",99).is_empty(), "Future data rejected")
+ clock.reset()
+ check(clock.advance(1,1,true,1,"a:1") == 0, "Worker first sample")
+ check(clock.advance(1,1,true,2,"a:1") == 1, "Same epoch accrues")
+ check(clock.advance(1,1,true,3,"a:2") == 0, "Missed intermediate lock/focus event breaks continuity")
+ check(clock.advance(1,1,true,4,"b:2") == 0, "New worker breaks continuity")
+ check(clock.advance(1,1,true,5,"b:2") == 1, "New worker resumes")
+ check(clock.advance(1,-1,true,6,"b:2") == 0, "Clock rollback excluded")
+ check(clock.advance(1,1,true,7,"b:2") == 0, "Clock rollback recovery not backfilled")
+ check(clock.advance(3600,3600,true,8,"b:2") == 0, "Sleep gap excluded")
+ check(clock.advance(1,1,true,9,"b:2") == 0, "Wake requires fresh interval")
  var store = Store.new()
  var test_path = "user://test-save-%s.json" % m.new_id()
  var saved: Dictionary = m.fresh_state()
@@ -98,6 +151,29 @@ func run() -> void:
  broken.close()
  var recovered: Dictionary = store.read(test_path,m)
  check(recovered.ok and recovered.recovered and recovered.state.focus_seconds == 42.0, "Recover backup")
+ # A parseable but incomplete primary must not replace the healthy backup.
+ broken = FileAccess.open(test_path,FileAccess.WRITE)
+ broken.store_string('{"version":3}')
+ broken.close()
+ check(store.read(test_path,m).recovered, "Incomplete primary falls back to backup")
+ check(store.write(test_path,recovered.state).ok, "Can repair corrupt primary")
+ check(store.read(test_path + ".bak",m).state.focus_seconds == 42.0, "Healthy backup survives repair")
+ game.save_path = test_path
+ game.state = test_state.duplicate(true)
+ var original_seconds = game.state.focus_seconds
+ check(game.set_idle_minutes(5).ok and game.state.idle_minutes == 5 and game.state.focus_seconds == original_seconds, "Setting commits without losing session")
+ check(not game.set_idle_minutes(7).ok and game.state.idle_minutes == 5, "Invalid setting not committed")
+ check(game.prepare_exit(), "Exit saves active session")
+ check(store.read(test_path,m).state == game.state, "Exit restores exact session")
+ game.save_path = "user://missing-%s/save.json" % m.new_id()
+ var before_failure: Dictionary = game.state.duplicate(true)
+ check(not game.set_idle_minutes(20).ok and game.state == before_failure, "Save failure rolls back setting")
+ check(not game.prepare_exit() and game.save_failed, "Save failure cancels exit")
+ game.save_path = test_path
+ check(game.prepare_exit() and not game.save_failed and game.warning.is_empty(), "Save recovers after transient failure")
+ game.blocked = true
+ check(game.prepare_exit(), "Corrupt save can exit without overwriting")
+ game.blocked = false
  for suffix in ["", ".bak", ".tmp"]:
   DirAccess.remove_absolute(ProjectSettings.globalize_path(test_path + suffix))
  var future = FileAccess.open(test_path,FileAccess.WRITE)

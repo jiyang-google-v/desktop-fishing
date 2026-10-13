@@ -12,6 +12,10 @@ try {
  if ($value.token -ne $token -or !$value.supported -or $value.idle_seconds -lt 0) { throw 'Invalid focus sample' }
  if ($value.foreground -isnot [bool] -or $value.locked -isnot [bool]) { throw 'Missing boolean state' }
  if ([Math]::Abs([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()/1000.0 - $value.sampled_at) -gt 5) { throw 'Stale sample' }
+ if ($value.epoch -lt 1 -or $value.sequence -lt 1) { throw 'Invalid continuity marker' }
+ Start-Sleep -Milliseconds 1200
+ $next = Get-Content -LiteralPath $output -Raw | ConvertFrom-Json
+ if ($next.sequence -le $value.sequence) { throw 'Worker stopped sampling' }
  Write-Host 'Windows native focus helper smoke passed'
 } finally {
  if (!$process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
