@@ -1,5 +1,7 @@
 extends RefCounted
 
+const Model = preload("res://scripts/core/fishing_model.gd")
+
 func parse_file(path: String):
  var json := JSON.new()
  if json.parse(FileAccess.get_file_as_string(path)) != OK:
@@ -25,7 +27,7 @@ func read(path: String, model) -> Dictionary:
 func write(path: String, state: Dictionary) -> Dictionary:
  var absolute: String = ProjectSettings.globalize_path(path)
  var previous = parse_file(path) if FileAccess.file_exists(path) else null
- if previous is Dictionary and not valid_version(previous.get("version",0)):
+ if previous is Dictionary and previous.has("version") and not valid_version(previous.version):
   return {"ok":false,"reason":"version"}
  var file = FileAccess.open(path + ".tmp",FileAccess.WRITE)
  if file == null:
@@ -36,7 +38,8 @@ func write(path: String, state: Dictionary) -> Dictionary:
  file.close()
  if write_error != OK:
   return {"ok":false,"reason":"save_failed"}
- if previous is Dictionary and previous.has("version"):
+ # Never rotate a corrupt primary over the last known-good backup.
+ if previous is Dictionary and Model.new().restore(previous).ok:
   var copied: Error = DirAccess.copy_absolute(absolute,absolute + ".bak.tmp")
   if copied != OK or DirAccess.rename_absolute(absolute + ".bak.tmp",absolute + ".bak") != OK:
    return {"ok":false,"reason":"save_failed"}

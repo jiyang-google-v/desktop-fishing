@@ -21,8 +21,10 @@ if ($ExportOnly) {
  New-Item -ItemType Directory -Force build/windows | Out-Null
  Invoke-GodotCheck -GodotArgs @('--headless','--export-release','Windows Desktop','build/windows/DesktopFishing.exe')
  Copy-Item README.md build/windows/README.md
+ Copy-Item docs/WINDOWS_STAGE1_ACCEPTANCE.md build/windows/WINDOWS_STAGE1_ACCEPTANCE.md
 } else {
  Invoke-GodotCheck -GodotArgs @('--headless','--editor','--import','--quit')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_windows_focus.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke')
 }

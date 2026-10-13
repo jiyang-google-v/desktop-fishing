@@ -1,6 +1,7 @@
 extends Node
 
 signal changed
+const Policy = preload("res://scripts/core/focus_policy.gd")
 const Model = preload("res://scripts/core/fishing_model.gd")
 const Store = preload("res://scripts/core/save_store.gd")
 const Clock = preload("res://scripts/core/focus_clock.gd")
@@ -18,6 +19,8 @@ var last_tick := 0
 var last_wall := 0.0
 var clock = Clock.new()
 var save_elapsed := 0.0
+var last_saved := "尚未保存"
+var save_failed := false
 
 func _ready() -> void:
  rng.randomize()
@@ -50,10 +53,7 @@ func _notification(what: int) -> void:
  if what == NOTIFICATION_APPLICATION_FOCUS_IN or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
   reset_clock()
  if what == NOTIFICATION_WM_CLOSE_REQUEST:
-  persist()
-  if probe != null:
-   probe.stop()
-  get_tree().quit()
+  request_exit()
 
 func tick() -> void:
  var now: int = Time.get_ticks_msec()
@@ -65,10 +65,10 @@ func tick() -> void:
  focus_status = probe.sample()
  # Pause conservatively for stale readings, foreground and clock/sleep gaps.
  var sequence: int = int(focus_status.get("sequence",-1))
- var eligible: bool = not blocked and state.cast and model.can_accrue(focus_status) and not get_window().has_focus()
- var accrued: float = clock.advance(elapsed,wall_elapsed,eligible,sequence)
+ var eligible: bool = pause_reason() == "working"
+ var accrued: float = clock.advance(elapsed,wall_elapsed,eligible,sequence,str(focus_status.get("token","")) + ":" + str(focus_status.get("epoch",-1)))
  state.focus_seconds = minf(Model.MAX_SECONDS,state.focus_seconds + accrued)
- save_elapsed += elapsed
+ save_elapsed += maxf(elapsed,0.0)
  if save_elapsed >= 30.0:
   persist()
   save_elapsed = 0.0
@@ -77,9 +77,15 @@ func tick() -> void:
 func persist() -> bool:
  if blocked:
   return false
+ var had_save_failure := save_failed
  var result: Dictionary = store.write(save_path,state)
- if not result.ok:
-  warning = "存档写入失败，请检查磁盘空间和权限。"
+ save_failed = not result.ok
+ if save_failed:
+  warning = "存档写入失败，请检查磁盘空间和权限后重试。"
+ else:
+  if had_save_failure:
+   warning = ""
+  last_saved = Time.get_time_string_from_system()
  return result.ok
 
 func commit(action: Callable) -> Dictionary:
@@ -90,9 +96,12 @@ func commit(action: Callable) -> Dictionary:
  if result.ok:
   var saved: Dictionary = store.write(save_path,next)
   if not saved.ok:
+   save_failed = true
    warning = "操作未保存，请检查磁盘空间后重试。"
    changed.emit()
    return {"ok":false,"reason":"save_failed"}
+  save_failed = false
+  last_saved = Time.get_time_string_from_system()
   state = next
   warning = ""
   reset_clock()
@@ -112,20 +121,39 @@ func remove_from_tank(catch_id: String) -> Dictionary:
  return commit(func(s): return model.remove_from_tank(s,catch_id))
 
 func pause_reason() -> String:
+ return Policy.reason(state,focus_status,blocked,get_window().has_focus())
+
+func set_idle_minutes(minutes: int) -> Dictionary:
+ if minutes not in [5,10,20]:
+  return {"ok":false,"reason":"invalid_setting"}
+ return commit(func(s):
+  s.idle_minutes = minutes
+  return {"ok":true})
+
+func prepare_exit() -> bool:
+ # A blocked/corrupt save must never be overwritten; leaving is still safe.
  if blocked:
-  return "blocked"
- if not state.pending_catch.is_empty():
-  return "pending"
- if not state.cast:
-  return "ready"
- if get_window().has_focus() or focus_status.get("foreground",true):
-  return "foreground"
- if not focus_status.get("supported",false):
-  return "unsupported"
- if focus_status.get("locked",true):
-  return "locked"
- if focus_status.get("idle_seconds",-1.0) > Model.IDLE_SECONDS:
-  return "idle"
- if state.focus_seconds >= Model.MAX_SECONDS:
-  return "max_depth"
- return "working"
+  return true
+ if not persist():
+  warning = "保存失败，已取消退出。请检查磁盘空间和权限，再点击保存退出。"
+  changed.emit()
+  return false
+ return true
+
+func request_exit() -> void:
+ if not prepare_exit():
+  return
+ if probe != null:
+  probe.stop()
+ get_tree().quit()
+
+func retry_detection() -> void:
+ if probe != null and OS.get_name() == "Windows":
+  probe.start()
+ focus_status = {"supported":false}
+ reset_clock()
+ changed.emit()
+
+func diagnostic_text() -> String:
+ var detail: String = probe.detail if probe != null else "not_started"
+ return "版本：0.3.1\n系统：%s\n状态：%s\n检测：%s\n空闲宽限：%d 分钟\n有效专注：%.1f 秒\n深度：%.1f 米\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.idle_minutes,state.focus_seconds,model.depth_for(state.focus_seconds),last_saved,str(save_failed)]
