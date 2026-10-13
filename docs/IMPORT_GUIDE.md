@@ -1,9 +1,9 @@
-# GitHub 导入
-1. 下载 `desktop-fishing-github-starter.zip` 并解压。
-2. 打开 https://github.com/jiyang-google-v/desktop-fishing ，选择 Add file → Upload files。
-3. 把解压后 `desktop-fishing-starter` 目录**里面的全部文件和文件夹**拖入上传页面（不要只上传 ZIP）。
-4. 提交到 `main` 后，进入 Actions 查看 `Windows Build`；若 Actions 尚未启用，按 GitHub 提示启用。
-5. Actions 成功后在运行详情的 Artifacts 下载 `desktop-fishing-windows`。
-6. 当前工程使用占位图，非正式 V2.6 生产美术；Windows 实机测试焦点、锁屏、睡眠、空闲时间是后续必须项。
+# Godot 工程导入
 
-提示：GitHub 网页上传对包含隐藏目录（如 `.github`）的拖拽行为可能因浏览器而异，提交后请确认 `.github/workflows/windows-build.yml` 确实存在；缺失时可在 GitHub 网页单独创建此文件。
+使用 Godot 4.6.1 Standard，Import 仓库根目录 `project.godot`。按 F5 运行；Windows 专注检测请使用独立运行窗口。
+
+代码只维护 Godot 实现。当前实现及构建不再依赖 Electron、npm、HTML 或 CSS。鱼种路径改为 `data/fish-data.json`，已有 14 个 ID 不变。
+
+原 V2.6 参考文件内容实际为 JPEG，已将扩展名从 `.png` 更正为 `.jpg`，图片字节内容保持一致。
+
+旧 v1/v2 存档可手动迁移：先退出两版程序并备份目录，之后复制旧存档到 `%APPDATA%/DesktopFishingGodot/save.json`。不要覆盖已有 Godot 收藏；未知版本保守暂停。项目不自动扫描旧版本目录。

@@ -1,4 +1,0 @@
-const fs=require('node:fs'),path=require('node:path');
-const root=path.resolve(__dirname,'..');const file=path.join(root,'assets/production/asset_manifest.json');const data=JSON.parse(fs.readFileSync(file,'utf8'));let errors=[];
-for(const a of data.assets){const p=path.resolve(root,a.path||'');if(!p.startsWith(path.join(root,'assets','production')+path.sep))errors.push('Unsafe path: '+a.id);else if(!fs.existsSync(p))errors.push('Missing: '+a.path);else{const b=fs.readFileSync(p);if(b.toString('hex',0,8)!=='89504e470d0a1a0a')errors.push('Not PNG: '+a.path);else if(b[25]!==6)errors.push('Not RGBA PNG: '+a.path);else{const w=b.readUInt32BE(16),h=b.readUInt32BE(20);if(w!==a.size[0]||h!==a.size[1])errors.push('Dimension mismatch: '+a.path)}}}
-if(errors.length){console.error(errors.join('\n'));process.exit(1)}console.log('Asset manifest verified; registered production assets:',data.assets.length,'(alpha pixels and visual QA require separate checks)');

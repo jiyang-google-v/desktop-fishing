@@ -1,5 +1,4 @@
-node_modules/
-dist/
-coverage/
-*.log
-.DS_Store
+.godot/
+build/
+*.tmp
+export_credentials.cfg

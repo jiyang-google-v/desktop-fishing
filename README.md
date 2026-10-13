@@ -1,44 +1,70 @@
 # Desktop Fishing · 桌面钓鱼
 
-Windows 桌面专注钓鱼小游戏，**0.2.0 功能试玩版**。
+**Godot 4.6.1 + GDScript，0.3.0 Windows 功能试玩版。** 当前工程已移除 Electron、Node.js 和网页 UI 实现。
 
-## 试玩流程
+## 下载直接试玩
 
-1. 点击「放下鱼钩」，切换到其他工作窗口。
-2. 有效专注每分钟下潜 4 米，最深 200 米。游戏在前台、锁屏、睡眠或键鼠空闲超过 10 分钟时暂停。
-3. 回到游戏点击「收杆看看」，按当前深度和本地昼夜揭晓鱼获。
-4. 选择收进鱼缸或放生。鱼缸最多 6 条；满缸时可以选择替换，确认前不会移走原鱼，取消保留原鱼和待安置鱼获。
-5. 图鉴记录发现次数和最大体长。放生不影响图鉴。
+在 GitHub 仓库 Actions 打开成功的 **Godot Windows Build**，从 Artifacts 下载 **desktop-fishing-godot-windows**。解压后双击 `DesktopFishing.exe`。该程序内嵌游戏资源，不需要安装 Godot 或 Node.js。
 
-鱼获按独立个体管理；待安置鱼获必须处理后才能重新放钩。同一结果不能重复领取。退出再打开会恢复正在进行的会话或待安置鱼获，不补计离线时间。
+## 在 Godot 中运行
 
-## 本地运行（Windows）
+1. 下载 Godot **4.6.1 Standard**（普通版，不需要 .NET）。
+2. 下载或克隆本仓库，在 Godot 项目管理器点击 Import，选择根目录 `project.godot`。
+3. 打开项目后按 **F6/F5**（运行当前场景/项目）；测试 Windows 专注检测时，请从项目菜单关闭“嵌入游戏”选项，使用独立游戏窗口。嵌入编辑器的运行方式不作为 Windows 专注判定验收环境。
 
-安装 Node.js 20 或 22，然后执行：
+命令行运行（Godot 已加入 PATH）：
 
-```bash
-npm install
-npm start
+```powershell
+godot --path .
 ```
 
-验证：`npm run verify`。Windows portable 打包：`npm run dist`。
+## 玩法
 
-## 下载自动构建
+手动放钩 → 切换到其他工作窗口 → 每有效专注分钟下潜 4 米 → 回来手动收杆 → 按深度/本地昼夜抽取鱼获 → 图鉴登记 → 收进精选鱼缸或放生。
 
-在 GitHub 仓库 Actions 中打开成功的 Windows Build 运行，从 Artifacts 下载 `desktop-fishing-windows`，解压后运行其中的 `.exe`。分支 PR 构建用于测试，main 构建对应已合入版本。未签名的测试程序可能显示 Windows 安全提示；先核对来源与构建记录。
+- 最大 200 米，14 个稳定生物 ID（其中水母/墨鱼为扩展种）。
+- 游戏前台、锁屏、远程会话断开、超过 10 分钟无键鼠输入及检测失败时暂停。
+- 最多 6 条精选鱼，每条都有独立 ID 和体长。满缸时选择替换并确认；取消保留原鱼和待安置鱼获。
+- 同一鱼获不能重复领取；未安置鱼获必须处理后再放钩。
+- 图鉴记录发现次数和最大体长。放生不删除图鉴。
+- 退出后恢复会话或待安置鱼获；退出、休眠间隔不补计。
 
-## 存档
+## 工程结构
 
-存档位于 Electron 的用户数据目录中的 `save.json`（Windows 通常为 `%APPDATA%/desktop-fishing/`）。每 30 秒保存进度；放钩、收杆、安置和退出时立即保存。写入使用临时文件替换，并保留上一份有效存档 `save.json.bak`。
+- `scenes/main.tscn`：主场景入口。
+- `scripts/core/`：可独立测试的钓鱼状态、计时策略和存档。
+- `scripts/services/`：游戏服务与 Windows 检测生命周期。
+- `scripts/ui/`：Godot 控件、弹窗和功能示意场景。
+- `data/fish-data.json`：鱼种和抽取配置。
+- `platform/windows/focus-worker.ps1`：一次启动的后台原生查询进程，每 0.5 秒提供最小状态。
+- `assets/`、`docs/`：美术标准、资源清单和验收。
 
-主存档损坏时尝试备份；两份都无法读取或遇到未知存档版本时暂停游戏，避免覆盖数据。修复前请先复制保存整个用户数据目录。v1 鱼缸条目会迁移为独立个体；旧格式未记录每条鱼的体长，迁移时使用该鱼种的历史最大体长。
+## 验证与导出
+
+```powershell
+godot --headless --editor --import --quit
+godot --headless --script res://tests/run_tests.gd -- --tests
+godot --headless --quit-after 180 -- --tests --ui-smoke
+powershell -NoProfile -File tests/windows_focus_smoke.ps1
+```
+
+安装匹配的 Godot 4.6.1 导出模板后，在 Project → Export 选择 Windows Desktop，或执行：
+
+```powershell
+New-Item -ItemType Directory -Force build/windows
+godot --headless --export-release "Windows Desktop" build/windows/DesktopFishing.exe
+```
+
+GitHub Actions 自动执行验证、Windows 查询脚本测试和 Windows 导出。
+
+## 存档与隐私
+
+Godot 存档目录：`%APPDATA%/DesktopFishingGodot/`，文件为 `save.json` 和 `save.json.bak`。每 30 秒保存进度，放钩/收杆/安置/正常退出立即保存。未知版本或两份存档都无法读取时暂停，避免覆盖数据。
+
+Windows 查询脚本使用系统自带 PowerShell 调用 Win32，只返回空闲秒数、本游戏是否在前台、锁屏/会话不可用状态、采样时间与顺序。没有键盘钩子，不记录按键、窗口标题或应用使用历史。检测进程随游戏退出终止；脚本被系统策略阻止时，界面提示检测不可用并暂停。
+
+旧版 v1/v2 存档格式可迁移，但不会自动扫描旧目录。需要迁移时，关闭游戏，备份新旧目录，再把旧 `save.json` 复制到 Godot 目录。已有 Godot 存档时不要直接覆盖。v1 未记录个体体长，迁移使用该鱼种历史最大体长。
 
 ## 当前限制
 
-- 正式 V2.6 美术 PNG、角色动画与分层场景尚未接入。当前界面使用 CSS 功能示意，不能视为最终画风验收。
-- 鱼获采用收杆时一次抽取的 MVP 模型；尚未实现水下停留遭遇事件。
-- 14 种生物 ID 保持稳定；生态范围和体长数据仍是玩法占位值。
-- Windows 前台、输入、锁屏、休眠及恢复必须实机验收。其他平台的专注计时保守暂停。
-- 查询键鼠空闲状态失败时保守暂停，不读取按键内容、窗口标题或应用使用历史。
-
-详见 `docs/TESTING.md`、`docs/FOCUS_SPEC.md` 与 `AGENTS.md`。
+正式 V2.6 插画素材与角色动画尚未接入；现有 Godot 绘制场景为功能占位，不能视为最终美术验收。鱼获仍使用收杆时抽取的 MVP 模型，生态范围和体长是玩法占位值。Windows 锁屏、休眠、唤醒、空闲恢复需要实际电脑验收。其他平台可打开 UI，但专注计时暂停。
