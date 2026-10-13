@@ -16,7 +16,7 @@ func new_id() -> String:
  return Crypto.new().generate_random_bytes(16).hex_encode()
 
 func fresh_state() -> Dictionary:
- return {"version":3,"idle_minutes":10,"cast":false,"session_id":"","focus_seconds":0.0,"encyclopedia":{},"aquarium":[],"pending_catch":{}}
+ return {"version":3,"idle_minutes":10,"sound_enabled":false,"cast":false,"session_id":"","focus_seconds":0.0,"encyclopedia":{},"aquarium":[],"pending_catch":{}}
 
 func depth_for(seconds: float) -> float:
  return clampf(seconds * 4.0 / 60.0,0.0,MAX_DEPTH)
@@ -137,6 +137,7 @@ func restore(data) -> Dictionary:
  var camel: bool = version < 3
  var s: Dictionary = fresh_state()
  s.idle_minutes = Policy.idle_minutes(data.get("idle_minutes",10))
+ s.sound_enabled = data.get("sound_enabled",false) == true
  s.focus_seconds = finite_number(data.get("focusSeconds" if camel else "focus_seconds",0),MAX_SECONDS)
  var book = data.get("encyclopedia",{})
  if book is Dictionary:
