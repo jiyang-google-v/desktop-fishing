@@ -1,0 +1,38 @@
+name: Godot Windows Build
+on:
+  push:
+    branches: [main, 'refactor/godot-*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.6.1
+          use-dotnet: false
+          include-templates: true
+      - name: Import and verify Godot project
+        shell: pwsh
+        run: ./scripts/ci_verify.ps1
+      - name: Test Windows focus helper
+        shell: powershell
+        run: ./tests/windows_focus_smoke.ps1
+      - name: Export Windows executable
+        shell: pwsh
+        run: ./scripts/ci_verify.ps1 -ExportOnly
+      - name: Smoke-test exported game
+        shell: pwsh
+        run: |
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--headless','--quit-after','10','--','--tests','--export-smoke' -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw 'Exported game failed to launch' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-fishing-godot-windows
+          path: build/windows/*
+          if-no-files-found: error

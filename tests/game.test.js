@@ -1,7 +1,0 @@
-const test=require('node:test');const assert=require('node:assert/strict');const {fish,depthFor,canAccrue,eligibleFish,pickFish,addToAquarium}=require('../src/shared/game');
-test('depth accrues at 4m/min and caps at 200',()=>{assert.equal(depthFor(60),4);assert.equal(depthFor(3000),200);assert.equal(depthFor(-1),0)});
-test('focus only in background, unlocked, active within 10m',()=>{const x={cast:true,foreground:false,locked:false,sleeping:false,idleSeconds:30,supported:true};assert.equal(canAccrue(x),true);for(const k of ['foreground','locked','sleeping'])assert.equal(canAccrue({...x,[k]:true}),false);assert.equal(canAccrue({...x,idleSeconds:601}),false);assert.equal(canAccrue({...x,supported:false}),false)});
-test('night-only legendary not eligible by day',()=>{assert.equal(eligibleFish(190,false).some(f=>f.id==='fish_012_star_wish_fish'),false);assert.equal(eligibleFish(190,true).some(f=>f.id==='fish_012_star_wish_fish'),true)});
-test('stable 14 species IDs',()=>{assert.equal(fish.length,14);assert.equal(new Set(fish.map(f=>f.id)).size,14);assert.equal(fish[10].id,'fish_011_lanternfish');assert.equal(fish[13].id,'creature_014_cuttlefish')});
-test('weighted selection stays within eligible pool',()=>{const f=pickFish(0,false,()=>0);assert.ok(f);assert.ok(f.minDepth<=0)});
-test('aquarium capacity',()=>{const a=['1','2','3','4','5','6'];assert.equal(addToAquarium(a,'7').ok,false);assert.equal(addToAquarium(a.slice(0,5),'7').aquarium.length,6)});
