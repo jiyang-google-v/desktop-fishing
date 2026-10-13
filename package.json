@@ -1,0 +1,35 @@
+{
+  "name": "desktop-fishing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cozy Windows desktop focus fishing game",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.js",
+    "check:assets": "node scripts/validate-assets.js",
+    "dist": "electron-builder --win portable",
+    "verify": "npm run test && npm run check:assets"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.desktopfishing.app",
+    "productName": "Desktop Fishing",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    }
+  }
+}

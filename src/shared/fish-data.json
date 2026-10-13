@@ -1,0 +1,142 @@
+[
+  {
+    "id": "fish_001_clownfish",
+    "name": "小丑鱼",
+    "rarity": "common",
+    "minDepth": 0,
+    "maxDepth": 40,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_002_blue_tang",
+    "name": "蓝倒吊鱼",
+    "rarity": "common",
+    "minDepth": 0,
+    "maxDepth": 60,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_003_butterflyfish",
+    "name": "蝴蝶鱼",
+    "rarity": "common",
+    "minDepth": 0,
+    "maxDepth": 100,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_004_seahorse",
+    "name": "海马",
+    "rarity": "uncommon",
+    "minDepth": 0,
+    "maxDepth": 80,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_005_pufferfish",
+    "name": "河豚",
+    "rarity": "uncommon",
+    "minDepth": 20,
+    "maxDepth": 120,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_006_lionfish",
+    "name": "狮子鱼",
+    "rarity": "uncommon",
+    "minDepth": 20,
+    "maxDepth": 180,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_007_red_seabream",
+    "name": "真鲷",
+    "rarity": "common",
+    "minDepth": 40,
+    "maxDepth": 200,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_008_yellowfin_tuna",
+    "name": "黄鳍金枪鱼",
+    "rarity": "uncommon",
+    "minDepth": 60,
+    "maxDepth": 200,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_009_grouper",
+    "name": "石斑鱼",
+    "rarity": "rare",
+    "minDepth": 60,
+    "maxDepth": 200,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_010_bigeye_tuna",
+    "name": "大眼金枪鱼",
+    "rarity": "rare",
+    "minDepth": 120,
+    "maxDepth": 200,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_011_lanternfish",
+    "name": "灯笼鱼",
+    "rarity": "rare",
+    "minDepth": 180,
+    "maxDepth": 200,
+    "time": "both",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "fish_012_star_wish_fish",
+    "name": "星愿鱼",
+    "rarity": "legendary",
+    "minDepth": 180,
+    "maxDepth": 200,
+    "time": "night",
+    "type": "fish",
+    "artStatus": "missing"
+  },
+  {
+    "id": "creature_013_jellyfish",
+    "name": "水母",
+    "rarity": "uncommon",
+    "minDepth": 0,
+    "maxDepth": 120,
+    "time": "both",
+    "type": "creature",
+    "artStatus": "missing"
+  },
+  {
+    "id": "creature_014_cuttlefish",
+    "name": "墨鱼",
+    "rarity": "uncommon",
+    "minDepth": 20,
+    "maxDepth": 160,
+    "time": "both",
+    "type": "creature",
+    "artStatus": "missing"
+  }
+]
