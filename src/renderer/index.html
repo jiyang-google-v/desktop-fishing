@@ -1,5 +1,13 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>桌面钓鱼</title><link rel="stylesheet" href="style.css"></head><body>
-<header><strong>☁️ 桌面钓鱼</strong><span>专注工作，潜入深海。休息片刻，收获惊喜。</span></header>
-<main><div class="scene"><div class="sky"><div class="sun"></div><div class="island">🏝️</div><div class="dock">🪵　🎣　🐈</div></div><div class="sea"><div class="waves">﹏　﹏　﹏　﹏　﹏</div><div class="fishart">🐟　🐠　🐡</div><div class="deep">🪸　　　🐚　　　🌿</div><div class="depth" id="depth">0.0 m</div></div></div>
-<aside><h2>今日的海</h2><p id="status">准备放钩</p><p>有效专注：<b id="time">0 分 0 秒</b></p><button id="cast">放钩</button><button id="reel" disabled>收杆</button><div id="catch" class="catch">放钩后切换到其他工作窗口，回来收杆。</div><nav><button id="book">图鉴</button><button id="tank">鱼缸</button></nav><section id="panel" class="panel" hidden></section></aside></main>
-<footer>V2.6 风格占位预览 · 正式美术资源尚未接入 · 仅 Windows 支持有效专注计时</footer><script src="renderer.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; object-src 'none'; base-uri 'none'"><title>桌面钓鱼 · 一小片属于你的海</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div><span class="eyebrow">DESKTOP FISHING</span><h1>一小片属于你的海</h1></div><nav><button id="book">鱼类图鉴 <span id="book-count">0 / 14</span></button><button id="tank">精选鱼缸 <span id="tank-count">0 / 6</span></button></nav></header>
+<main>
+<section class="scene" aria-label="码头与水下的功能示意场景"><div class="sky"><div class="sun"></div><div class="cloud cloud-one"></div><div class="cloud cloud-two"></div><div class="island"></div><div class="dock"><div class="rod"></div></div></div><div class="sea"><div class="ripples"></div><div class="fishing-line" id="line"><span class="hook">J</span></div><div class="fish-shape fish-one"></div><div class="fish-shape fish-two"></div><div class="seabed"></div></div><div class="scene-label"><span id="day-label">白昼的海</span><small id="layer">表层 · 0–30 m</small></div><div class="depth-badge"><b id="depth">0.0</b><span>米 · 当前深度</span></div><div class="scene-note">功能示意场景 · 正式 V2.6 美术待接入</div></section>
+<aside><span class="eyebrow">慢慢工作，轻轻收获</span><h2 id="status-title">准备出发</h2><p id="status" class="muted">放钩后切换到其他工作窗口。</p><div class="focus-card"><span>本次有效专注</span><b id="time">00:00</b><div class="progress"><div id="progress"></div></div><small>每分钟下潜 4 米 · 最深 200 米</small></div><div class="actions"><button id="cast" class="primary">放下鱼钩</button><button id="reel" class="warm" disabled>收杆看看</button></div><section id="catch" class="catch" aria-live="polite"></section><p id="notice" class="notice" role="status"></p><p class="help">游戏在前台时暂停计时；后台且最近 10 分钟有键鼠操作时继续下潜。锁屏和睡眠不会累计时间。</p></aside>
+</main>
+<dialog id="collection"><div class="dialog-head"><h2 id="panel-title"></h2><button id="close-panel" aria-label="关闭面板">关闭</button></div><p id="panel-description" class="muted"></p><div id="panel"></div></dialog>
+<dialog id="confirmation"><h2 id="confirm-title"></h2><p id="confirm-message"></p><div class="actions"><button id="confirm-cancel">取消</button><button id="confirm-ok" class="warm">确认</button></div></dialog>
+<footer>桌面钓鱼 · 0.2.0 功能试玩版 <span>只读取空闲时间，不记录按键内容</span></footer><script src="renderer.js"></script>
+</body></html>

@@ -3,7 +3,7 @@ const MAX_DEPTH = 200, DEPTH_PER_SECOND = 4/60, IDLE_LIMIT_SECONDS = 600;
 const rarityWeight = { common: 60, uncommon: 25, rare: 9, legendary: 1 };
 function depthFor(seconds) { return Math.min(MAX_DEPTH, Math.max(0, seconds) * DEPTH_PER_SECOND); }
 function canAccrue({cast, foreground, locked, sleeping, idleSeconds, supported}) {
-  return Boolean(cast && supported && !foreground && !locked && !sleeping && Number.isFinite(idleSeconds) && idleSeconds <= IDLE_LIMIT_SECONDS);
+  return Boolean(cast && supported && !foreground && !locked && !sleeping && Number.isFinite(idleSeconds) && idleSeconds >= 0 && idleSeconds <= IDLE_LIMIT_SECONDS);
 }
 function eligibleFish(depth, isNight, roster=fish) {
   return roster.filter(f => depth >= f.minDepth && depth <= f.maxDepth && (f.time !== 'night' || isNight));

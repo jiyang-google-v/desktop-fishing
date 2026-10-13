@@ -1,56 +1,71 @@
-const {app, BrowserWindow, ipcMain, powerMonitor} = require('electron');
-const fs = require('node:fs');
-const path = require('node:path');
-const {execFile} = require('node:child_process');
-const {promisify} = require('node:util');
+const {app,BrowserWindow,ipcMain,powerMonitor}=require('electron');
+const path=require('node:path');const {execFile}=require('node:child_process');
+const {promisify}=require('node:util');const {performance}=require('node:perf_hooks');
 const execFileAsync=promisify(execFile);
-const {depthFor,canAccrue,pickFish,addToAquarium,fish} = require('./shared/game');
-let win, cast=false, focusSeconds=0, locked=false, sleeping=false, lastTick=Date.now();
-let encyclopedia={},aquarium=[],lastCatch=null;
+const {depthFor,canAccrue,fish}=require('./shared/game');
+const {createState,castLine,reelLine,settleCatch,removeCatch,MAX_SECONDS}=require('./shared/session');
+const {readSave,writeSave}=require('./shared/storage');
+let win,state=createState(),locked=false,sleeping=false,blocked=false,warning=null;
+let status={supported:process.platform==='win32',idleSeconds:Infinity},busy=false,epoch=0,lastTick=performance.now(),lastEligible=false;
+let tickTimer,saveTimer;
 const savePath=()=>path.join(app.getPath('userData'),'save.json');
-function load(){try{const d=JSON.parse(fs.readFileSync(savePath(),'utf8'));focusSeconds=Math.max(0,Number(d.focusSeconds)||0);encyclopedia=d.encyclopedia||{};aquarium=Array.isArray(d.aquarium)?d.aquarium.slice(0,6):[];}catch{}}
-function save(){try{fs.writeFileSync(savePath(),JSON.stringify({version:1,focusSeconds,encyclopedia,aquarium},null,2));}catch(e){console.error('Save failed',e.message)}}
+function resetClock(){epoch++;lastEligible=false;lastTick=performance.now();}
+function persist(){if(blocked)return;try{writeSave(savePath(),state);}catch{warning='存档写入失败，请检查磁盘空间和文件权限。';}}
 async function inputStatus(){
  if(process.platform!=='win32')return {supported:false,idleSeconds:Infinity};
  try{
-  const script=path.join(__dirname,'windows','input-status.ps1');
-  const {stdout}=await execFileAsync('powershell.exe',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',script],{timeout:4000,windowsHide:true});
-  const data=JSON.parse(stdout.trim());
-  return {supported:true,idleSeconds:Number(data.idleSeconds)};
+  const {stdout}=await execFileAsync('powershell.exe',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',path.join(__dirname,'windows','input-status.ps1')],{timeout:4000,windowsHide:true});
+  const seconds=Number(JSON.parse(stdout.trim()).idleSeconds);
+  return {supported:Number.isFinite(seconds)&&seconds>=0,idleSeconds:seconds};
  }catch{return {supported:false,idleSeconds:Infinity};}
 }
-function snapshot(){return {cast,depth:Math.round(depthFor(focusSeconds)*10)/10,focusSeconds:Math.floor(focusSeconds),locked,sleeping,foreground:!!win?.isFocused(),encyclopedia,aquarium,lastCatch,fish};}
-let busy=false;
+function pauseReason(){
+ if(blocked)return 'save-blocked';if(!state.cast)return state.pendingCatch?'pending':'ready';
+ if(sleeping)return 'sleeping';if(locked)return 'locked';if(win?.isFocused())return 'foreground';
+ if(!status.supported)return 'unsupported';if(status.idleSeconds>600)return 'idle';
+ if(state.focusSeconds>=MAX_SECONDS)return 'max-depth';return 'working';
+}
+function snapshot(){return {...state,depth:depthFor(state.focusSeconds),locked,sleeping,foreground:!!win?.isFocused(),pauseReason:pauseReason(),warning,blocked,fish,isNight:new Date().getHours()<6||new Date().getHours()>=18};}
+function publish(){if(win&&!win.isDestroyed())win.webContents.send('game:state',snapshot());}
 async function tick(){
- const now=Date.now(),elapsed=Math.max(0,Math.min((now-lastTick)/1000,2));lastTick=now;
  if(busy)return;busy=true;
+ const token=epoch;
  try{
-  const status=await inputStatus();
-  if(canAccrue({cast,foreground:win?.isFocused(),locked,sleeping,...status}))focusSeconds+=elapsed;
-  if(win&&!win.isDestroyed())win.webContents.send('game:state',snapshot());
+  if(state.cast&&!blocked&&!locked&&!sleeping&&!win?.isFocused())status=await inputStatus();
+  const now=performance.now(),elapsed=(now-lastTick)/1000;lastTick=now;
+  const eligible=!blocked&&canAccrue({cast:state.cast,foreground:win?.isFocused(),locked,sleeping,...status});
+  if(token===epoch&&lastEligible&&eligible&&elapsed>=0&&elapsed<=5)state.focusSeconds=Math.min(MAX_SECONDS,state.focusSeconds+elapsed);
+  lastEligible=token===epoch&&eligible;
+  publish();
  }finally{busy=false;}
 }
+function transition(event,action){
+ if(event.sender!==win?.webContents||blocked)return {ok:false,reason:'blocked',state:snapshot()};
+ const next=JSON.parse(JSON.stringify(state));const result=action(next);
+ if(result.ok){
+  try{writeSave(savePath(),next);}catch{warning='操作未保存，请检查磁盘空间后重试。';publish();return {ok:false,reason:'save-failed',state:snapshot()};}
+  state=next;resetClock();warning=null;
+ }
+ publish();return {...result,state:snapshot()};
+}
 app.whenReady().then(()=>{
- load();
- win=new BrowserWindow({width:1100,height:760,minWidth:850,minHeight:600,backgroundColor:'#d9e8e8',webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+ const loaded=readSave(savePath());state=loaded.state;blocked=!!loaded.blocked;warning=loaded.warning||null;
+ win=new BrowserWindow({width:1100,height:790,minWidth:850,minHeight:650,backgroundColor:'#edf2ef',autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false,sandbox:true}});
+ win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
+ win.webContents.on('will-navigate',event=>event.preventDefault());
  win.loadFile(path.join(__dirname,'renderer','index.html'));
- powerMonitor.on('lock-screen',()=>locked=true);
- powerMonitor.on('unlock-screen',()=>{locked=false;lastTick=Date.now()});
- powerMonitor.on('suspend',()=>{sleeping=true;save()});
- powerMonitor.on('resume',()=>{sleeping=false;lastTick=Date.now()});
- setInterval(tick,1000);setInterval(save,30000);
- win.on('close',save);
+ for(const event of ['focus','blur'])win.on(event,()=>{resetClock();publish();});
+ powerMonitor.on('lock-screen',()=>{locked=true;resetClock();publish();});
+ powerMonitor.on('unlock-screen',()=>{locked=false;resetClock();publish();});
+ powerMonitor.on('suspend',()=>{sleeping=true;resetClock();persist();});
+ powerMonitor.on('resume',()=>{sleeping=false;resetClock();publish();});
+ tickTimer=setInterval(tick,1000);saveTimer=setInterval(persist,30000);
+ win.on('close',persist);
 });
 ipcMain.handle('game:state',()=>snapshot());
-ipcMain.handle('game:cast',()=>{cast=true;focusSeconds=0;lastCatch=null;lastTick=Date.now();return snapshot()});
-ipcMain.handle('game:reel',()=>{
- if(!cast)return snapshot();cast=false;
- const h=new Date().getHours(),isNight=h<6||h>=18;
- const selected=pickFish(depthFor(focusSeconds),isNight);
- if(selected){const lengthCm=Math.round((10+Math.random()*70)*10)/10;const prev=encyclopedia[selected.id]||{count:0,recordCm:0};encyclopedia[selected.id]={count:prev.count+1,recordCm:Math.max(prev.recordCm,lengthCm)};lastCatch={id:selected.id,name:selected.name,rarity:selected.rarity,lengthCm};}
- save();return snapshot();
-});
-ipcMain.handle('game:aquarium-add',(_event,id)=>{if(!fish.some(f=>f.id===id))return {ok:false,reason:'unknown',state:snapshot()};const result=addToAquarium(aquarium,id);if(result.ok){aquarium=result.aquarium;save()}return {...result,state:snapshot()}});
-ipcMain.handle('game:aquarium-remove',(_event,index)=>{if(Number.isInteger(index)&&index>=0&&index<aquarium.length){aquarium.splice(index,1);save()}return snapshot()});
-app.on('before-quit',save);
-app.on('window-all-closed',()=>{app.quit()});
+ipcMain.handle('game:cast',event=>transition(event,castLine));
+ipcMain.handle('game:reel',event=>transition(event,reelLine));
+ipcMain.handle('game:settle',(event,request)=>transition(event,s=>settleCatch(s,request)));
+ipcMain.handle('game:aquarium-remove',(event,id)=>transition(event,s=>removeCatch(s,id)));
+app.on('before-quit',()=>{clearInterval(tickTimer);clearInterval(saveTimer);persist();});
+app.on('window-all-closed',()=>app.quit());

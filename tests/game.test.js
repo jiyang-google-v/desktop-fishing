@@ -5,3 +5,5 @@ test('night-only legendary not eligible by day',()=>{assert.equal(eligibleFish(1
 test('stable 14 species IDs',()=>{assert.equal(fish.length,14);assert.equal(new Set(fish.map(f=>f.id)).size,14);assert.equal(fish[10].id,'fish_011_lanternfish');assert.equal(fish[13].id,'creature_014_cuttlefish')});
 test('weighted selection stays within eligible pool',()=>{const f=pickFish(0,false,()=>0);assert.ok(f);assert.ok(f.minDepth<=0)});
 test('aquarium capacity',()=>{const a=['1','2','3','4','5','6'];assert.equal(addToAquarium(a,'7').ok,false);assert.equal(addToAquarium(a.slice(0,5),'7').aquarium.length,6)});
+
+test('invalid idle readings cannot accrue',()=>{const x={cast:true,foreground:false,locked:false,sleeping:false,supported:true};for(const idleSeconds of [-1,NaN,Infinity])assert.equal(canAccrue({...x,idleSeconds}),false);assert.equal(canAccrue({...x,idleSeconds:600}),true)});

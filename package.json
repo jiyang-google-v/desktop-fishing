@@ -1,6 +1,6 @@
 {
   "name": "desktop-fishing",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Cozy Windows desktop focus fishing game",
   "main": "src/main.js",
