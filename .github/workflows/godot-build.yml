@@ -20,17 +20,18 @@ jobs:
       - name: Import and verify Godot project
         shell: pwsh
         run: |
+          $godotExe = Join-Path $env:USERPROFILE 'godot/Godot_v4.6.1-stable_win64_console.exe'
           function Invoke-GodotCheck([string[]]$GodotArgs) {
-            $output = & godot @GodotArgs 2>&1
+            $output = & $godotExe @GodotArgs 2>&1
             $code = $LASTEXITCODE
             $output | ForEach-Object { Write-Host $_ }
             if ($code -ne 0 -or ($output -join "`n") -match '(?m)^(SCRIPT ERROR:|ERROR:)') {
               throw "Godot validation failed ($code)"
             }
           }
-          Invoke-GodotCheck @('--headless','--editor','--import','--quit')
-          Invoke-GodotCheck @('--headless','--script','res://tests/run_tests.gd','--','--tests')
-          Invoke-GodotCheck @('--headless','--quit-after','180','--','--tests','--ui-smoke')
+          Invoke-GodotCheck -GodotArgs @('--headless','--editor','--import','--quit')
+          Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_tests.gd','--','--tests')
+          Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke')
       - name: Test Windows focus helper
         shell: powershell
         run: ./tests/windows_focus_smoke.ps1
@@ -38,7 +39,8 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force build/windows | Out-Null
-          $output = & godot --headless --export-release 'Windows Desktop' build/windows/DesktopFishing.exe 2>&1
+          $godotExe = Join-Path $env:USERPROFILE 'godot/Godot_v4.6.1-stable_win64_console.exe'
+          $output = & $godotExe --headless --export-release 'Windows Desktop' build/windows/DesktopFishing.exe 2>&1
           $code = $LASTEXITCODE
           $output | ForEach-Object { Write-Host $_ }
           if ($code -ne 0 -or ($output -join "`n") -match '(?m)^(SCRIPT ERROR:|ERROR:)') { throw 'Export failed' }
