@@ -21,6 +21,11 @@ public static class FishingFocus {
  [DllImport("user32.dll", CharSet=CharSet.Unicode, SetLastError=true)] static extern bool GetUserObjectInformation(IntPtr desktop, int index, StringBuilder value, uint size, out uint needed);
  [DllImport("wtsapi32.dll", CharSet=CharSet.Unicode)] static extern bool WTSQuerySessionInformation(IntPtr server, int session, int info, out IntPtr buffer, out uint bytes);
  [DllImport("wtsapi32.dll")] static extern void WTSFreeMemory(IntPtr buffer);
+ public static void Publish(string source, string destination) {
+  // Pass a real C# null: Windows PowerShell can coerce $null to an empty string.
+  if (System.IO.File.Exists(destination)) System.IO.File.Replace(source, destination, null);
+  else System.IO.File.Move(source, destination);
+ }
  public static double IdleSeconds() {
   LASTINPUTINFO info = new LASTINPUTINFO();
   info.cbSize = (uint)Marshal.SizeOf(info);
@@ -81,8 +86,7 @@ try {
   $json = $state | ConvertTo-Json -Compress
   try {
    [IO.File]::WriteAllText($OutputPath + '.tmp', $json, $encoding)
-   if ([IO.File]::Exists($OutputPath)) { [IO.File]::Replace($OutputPath + '.tmp', $OutputPath, $null) }
-   else { [IO.File]::Move($OutputPath + '.tmp', $OutputPath) }
+   [FishingFocus]::Publish($OutputPath + '.tmp', $OutputPath)
   } catch { }
   Start-Sleep -Milliseconds 500
  }

@@ -29,6 +29,8 @@ func run() -> void:
  root.add_child(probe)
  var first: Dictionary = await wait_for_sample(probe)
  check(not first.is_empty(), "Native worker starts and validates")
+ var next_sample: Dictionary = await wait_for_sample(probe)
+ check(not next_sample.is_empty() and next_sample.get("sequence",0) > first.get("sequence",0), "Native sample file continuously updates")
  var old_token: String = probe.token
  var old_path: String = probe.status_path
  var old_script: String = probe.script_path
