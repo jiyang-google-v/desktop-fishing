@@ -10,7 +10,14 @@ var profile := 'scene'
 var action := 'idle'
 var age := 0.0
 var night := false
+var brightness_lift := .10
 func _ready() -> void:
+ var shader := Shader.new()
+ shader.code = "shader_type canvas_item; uniform float brightness_lift = 0.10; void fragment() { COLOR.rgb = mix(COLOR.rgb, vec3(1.0), brightness_lift); }"
+ var art_material := ShaderMaterial.new()
+ art_material.shader = shader
+ art_material.set_shader_parameter("brightness_lift",brightness_lift)
+ material = art_material
  mouse_filter = Control.MOUSE_FILTER_IGNORE
  clip_contents = true
  for entry in manifest.assets:
@@ -65,7 +72,8 @@ func draw_layer(id: String, tint: Color) -> void:
 func _draw() -> void:
  if textures.is_empty() or size.x <= 0 or size.y <= 0:
   return
- var tint := Color(config.night_tint) if night else Color.WHITE
+ # Keep night readable on the desktop without dimming the whole widget.
+ var tint := Color(config.night_tint).lerp(Color.WHITE,.72) if night else Color.WHITE
  var rig: Dictionary = rig_geometry()
  var scale_value: float = size.x/600.0
  if profile == 'scene':

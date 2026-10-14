@@ -403,6 +403,8 @@ func update_notices() -> void:
  collection_notice.visible = not message.is_empty()
 
 func ask(text: String, action: Callable, confirm_text: String = "确认") -> void:
+ confirmation.hide()
+ confirmation.force_native = layouts != null and layouts.mode != "full"
  confirm_action = action
  var parent: Node = collection if collection.visible else self
  if confirmation.get_parent() != parent:
@@ -578,6 +580,8 @@ func animate_tank_button() -> void:
  tank_tween.tween_property(tank_button,"scale",Vector2.ONE,0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT)
 
 func open_collection(mode: String, replace: bool = false) -> void:
+ collection.hide()
+ collection.force_native = layouts != null and layouts.mode != "full"
  panel_mode = mode
  replacing = replace and mode == "tank" and not Game.state.pending_catch.is_empty() and not Game.state.aquarium.is_empty()
  collection_feedback.visible = false

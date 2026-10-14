@@ -42,6 +42,8 @@ if ($ExportOnly) {
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_ui_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/floating_art_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/window_layout_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/window_controls_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/window_controls_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/window_layout_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_windows_focus.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke')
