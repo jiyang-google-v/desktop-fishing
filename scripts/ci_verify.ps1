@@ -27,6 +27,10 @@ if ($ExportOnly) {
  Copy-Item docs/qa/stage3 build/windows/stage3-preview -Recurse
  Copy-Item docs/STAGE4_ART_QA.md build/windows/STAGE4_ART_QA.md
  Copy-Item docs/qa/stage4 build/windows/stage4-preview -Recurse
+ Copy-Item docs/FLOATING_ART_QA.md build/windows/FLOATING_ART_QA.md
+ Copy-Item docs/qa/floating build/windows/floating-preview -Recurse
+ Copy-Item docs/WINDOW_LAYOUT_QA.md build/windows/WINDOW_LAYOUT_QA.md
+ Copy-Item docs/qa/layouts build/windows/layout-preview -Recurse
  Copy-Item docs/UI_FINISH_QA.md build/windows/UI_FINISH_QA.md
  if (Test-Path docs/qa/ui) { Copy-Item docs/qa/ui build/windows/ui-preview -Recurse }
 } else {
@@ -36,6 +40,9 @@ if ($ExportOnly) {
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage3_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_ui_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/floating_art_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/window_layout_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/window_layout_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_windows_focus.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke','--small')
@@ -53,6 +60,11 @@ if ($ExportOnly) {
    'confirm' { $reviewArgs += @('--tank','--replace','--confirm') }
   }
   Invoke-GodotCheck -GodotArgs $reviewArgs
+ }
+ foreach ($profile in @('scene','mini')) {
+  foreach ($backdrop in @('light','dark','transparent')) {
+   Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','180','--script','res://tests/floating_art_capture.gd','--','--tests',"--profile=$profile","--backdrop=$backdrop")
+  }
  }
  foreach ($mode in @('--day','--night','--cast-pose','--reel-pose')) {
   Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','180','--','--tests','--scene-capture','--stage4',$mode)

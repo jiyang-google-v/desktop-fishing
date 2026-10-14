@@ -16,6 +16,7 @@ const STATUS := {
  "max_depth":["抵达 200 米","已经到达最深处，可以收杆看看。"],
  "blocked":["存档需要处理","为保护已有数据，已暂停游戏操作。"]
 }
+var layouts
 var ocean
 var scene_audio
 var sound_button: Button
@@ -71,6 +72,8 @@ func _ready() -> void:
  add_child(scene_audio)
  theme = make_theme()
  build_ui()
+ layouts = load("res://scripts/ui/window_layouts.gd").new()
+ add_child(layouts)
  Game.changed.connect(refresh)
  refresh()
  if "--export-smoke" in OS.get_cmdline_user_args():
@@ -85,6 +88,9 @@ func _ready() -> void:
      valid = valid and ocean.frames.texture(group,clip,(i+.5)/sequence.frames.size()*float(sequence.duration)) != null
   for gear in ocean.frames.config.gear:
    valid = valid and ocean.frames.gear(gear) != null
+  var floating: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/production/floating_manifest.json"))
+  for asset in floating.assets:
+   valid = valid and load("res://"+asset.path) is Texture2D
   get_tree().quit(0 if valid else 1)
  if "--collection-capture" in OS.get_cmdline_user_args():
   call_deferred("collection_capture")
@@ -272,6 +278,8 @@ func build_ui() -> void:
  var version := label("桌面钓鱼 · 0.6.0-preview · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
+ button("场景悬浮",footer,func(): layouts.apply("scene"))
+ button("极简悬浮",footer,func(): layouts.apply("mini"))
  footer.add_child(label("不记录按键内容或窗口标题",11,true))
  build_dialogs()
 
