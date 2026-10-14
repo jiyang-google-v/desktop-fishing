@@ -60,7 +60,7 @@ func reel_line(s: Dictionary, hour: int, rng: RandomNumberGenerator) -> Dictiona
  var length: float = snappedf(10.0 + rng.randf() * 70.0,0.1)
  var record: Dictionary = s.encyclopedia.get(selected.id,{"count":0,"record_cm":0.0})
  s.encyclopedia[selected.id] = {"count":record.count + 1,"record_cm":maxf(record.record_cm,length)}
- s.pending_catch = {"catch_id":new_id(),"species_id":selected.id,"length_cm":length,"depth":depth,"caught_at":Time.get_datetime_string_from_system(true),"first_discovery":record.count == 0,"new_record":length > float(record.record_cm)}
+ s.pending_catch = {"catch_id":new_id(),"species_id":selected.id,"length_cm":length,"depth":depth,"caught_at":Time.get_datetime_string_from_system(true),"first_discovery":record.count == 0,"new_record":length > float(record.record_cm),"previous_record_cm":finite_number(record.record_cm,100000.0)}
  return {"ok":true}
 
 func settle(s: Dictionary, action: String, target_id: String = "") -> Dictionary:
@@ -119,6 +119,8 @@ func clean_catch(value, camel_case: bool = false) -> Dictionary:
  for flag in ["first_discovery","new_record"]:
   if value.has(flag):
    cleaned[flag] = value[flag] == true
+ if value.has("previous_record_cm") and (value.previous_record_cm is float or value.previous_record_cm is int) and is_finite(float(value.previous_record_cm)):
+  cleaned.previous_record_cm = finite_number(value.previous_record_cm,100000.0)
  return cleaned
 
 func restore(data) -> Dictionary:

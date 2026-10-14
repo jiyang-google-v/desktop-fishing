@@ -33,6 +33,10 @@ var book_button: Button
 var tank_button: Button
 var catch_box: VBoxContainer
 var notice: Label
+var feedback_toast: Label
+var feedback_tween: Tween
+var reveal_tween: Tween
+var tank_tween: Tween
 var idle_select: OptionButton
 var saved_label: Label
 var diagnostic_dialog: AcceptDialog
@@ -234,6 +238,9 @@ func build_ui() -> void:
  catch_box = VBoxContainer.new()
  catch_box.add_theme_constant_override("separation",8)
  side.add_child(catch_box)
+ feedback_toast = paragraph("",side,12)
+ feedback_toast.add_theme_color_override("font_color",Color("477c66"))
+ feedback_toast.visible = false
  notice = paragraph("",side,12)
  notice.add_theme_color_override("font_color",Color("9b745c"))
  var side_spacer := Control.new()
@@ -433,6 +440,10 @@ func select_tank_fish(catch_id: String) -> void:
  card_panel.get_child(0).get_children().back().grab_focus()
 
 func render_catch() -> void:
+ if reveal_tween != null and reveal_tween.is_running():
+  reveal_tween.kill()
+ catch_box.scale = Vector2.ONE
+ catch_box.modulate.a = 1.0
  clear_children(catch_box)
  var c: Dictionary = Game.state.pending_catch
  if c.is_empty():
@@ -440,13 +451,15 @@ func render_catch() -> void:
   paragraph("鱼获由收杆时的深度和昼夜决定。发现过的鱼会留在图鉴中。",catch_box,12)
   return
  var f: Dictionary = Game.model.species(c.species_id)
- catch_box.add_child(label("本次鱼获 · " + RARITY.get(f.rarity,f.rarity),11,true))
- catch_box.add_child(portrait(f.id))
+ catch_box.add_child(label("鱼获揭晓 · " + RARITY.get(f.rarity,f.rarity),11,true))
+ catch_box.add_child(portrait(f.id,false,112))
  catch_box.add_child(label(f.name,22))
  if c.get("first_discovery",false):
-  catch_box.add_child(label("第一次遇见 · 图鉴已点亮",12,true))
- elif c.get("new_record",false):
-  catch_box.add_child(label("新的体长纪录",12,true))
+  catch_box.add_child(label("✦ 首次发现 · 图鉴已点亮",12,true))
+ if c.get("new_record",false):
+  var previous: float = float(c.get("previous_record_cm",0.0))
+  var record_text := "✦ 新纪录 · %.1f cm" % c.length_cm if previous <= 0.0 else "✦ 新纪录 · %.1f → %.1f cm" % [previous,c.length_cm]
+  catch_box.add_child(label(record_text,12,true))
  catch_box.add_child(label("%.1f cm · %.1f m" % [c.length_cm,c.depth],13,true))
  var row := HBoxContainer.new()
  row.add_theme_constant_override("separation",8)
@@ -455,10 +468,63 @@ func render_catch() -> void:
   if Game.state.aquarium.size() >= 6:
    open_collection("tank",true)
   else:
-   handle(Game.settle("keep")))
- var release := button("放生",row,func(): ask("放生这次鱼获？图鉴次数和体长纪录会保留。",func(): handle(Game.settle("release"))))
+   settle_catch("keep"))
+ var release := button("放生",row,func(): ask("放生这次鱼获？图鉴次数和体长纪录会保留。",func(): settle_catch("release")))
  keep.disabled = Game.blocked
  release.disabled = Game.blocked
+ catch_box.scale = Vector2(0.96,0.96)
+ catch_box.modulate.a = 0.0
+ reveal_tween = create_tween().set_parallel(true)
+ reveal_tween.tween_property(catch_box,"scale",Vector2.ONE,0.28).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+ reveal_tween.tween_property(catch_box,"modulate:a",1.0,0.22)
+
+func settle_catch(action: String, target_id: String = "") -> Dictionary:
+ var c: Dictionary = Game.state.pending_catch.duplicate(true)
+ if c.is_empty():
+  return {"ok":false,"reason":"no_catch"}
+ var fish: Dictionary = Game.model.species(c.species_id)
+ var replaced_name := ""
+ if action == "replace":
+  var index: int = Game.model.find_catch(Game.state.aquarium,target_id)
+  if index >= 0:
+   replaced_name = Game.model.species(Game.state.aquarium[index].species_id).get("name","")
+ var result: Dictionary = Game.settle(action,target_id)
+ handle(result)
+ if not result.ok:
+  return result
+ if action == "keep":
+  show_feedback("%s 已入住鱼缸 · %d / 6" % [fish.name,Game.state.aquarium.size()])
+  animate_tank_button()
+ elif action == "replace":
+  show_feedback("%s 替换了 %s · 鱼缸 %d / 6" % [fish.name,replaced_name,Game.state.aquarium.size()])
+  animate_tank_button()
+ elif action == "release":
+  show_feedback("%s 已放生 · 图鉴纪录已保留" % fish.name)
+ return result
+
+func show_feedback(message: String) -> void:
+ if feedback_toast == null:
+  return
+ feedback_toast.text = "✓ " + message
+ feedback_toast.visible = true
+ feedback_toast.modulate.a = 1.0
+ if feedback_tween != null and feedback_tween.is_running():
+  feedback_tween.kill()
+ feedback_tween = create_tween()
+ feedback_tween.tween_interval(2.4)
+ feedback_tween.tween_property(feedback_toast,"modulate:a",0.0,0.4)
+ feedback_tween.tween_callback(func(): feedback_toast.visible = false)
+
+func animate_tank_button() -> void:
+ if tank_button == null:
+  return
+ if tank_tween != null and tank_tween.is_running():
+  tank_tween.kill()
+ tank_button.pivot_offset = tank_button.size / 2.0
+ tank_button.scale = Vector2.ONE
+ tank_tween = create_tween()
+ tank_tween.tween_property(tank_button,"scale",Vector2(1.08,1.08),0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+ tank_tween.tween_property(tank_button,"scale",Vector2.ONE,0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT)
 
 func open_collection(mode: String, replace: bool = false) -> void:
  panel_mode = mode
@@ -517,8 +583,7 @@ func render_collection() -> void:
   var chosen = button("替换这条鱼" if replacing else "放生",box,func():
    if replacing:
     ask("放生 %s（%.1f cm），让本次鱼获住进来？" % [f.name,c.length_cm],func():
-     var result: Dictionary = Game.settle("replace",catch_id)
-     handle(result)
+     var result: Dictionary = settle_catch("replace",catch_id)
      if result.ok:
       replacing = false
       collection.hide())
@@ -532,6 +597,8 @@ func ui_smoke() -> void:
  var layout_root: Control = get_node("LayoutMargin").get_child(0)
  assert(layout_root.get_combined_minimum_size().y + 48 <= get_window().size.y)
  # Isolated in-memory UI check; no save writes or Windows sampling.
+ var test_path: String = "user://ui-test-%s.json" % Game.model.new_id()
+ Game.save_path = test_path
  Game.state = Game.model.fresh_state()
  refresh()
  assert(not cast_button.disabled)
@@ -542,15 +609,19 @@ func ui_smoke() -> void:
  assert(Game.model.reel_line(Game.state,12,Game.rng).ok)
  refresh()
  assert(cast_button.disabled and reel_button.disabled)
- assert(Game.model.settle(Game.state,"keep").ok)
+ var reveal_copy: String = ""
+ for child in catch_box.get_children():
+  if child is Label:
+   reveal_copy += child.text + "\n"
+ assert(reveal_copy.contains("首次发现") and reveal_copy.contains("新纪录"))
+ assert(settle_catch("keep").ok)
+ assert(feedback_toast.visible and feedback_toast.text.contains("已入住鱼缸"))
  open_collection("tank")
  assert(collection_grid.get_child_count() == 1)
  collection.hide()
  open_collection("book")
  assert(collection_grid.get_child_count() == 14)
  collection.hide()
- var test_path: String = "user://ui-test-%s.json" % Game.model.new_id()
- Game.save_path = test_path
  assert(Game.model.cast_line(Game.state).ok)
  assert(Game.model.reel_line(Game.state,12,Game.rng).ok)
  for i in range(5):
@@ -572,6 +643,7 @@ func ui_smoke() -> void:
  confirmation.confirmed.emit()
  assert(Game.state.pending_catch.is_empty())
  assert(Game.state.aquarium.size() == 6)
+ assert(feedback_toast.visible and feedback_toast.text.contains("替换了"))
  assert(not collection.visible)
  for suffix in ["", ".bak", ".tmp"]:
   DirAccess.remove_absolute(ProjectSettings.globalize_path(test_path + suffix))
@@ -591,6 +663,8 @@ func ui_smoke() -> void:
  assert(Game.state.pending_catch == caught)
  ocean.skip()
  assert(not ocean.is_busy() and catch_box.visible)
+ assert(settle_catch("release").ok)
+ assert(feedback_toast.visible and feedback_toast.text.contains("图鉴纪录已保留"))
  show_diagnostics()
  assert(diagnostic_dialog.visible)
  assert(diagnostic_dialog.dialog_text.contains("20 分钟"))
