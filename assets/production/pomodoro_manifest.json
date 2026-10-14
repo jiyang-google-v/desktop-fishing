@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "style": "V2.6 / approved A card / scene V2.7",
+  "status": "production_ready",
+  "assets": [
+    {
+      "id": "fill",
+      "path": "assets/production/ui/pomodoro/fill.png",
+      "size": [
+        320,
+        20
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "2cfca7d72a16dac21b60b734feffae1a6e5c434c3a95807c2266fe22b30730b1",
+      "source": "editable_svg"
+    },
+    {
+      "id": "moon",
+      "path": "assets/production/ui/pomodoro/moon.png",
+      "size": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "2cb4fcafbcf98e331bfcab357afd113e52d14265d07397882a0511b2e251073d",
+      "source": "imagegen"
+    },
+    {
+      "id": "panel",
+      "path": "assets/production/ui/pomodoro/panel.png",
+      "size": [
+        368,
+        152
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "3fbbfe8823cfca6761a0a22248c706dd2b5b0b130da7d511b5c9ecc904bb3882",
+      "source": "editable_svg"
+    },
+    {
+      "id": "pause-disabled",
+      "path": "assets/production/ui/pomodoro/pause-disabled.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "b68b5751cb4a25687cf37082eb63a6bd1076fb03dc569d8cc1302f9926ba5b8a",
+      "source": "editable_svg"
+    },
+    {
+      "id": "pause-hover",
+      "path": "assets/production/ui/pomodoro/pause-hover.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "3042770402d1f7a31057b394f74837943174254474b98a0f556c0278d0e23da8",
+      "source": "editable_svg"
+    },
+    {
+      "id": "pause-normal",
+      "path": "assets/production/ui/pomodoro/pause-normal.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "f4748e0cb07754204bf36153bbdd9e202aff10bac1096633a842241b4986ffde",
+      "source": "editable_svg"
+    },
+    {
+      "id": "pause-pressed",
+      "path": "assets/production/ui/pomodoro/pause-pressed.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "cb8daa66e77be708ec6ae99518e194cccd1bc210da1b5bac4d2bd4d74e5a17c9",
+      "source": "editable_svg"
+    },
+    {
+      "id": "play-disabled",
+      "path": "assets/production/ui/pomodoro/play-disabled.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "3fba99aa99e775838510ff3556895f538d20caa5221ae13510f7aca8c7e71407",
+      "source": "editable_svg"
+    },
+    {
+      "id": "play-hover",
+      "path": "assets/production/ui/pomodoro/play-hover.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "6839cc2e3472c51eb50cfe880446350527c325ef3ef89d08b3e5356aa27166d7",
+      "source": "editable_svg"
+    },
+    {
+      "id": "play-normal",
+      "path": "assets/production/ui/pomodoro/play-normal.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "8f8ea904fef1c8d3453bd4521f2c324aa2e9bdef2e483ba372dbff0bfcb5f026",
+      "source": "editable_svg"
+    },
+    {
+      "id": "play-pressed",
+      "path": "assets/production/ui/pomodoro/play-pressed.png",
+      "size": [
+        64,
+        64
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "0d375c515a1f7712e4524864fb015a3c872110b1aa7052cb898a2e7095a67373",
+      "source": "editable_svg"
+    },
+    {
+      "id": "sun",
+      "path": "assets/production/ui/pomodoro/sun.png",
+      "size": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "692b8c1b40f7f611020e64bec91ddef7a4730e94ca72e1bd2d807e443b1dba33",
+      "source": "imagegen"
+    },
+    {
+      "id": "track",
+      "path": "assets/production/ui/pomodoro/track.png",
+      "size": [
+        320,
+        20
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "sha256": "53319bc742f204f3261165ed78eb215910a70c07ca3d940748ac7628087a576c",
+      "source": "editable_svg"
+    }
+  ],
+  "layouts": {
+    "scene": {
+      "window": [
+        420,
+        280
+      ],
+      "card": [
+        244,
+        2,
+        164,
+        68
+      ]
+    },
+    "mini": {
+      "window": [
+        180,
+        176
+      ],
+      "card": [
+        6,
+        4,
+        168,
+        70
+      ],
+      "art": [
+        10,
+        76,
+        160,
+        100
+      ]
+    }
+  },
+  "states": [
+    "ready",
+    "working",
+    "paused",
+    "completed",
+    "pending"
+  ],
+  "day_night": {
+    "source": "Game local clock via main.ocean.night",
+    "day": "sun",
+    "night": "moon"
+  },
+  "text": "Runtime labels; no baked digits",
+  "animation": "Static UI: no invented frame animation. Progress driven by existing Game state.",
+  "acceptance": "RGBA, alpha, dimensions, hashes, actual-size OpenGL composition reviewed; Windows high-DPI remains manual"
+}

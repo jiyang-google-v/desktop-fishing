@@ -42,6 +42,26 @@ static func run(main: Control) -> void:
  game.save_path = save_path
  for origin in ['scene','mini']:
   layouts.apply(origin,false)
+  game.state = game.model.fresh_state()
+  game.model.cast_line(game.state)
+  game.state.focus_seconds = 24.0
+  game.focus_status = {'supported':true,'locked':false}
+  main.refresh()
+  layouts.tools.hide()
+  var root_position: Vector2i = main.get_window().position
+  for expected_pause in [true,false]:
+   layouts.sync_tools()
+   for i in 4:
+    await tree.process_frame
+   var center: Vector2i = main.get_window().position+Vector2i(layouts.timer_card.pause_button.get_global_rect().get_center())
+   var output := []
+   var result := OS.execute('powershell.exe',PackedStringArray(['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',ProjectSettings.globalize_path(helper),'-X',str(center.x),'-Y',str(center.y)]),output)
+   await tree.create_timer(.35).timeout
+   if result != 0 or game.state.paused != expected_pause or game.state.focus_seconds != 24.0 or main.get_window().position != root_position:
+    push_error('Physical Card A pause/resume click failed: '+origin)
+    tree.quit(1)
+    return
+  print('Physical Windows Card A pause/resume passed: '+origin)
   for kind in ['book','tank','reel']:
    game.state = game.model.fresh_state()
    game.model.cast_line(game.state)

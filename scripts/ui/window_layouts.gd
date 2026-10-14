@@ -1,9 +1,11 @@
 extends Control
+const TimerCard = preload('res://scripts/ui/pomodoro_card.gd')
 const Floating = preload('res://scripts/ui/floating_art_view.gd')
-const SIZES := {'full':Vector2i(1100,760),'scene':Vector2i(420,280),'mini':Vector2i(160,100)}
+const SIZES := {'full':Vector2i(1100,760),'scene':Vector2i(420,280),'mini':Vector2i(180,176)}
 var mode := 'full'
 var main
 var view
+var timer_card
 var background: ColorRect
 var toolbar: VBoxContainer
 var tools: Window
@@ -38,6 +40,9 @@ func _ready() -> void:
  view = Floating.new()
  view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  add_child(view)
+ timer_card = TimerCard.new()
+ add_child(timer_card)
+ timer_card.pause_requested.connect(func(): main.handle(main.get_node('/root/Game').toggle_pause()))
  tools = Window.new()
  tools.visible = false
  tools.force_native = true
@@ -202,6 +207,13 @@ func apply(next: String, persist: bool = true) -> void:
  main.get_node('LayoutMargin').visible = not compact
  view.visible = compact
  view.profile = mode if compact else 'scene'
+ timer_card.visible = compact
+ # Preserve the original 160x100 minimal rig below the shared timer.
+ view.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+ view.position = Vector2(10,76) if mode == 'mini' else Vector2.ZERO
+ view.size = Vector2(160,100) if mode == 'mini' else Vector2(SIZES[mode])
+ timer_card.position = Vector2(6,4) if mode == 'mini' else Vector2(244,2)
+ timer_card.size = Vector2(168,70) if mode == 'mini' else Vector2(164,68)
  # Clear old size limits before applying new ones, including mini -> full.
  window.max_size = Vector2i.ZERO
  window.min_size = Vector2i.ZERO
@@ -252,6 +264,9 @@ func _input(event: InputEvent) -> void:
  if tools.visible and Rect2i(tools.position,tools.size).has_point(DisplayServer.mouse_get_position()):
   drag = false
   return
+ if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and timer_card.visible and timer_card.get_rect().has_point(event.position):
+  drag = false
+  return
  if event is InputEventMouseButton:
   if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
    menu.set_item_checked(menu.get_item_index(5),pinned)
@@ -269,6 +284,8 @@ func _input(event: InputEvent) -> void:
 func _process(_delta: float) -> void:
  if mode == 'full':
   return
+ sync_tools()
+ view.night = main.ocean.night
  if main.collection.visible or main.confirmation.visible:
   tools.hide()
   return
@@ -279,8 +296,6 @@ func _process(_delta: float) -> void:
   hover_grace -= _delta
   if hover_grace <= 0:
    tools.hide()
- sync_tools()
- view.night = main.ocean.night
  var action: String = main.ocean.motion.active
  if action in ['cast','reel']:
   view.action = action
@@ -292,6 +307,7 @@ func sync_tools() -> void:
  for key in mode_buttons:
   mode_buttons[key].disabled = key == mode
  var game = main.get_node('/root/Game')
+ timer_card.sync(game,main.ocean.night)
  var remaining: int = int(ceil(game.remaining_seconds()))
  timer_label.text = '%s · %02d:%02d' % [game.model.group_for(game.state.duration_minutes),remaining/60,remaining%60]
  if game.model.completed(game.state):
@@ -309,8 +325,11 @@ func should_show_tools(screen_point: Vector2i) -> bool:
  if tools.visible and Rect2i(tools.position,tools.size).has_point(screen_point):
   return true
  var local := Vector2(screen_point-get_window().position)
+ if timer_card.visible and timer_card.get_rect().has_point(local):
+  return false
  if mode == 'scene':
   return Rect2(Vector2.ZERO,size).has_point(local)
+ local -= view.position
  var rig: Dictionary = view.rig_geometry()
  var start: Vector2 = rig.tip
  var end: Vector2 = rig.hand
