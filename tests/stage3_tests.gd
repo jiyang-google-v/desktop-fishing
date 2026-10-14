@@ -11,6 +11,7 @@ func _initialize() -> void:
  var rng := RandomNumberGenerator.new()
  rng.seed = 44
  m.cast_line(s)
+ s.focus_seconds = s.duration_minutes*60.0
  m.reel_line(s,12,rng)
  check(s.pending_catch.get("first_discovery",false),"First catch discovery flag")
  check(s.pending_catch.get("new_record",false),"First catch record flag")
@@ -23,6 +24,7 @@ func _initialize() -> void:
  for f in m.roster:
   s.encyclopedia[f.id] = {"count":4,"record_cm":1000.0}
  m.cast_line(s)
+ s.focus_seconds = s.duration_minutes*60.0
  m.reel_line(s,12,rng)
  check(not s.pending_catch.first_discovery and not s.pending_catch.new_record,"Existing species below record is not celebrated")
  check(s.pending_catch.previous_record_cm == 1000.0,"Pending catch preserves previous record for reveal")

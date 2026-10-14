@@ -53,7 +53,10 @@ func sample() -> Dictionary:
   return paused
  var value = null
  if FileAccess.file_exists(status_path):
-  value = JSON.parse_string(FileAccess.get_file_as_string(status_path))
+  # A worker replacement can briefly leave an empty/partial read; fail closed without an engine error.
+  var parser := JSON.new()
+  if parser.parse(FileAccess.get_file_as_string(status_path)) == OK:
+   value = parser.data
  var valid: Dictionary = Sample.validate(value,token,Time.get_unix_time_from_system())
  if not valid.is_empty() and int(valid.sequence) > last_sequence:
   last_sequence = int(valid.sequence)

@@ -229,7 +229,7 @@ func _draw() -> void:
  for i in range(5):
   var y: float = surface+42*scale_value+(h-surface-110*scale_value)*i/4.0
   draw_line(Vector2(20*scale_value,y),Vector2(32*scale_value,y),Color("fff8df"),1.6,true)
-  draw_string(ThemeDB.fallback_font,Vector2(39*scale_value,y+4*scale_value),"%dm" % (i*50),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("fff8df"))
+  draw_string(ThemeDB.fallback_font,Vector2(39*scale_value,y+4*scale_value),"%d%%" % (i*25),HORIZONTAL_ALIGNMENT_LEFT,-1,12,Color("fff8df"))
  draw_style_box(border(),Rect2(Vector2.ZERO,size))
 
 func box(color: Color) -> StyleBoxFlat:

@@ -47,4 +47,4 @@ func write(path: String, state: Dictionary) -> Dictionary:
  return {"ok":error == OK,"reason":"" if error == OK else "save_failed"}
 
 func valid_version(value) -> bool:
- return (value is float or value is int) and float(value) in [1.0,2.0,3.0]
+ return (value is float or value is int) and float(value) in [1.0,2.0,3.0,4.0]

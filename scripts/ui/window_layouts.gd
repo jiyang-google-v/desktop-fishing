@@ -10,6 +10,8 @@ var tools: Window
 var mode_buttons := {}
 var action_buttons := {}
 var hover_grace := 0.0
+var timer_label: Label
+var pause_control: Button
 var menu: PopupMenu
 var settings := ConfigFile.new()
 var drag := false
@@ -40,9 +42,10 @@ func _ready() -> void:
  tools.unresizable = true
  tools.transparent_bg = true
  tools.transparent = true
- tools.unfocusable = true
+ # Interactive native windows must accept focus for Windows to deliver button clicks.
+ tools.unfocusable = false
  tools.transient = true
- tools.size = Vector2i(300,120)
+ tools.size = Vector2i(320,160)
  tools.content_scale_size = tools.size
  tools.theme = main.theme
  add_child(tools)
@@ -62,6 +65,15 @@ func _ready() -> void:
  toolbar = VBoxContainer.new()
  toolbar.add_theme_constant_override('separation',6)
  panel.add_child(toolbar)
+ var timer_row := HBoxContainer.new()
+ toolbar.add_child(timer_row)
+ timer_label = Label.new()
+ timer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ timer_row.add_child(timer_label)
+ pause_control = Button.new()
+ pause_control.text = '暂停'
+ pause_control.pressed.connect(func(): main.handle(main.get_node('/root/Game').toggle_pause()))
+ timer_row.add_child(pause_control)
  var modes := HBoxContainer.new()
  toolbar.add_child(modes)
  for entry in [['完整','full'],['悬浮','scene'],['极简','mini']]:
@@ -78,7 +90,7 @@ func _ready() -> void:
   var b := Button.new()
   b.text = entry[0]
   b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  b.pressed.connect(tool_action.bind(entry[1]))
+  b.pressed.connect(request_action.bind(entry[1]))
   actions.add_child(b)
   action_buttons[entry[1]] = b
  menu = PopupMenu.new()
@@ -197,7 +209,7 @@ func _input(event: InputEvent) -> void:
 func _process(_delta: float) -> void:
  if mode == 'full':
   return
- if main.collection.visible:
+ if main.collection.visible or main.confirmation.visible:
   tools.hide()
   return
  if should_show_tools(DisplayServer.mouse_get_position()) and not drag:
@@ -220,9 +232,17 @@ func sync_tools() -> void:
  for key in mode_buttons:
   mode_buttons[key].disabled = key == mode
  var game = main.get_node('/root/Game')
- action_buttons.reel.text = '安置鱼获' if not game.state.pending_catch.is_empty() else '收杆'
+ var remaining: int = int(ceil(game.remaining_seconds()))
+ timer_label.text = '%s · %02d:%02d' % [game.model.group_for(game.state.duration_minutes),remaining/60,remaining%60]
+ if game.model.completed(game.state):
+  timer_label.text = '专注完成 · 可以起竿'
+ elif game.state.paused:
+  timer_label.text += ' · 已暂停'
+ pause_control.text = '继续' if game.state.paused else '暂停'
+ pause_control.disabled = game.blocked or not game.state.cast or game.model.completed(game.state)
+ action_buttons.reel.text = '安置鱼获' if not game.state.pending_catch.is_empty() else ('起竿' if game.model.completed(game.state) else '提前起竿')
  action_buttons.reel.disabled = main.ocean.is_busy() or game.blocked or (not game.state.cast and game.state.pending_catch.is_empty())
- action_buttons.reel.tooltip_text = '请先在完整窗口放钩。' if action_buttons.reel.disabled else '收杆揭晓鱼获；待安置时返回完整窗口。'
+ action_buttons.reel.tooltip_text = '请先在完整窗口放钩。' if action_buttons.reel.disabled else ('提前起竿会失败，需确认。' if game.state.cast and not game.model.completed(game.state) else '完成后起竿揭晓鱼获。')
 func should_show_tools(screen_point: Vector2i) -> bool:
  if mode == 'full':
   return false
@@ -255,3 +275,7 @@ func tool_action(kind: String) -> void:
 func request_mode(next: String) -> void:
  # Finish the native button event before changing its owner window.
  apply.call_deferred(next)
+
+func request_action(kind: String) -> void:
+ # Hide/open native windows only after the mouse release has finished.
+ tool_action.call_deferred(kind)
