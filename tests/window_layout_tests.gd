@@ -17,7 +17,7 @@ func run() -> void:
   assert(main.get_node('LayoutMargin').visible == (mode == 'full'))
   assert(layouts.view.visible == (mode != 'full'))
   if DisplayServer.get_name() != 'headless':
-   assert(root.borderless == (mode != 'full'))
+   assert(root.borderless)
   assert(root.transparent_bg)
   assert(layouts.background.visible == (mode == 'full'))
   assert(JSON.stringify(main.get_node('/root/Game').state) == snapshot)
