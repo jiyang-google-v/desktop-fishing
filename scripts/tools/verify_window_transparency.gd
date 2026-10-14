@@ -6,6 +6,10 @@ static func run(main: Control) -> void:
   print('Native DWM transparency verification requires Windows.')
   tree.quit(0)
   return
+ if RenderingServer.get_current_rendering_driver_name() != 'opengl3_angle':
+  push_error('Windows transparency validation must use ANGLE; fallback is not accepted.')
+  tree.quit(1)
+  return
  var root := main.get_window()
  var layouts = main.layouts
  layouts.set_process(false)

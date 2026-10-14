@@ -17,6 +17,6 @@ Windows 实机待验：DWM 透明合成、多显示器/高 DPI 拖动与屏幕�
 
 ## Windows 黑底修复
 
-用户实机反馈显示黑色背景；之前的 viewport Alpha 截图不能证明桌面合成成功。现改为启动时同时允许并启用原生窗口透明、viewport 透明与透明清屏；所有布局保持 alpha 合成表面，完整模式用独立不透明 ColorRect 作背景，避免重复重建合成状态。Windows Compatibility 使用 ANGLE / Direct3D 11，导出强制包含 libEGL.dll 和 libGLESv2.dll，并检查 DLL 存在。
+用户实机反馈显示黑色背景；之前的 viewport Alpha 截图不能证明桌面合成成功。现改为启动时同时允许并启用原生窗口透明、viewport 透明与透明清屏；所有布局保持 alpha 合成表面，完整模式用独立不透明 ColorRect 作背景，避免重复重建合成状态。Windows Compatibility 使用 ANGLE / Direct3D 11，官方 Godot 4.6.1 模板内置 ANGLE；导出测试检查实际驱动为 opengl3_angle，不允许静默回退到原生 OpenGL。使用动态 ANGLE 模板时由导出器包含 DLL。
 
 导出程序新增 --tests --transparency-smoke：创建独立原生双色测试底窗，在完整/悬浮/极简之间往返，直接读取屏幕合成像素，要求悬浮空白角落透出底窗两种颜色且完整模式保持不透明。同时检查 viewport Alpha。此测试仅在 CI/显式测试参数下执行，不在正常游戏中读取屏幕。Windows CI 结果以对应运行记录为准，不将 Linux Alpha 测试当作 DWM 验收。
