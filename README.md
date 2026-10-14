@@ -79,6 +79,7 @@ godot --headless --script res://tests/stage2_tests.gd -- --tests
 godot --headless --script res://tests/stage3_tests.gd -- --tests
 godot --headless --script res://tests/stage4_tests.gd -- --tests
 godot --headless --script res://tests/stage4_ui_tests.gd -- --tests
+godot --headless --script res://tests/floating_art_tests.gd -- --tests
 godot --headless --quit-after 180 -- --tests --ui-smoke
 godot --headless --quit-after 180 -- --tests --ui-smoke --small
 godot --headless --script res://tests/run_windows_focus.gd -- --tests
@@ -105,3 +106,7 @@ Windows 查询脚本使用系统自带 PowerShell 调用 Win32，只返回空闲
 ## 当前限制
 
 V2.6 主场景素材和分层动作已接入；14生物与鱼缸三层插画已接入，完整收藏演出仍待完善。主场景已补齐人物22帧、猫16帧与特效34帧；UI收尾仍待完成。鱼获仍使用收杆时抽取的 MVP 模型，生态范围和体长是玩法占位值。第一阶段用户已报告 Windows 实机验收通过；本轮视觉交互仍需实际试玩反馈。其他平台可打开 UI，但专注计时暂停。
+
+## 三态窗口
+
+主界面底部切换场景悬浮/极简悬浮。悬浮窗口左键拖动，右键菜单可切换、放钩/收杆、安置鱼获、设置置顶及保存退出；Escape 返回完整窗口。极简状态无常驻 UI。透明区域目前仍属于窗口鼠标命中区。位置与置顶独立保存，不改变钓鱼存档。Windows 实机验收项见 docs/WINDOW_LAYOUT_QA.md。

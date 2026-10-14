@@ -3,3 +3,5 @@ build/
 *.tmp
 export_credentials.cfg
 art/concepts/motion/*.import
+art/concepts/floating/*.import
+docs/qa/floating/*.import

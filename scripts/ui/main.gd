@@ -16,6 +16,7 @@ const STATUS := {
  "max_depth":["抵达 200 米","已经到达最深处，可以收杆看看。"],
  "blocked":["存档需要处理","为保护已有数据，已暂停游戏操作。"]
 }
+var layouts
 var ocean
 var scene_audio
 var sound_button: Button
@@ -71,8 +72,14 @@ func _ready() -> void:
  add_child(scene_audio)
  theme = make_theme()
  build_ui()
+ layouts = load("res://scripts/ui/window_layouts.gd").new()
+ add_child(layouts)
  Game.changed.connect(refresh)
  refresh()
+ if "--tests" in OS.get_cmdline_user_args() and "--toolbar-click-smoke" in OS.get_cmdline_user_args():
+  load("res://scripts/tools/verify_toolbar_clicks.gd").run.call_deferred(self)
+ if "--tests" in OS.get_cmdline_user_args() and "--transparency-smoke" in OS.get_cmdline_user_args():
+  load("res://scripts/tools/verify_window_transparency.gd").run.call_deferred(self)
  if "--export-smoke" in OS.get_cmdline_user_args():
   var valid: bool = Game.model.roster.size() == 14 and FileAccess.file_exists("res://platform/windows/focus-worker.ps1") and not ocean.motion.config.is_empty() and Ocean.BACKGROUND != null and SceneAudio.WATER != null
   for fish in Game.model.roster:
@@ -85,6 +92,9 @@ func _ready() -> void:
      valid = valid and ocean.frames.texture(group,clip,(i+.5)/sequence.frames.size()*float(sequence.duration)) != null
   for gear in ocean.frames.config.gear:
    valid = valid and ocean.frames.gear(gear) != null
+  var floating: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/production/floating_manifest.json"))
+  for asset in floating.assets:
+   valid = valid and load("res://"+asset.path) is Texture2D
   get_tree().quit(0 if valid else 1)
  if "--collection-capture" in OS.get_cmdline_user_args():
   call_deferred("collection_capture")
@@ -272,6 +282,8 @@ func build_ui() -> void:
  var version := label("桌面钓鱼 · 0.6.0-preview · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
+ button("场景悬浮",footer,func(): layouts.apply("scene"))
+ button("极简悬浮",footer,func(): layouts.apply("mini"))
  footer.add_child(label("不记录按键内容或窗口标题",11,true))
  build_dialogs()
 
@@ -393,6 +405,8 @@ func update_notices() -> void:
  collection_notice.visible = not message.is_empty()
 
 func ask(text: String, action: Callable, confirm_text: String = "确认") -> void:
+ confirmation.hide()
+ confirmation.force_native = layouts != null and layouts.mode != "full"
  confirm_action = action
  var parent: Node = collection if collection.visible else self
  if confirmation.get_parent() != parent:
@@ -568,6 +582,8 @@ func animate_tank_button() -> void:
  tank_tween.tween_property(tank_button,"scale",Vector2.ONE,0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN_OUT)
 
 func open_collection(mode: String, replace: bool = false) -> void:
+ collection.hide()
+ collection.force_native = layouts != null and layouts.mode != "full"
  panel_mode = mode
  replacing = replace and mode == "tank" and not Game.state.pending_catch.is_empty() and not Game.state.aquarium.is_empty()
  collection_feedback.visible = false

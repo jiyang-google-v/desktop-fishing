@@ -1,0 +1,140 @@
+[
+  {
+    "id": "corner-water",
+    "mode": "RGBA",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "f323bc40007234c0ece70865f8c88c1773df745bdee16b37c60e757f381f1dc0",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_fraction": 0.5422,
+    "visible_bounds_alpha_over_16": [
+      11,
+      261,
+      1774,
+      887
+    ],
+    "intentional_canvas_contacts": [
+      "right",
+      "bottom"
+    ],
+    "passed": true
+  },
+  {
+    "id": "shore-rocks",
+    "mode": "RGBA",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "42a2c5cc98328ce539ffc7b0f7270873859ec9ef4bd736eb10bd52a0e2be761a",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_fraction": 0.8224,
+    "visible_bounds_alpha_over_16": [
+      265,
+      444,
+      1774,
+      881
+    ],
+    "intentional_canvas_contacts": [
+      "right",
+      "bottom"
+    ],
+    "passed": true
+  },
+  {
+    "id": "distant-island",
+    "mode": "RGBA",
+    "size": [
+      1536,
+      1024
+    ],
+    "sha256": "839cff1e1fff6d922a590d3714e96b1e956363e6d3f08f5ce6c9d53c609e786f",
+    "alpha_range": [
+      0,
+      254
+    ],
+    "transparent_fraction": 0.7374,
+    "visible_bounds_alpha_over_16": [
+      29,
+      273,
+      1521,
+      913
+    ],
+    "intentional_canvas_contacts": [],
+    "passed": true
+  },
+  {
+    "id": "cloud-large",
+    "mode": "RGBA",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "f80081dfb72e5582e6fa29c741a3e1902c464b959e8c0713cd4031a51550a386",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_fraction": 0.5985,
+    "visible_bounds_alpha_over_16": [
+      67,
+      120,
+      1714,
+      828
+    ],
+    "intentional_canvas_contacts": [],
+    "passed": true
+  },
+  {
+    "id": "cloud-small",
+    "mode": "RGBA",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "fc3cd1444993076c84d4952b94ba053c311989eafb4bf1f7d5e902e362331d1e",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_fraction": 0.8124,
+    "visible_bounds_alpha_over_16": [
+      266,
+      286,
+      1506,
+      687
+    ],
+    "intentional_canvas_contacts": [],
+    "passed": true
+  },
+  {
+    "id": "mini-water",
+    "mode": "RGBA",
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "ce6b4c220baa474faa3fa9bb8ae1636589b56f53dd6b2d68c6ff5033e91b6c50",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_fraction": 0.9086,
+    "visible_bounds_alpha_over_16": [
+      366,
+      401,
+      1426,
+      640
+    ],
+    "intentional_canvas_contacts": [],
+    "passed": true
+  }
+]

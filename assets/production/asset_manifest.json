@@ -1589,9 +1589,154 @@
       "status": "integration_candidate",
       "source": "built-in imagegen; fixed-grid extraction and registration",
       "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "floating-corner-water",
+      "path": "assets/production/floating/corner-water.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        1,
+        1
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "screen_edge_layer",
+      "intentional_canvas_contacts": [
+        "right",
+        "bottom"
+      ],
+      "sha256": "f323bc40007234c0ece70865f8c88c1773df745bdee16b37c60e757f381f1dc0",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-e99990bc-1b71-4d3e-b88e-b54adf207959.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "floating-shore-rocks",
+      "path": "assets/production/floating/shore-rocks.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        1,
+        1
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "screen_edge_layer",
+      "intentional_canvas_contacts": [
+        "right",
+        "bottom"
+      ],
+      "sha256": "42a2c5cc98328ce539ffc7b0f7270873859ec9ef4bd736eb10bd52a0e2be761a",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-d5e6be7b-99d1-4eb6-9802-83e46abbaa87.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "floating-distant-island",
+      "path": "assets/production/floating/distant-island.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "pivot": [
+        1,
+        1
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "839cff1e1fff6d922a590d3714e96b1e956363e6d3f08f5ce6c9d53c609e786f",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-e400f119-784b-4c4b-a95f-8e7852e8b007.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "floating-cloud-large",
+      "path": "assets/production/floating/cloud-large.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "f80081dfb72e5582e6fa29c741a3e1902c464b959e8c0713cd4031a51550a386",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-30dc9783-3e33-458b-bae4-4d8686e08af0.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "floating-cloud-small",
+      "path": "assets/production/floating/cloud-small.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "fc3cd1444993076c84d4952b94ba053c311989eafb4bf1f7d5e902e362331d1e",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-fe481e72-ed91-4391-8f31-cde00ca016c5.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "floating-mini-water",
+      "path": "assets/production/floating/mini-water.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.58
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "ce6b4c220baa474faa3fa9bb8ae1636589b56f53dd6b2d68c6ff5033e91b6c50",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-a026278f-fe7b-4a67-a418-3dfe6df014ad.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
     }
   ],
   "animation": "assets/production/scene.animation.json",
   "note": "Stage4 independent authored frames are integration candidates pending final visual acceptance; legacy scene sources retained for traceability.",
-  "motion_animation": "assets/production/motion.animation.json"
+  "motion_animation": "assets/production/motion.animation.json",
+  "floating_manifest": "assets/production/floating_manifest.json"
 }
