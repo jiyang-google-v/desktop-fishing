@@ -44,7 +44,9 @@ static func run(main: Control) -> void:
     push_error('Cannot read native desktop compositor output.')
     tree.quit(1)
     return
-   var sample := root.position+Vector2i(2,2)-DisplayServer.screen_get_position(root.current_screen)
+   # Full-mode native corner rounding/shadow is outside the client background.
+   var inset := Vector2i(20,20) if mode == 'full' else Vector2i(2,2)
+   var sample := root.position+inset-DisplayServer.screen_get_position(root.current_screen)
    var actual := screen.get_pixelv(sample)
    var expected: Color = layouts.background.color if mode == 'full' else color
    if maxf(absf(actual.r-expected.r),maxf(absf(actual.g-expected.g),absf(actual.b-expected.b))) > .12:
