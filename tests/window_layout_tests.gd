@@ -20,6 +20,14 @@ func run() -> void:
   if mode != 'full':
    assert(layouts.view.profile == mode)
    assert(root.min_size == layouts.SIZES[mode])
+ for mode in ['scene','mini']:
+  layouts.apply(mode,false)
+  for action in ['cast','reel']:
+   main.ocean.play(action)
+   assert(main.ocean.is_busy())
+   main.ocean._process(10.0)
+   assert(not main.ocean.is_busy())
+ layouts.apply('full',false)
  layouts.apply('invalid', false)
  assert(layouts.mode == 'full')
  assert(layouts.clamp_position(Vector2i(-99999,99999),Vector2i(160,100)).y < 99999)

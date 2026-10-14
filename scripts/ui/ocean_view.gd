@@ -76,7 +76,7 @@ func skip() -> void:
   queue_redraw()
 
 func _process(delta: float) -> void:
- if not is_visible_in_tree():
+ if not is_visible_in_tree() and not motion.busy():
   return
  elapsed += delta
  # Gentle ambience continues when paused; only exploration cues freeze.
