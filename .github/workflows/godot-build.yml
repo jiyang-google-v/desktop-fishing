@@ -34,8 +34,12 @@ jobs:
       - name: Verify exported native desktop transparency
         shell: pwsh
         run: |
-          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file','build/windows/transparency.log','--quit-after','600','--','--tests','--transparency-smoke' -Wait -PassThru
-          Get-Content build/windows/transparency.log -ErrorAction SilentlyContinue
+          $logPath = Join-Path $PWD 'build/windows/transparency.log'
+          $stdoutPath = Join-Path $PWD 'build/windows/transparency-stdout.log'
+          $stderrPath = Join-Path $PWD 'build/windows/transparency-stderr.log'
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file',$logPath,'--quit-after','600','--','--tests','--transparency-smoke' -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+          Get-Content $logPath,$stdoutPath,$stderrPath -ErrorAction SilentlyContinue
+          Write-Host "Native transparency process exit code: $($process.ExitCode)"
           if ($process.ExitCode -ne 0) { throw 'Native desktop transparency check failed' }
       - uses: actions/upload-artifact@v4
         with:
@@ -49,6 +53,6 @@ jobs:
         with:
           name: transparency-diagnostics
           path: |
-            build/windows/transparency.log
+            build/windows/*transparency*.log
             build/windows/transparency-qa/**
           if-no-files-found: ignore
