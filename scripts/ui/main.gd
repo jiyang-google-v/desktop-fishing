@@ -63,6 +63,9 @@ func _ready() -> void:
  refresh()
  if "--export-smoke" in OS.get_cmdline_user_args():
   var valid: bool = Game.model.roster.size() == 14 and FileAccess.file_exists("res://platform/windows/focus-worker.ps1") and not ocean.motion.config.is_empty() and Ocean.BACKGROUND != null and SceneAudio.WATER != null
+  for fish in Game.model.roster:
+   valid = valid and Portrait.texture_for(fish.id) != null
+  valid = valid and FileAccess.file_exists("res://assets/production/aquarium_manifest.json")
   get_tree().quit(0 if valid else 1)
  if "--collection-capture" in OS.get_cmdline_user_args():
   call_deferred("collection_capture")
@@ -620,12 +623,16 @@ func scene_capture() -> void:
 func collection_capture() -> void:
  OS.low_processor_usage_mode = false
  Game.state = Game.model.fresh_state()
- var ids := ["fish_001_clownfish","fish_004_seahorse","fish_011_lanternfish"]
+ var ids: Array = Game.model.roster.map(func(f): return f.id)
+ if "--showcase" in OS.get_cmdline_user_args():
+  ids = ["fish_001_clownfish","creature_013_jellyfish","fish_008_yellowfin_tuna","fish_004_seahorse","creature_014_cuttlefish","fish_012_star_wish_fish"]
  for i in range(6):
-  var id: String = ids[i%3]
+  var id: String = ids[i%ids.size()]
   Game.state.aquarium.append({"catch_id":"qa-%d"%i,"species_id":id,"length_cm":12.0+i,"depth":80.0,"caught_at":"QA"})
   Game.state.encyclopedia[id] = {"count":2,"record_cm":17.0}
  Game.state.pending_catch = {"catch_id":"qa-pending","species_id":ids[0],"length_cm":18.0,"depth":20.0,"caught_at":"QA","first_discovery":true,"new_record":true}
+ for fish in Game.model.roster:
+  Game.state.encyclopedia[fish.id] = {"count":2,"record_cm":17.0}
  if "--undiscovered" in OS.get_cmdline_user_args():
   Game.state.encyclopedia = {}
  refresh()
@@ -635,12 +642,15 @@ func collection_capture() -> void:
   var board := VBoxContainer.new()
   board.position = Vector2(24,24)
   add_child(board)
-  board.add_child(label("V2.6 三鱼样本 · 32 / 48 / 64 / 96 px",22))
-  for color in [Color("fffbee"),Color("91c8d1")]:
-   var row := HBoxContainer.new()
-   row.add_theme_constant_override("separation",20)
+  board.add_child(label("V2.6 全生物 · 32 / 48 / 64 / 96 px",22))
+  var sample_ids: Array = ids.slice(7,14) if "--page2" in OS.get_cmdline_user_args() else ids.slice(0,7)
+  for color in [Color("91c8d1") if "--blue" in OS.get_cmdline_user_args() else Color("fffbee")]:
+   var row := GridContainer.new()
+   row.columns = 3
+   row.add_theme_constant_override("h_separation",12)
+   row.add_theme_constant_override("v_separation",8)
    board.add_child(row)
-   for id in ids:
+   for id in sample_ids:
     var panel := PanelContainer.new()
     panel.add_theme_stylebox_override("panel",style(color,12))
     row.add_child(panel)
@@ -670,5 +680,5 @@ func collection_capture() -> void:
   assert(collection_description.text.contains("小丑鱼"))
   await RenderingServer.frame_post_draw
  var viewport: Viewport = get_viewport() if "--catch" in OS.get_cmdline_user_args() or "--samples" in OS.get_cmdline_user_args() else collection
- viewport.get_texture().get_image().save_png("res://docs/qa/stage3/" + ("samples" if "--samples" in OS.get_cmdline_user_args() else ("catch" if "--catch" in OS.get_cmdline_user_args() else mode)) + ("-small" if "--small" in OS.get_cmdline_user_args() else "") + ("-hidden" if "--undiscovered" in OS.get_cmdline_user_args() else "") + ".png")
+ viewport.get_texture().get_image().save_png("res://docs/qa/stage3/" + ("samples" if "--samples" in OS.get_cmdline_user_args() else ("catch" if "--catch" in OS.get_cmdline_user_args() else mode)) + ("-small" if "--small" in OS.get_cmdline_user_args() else "") + ("-hidden" if "--undiscovered" in OS.get_cmdline_user_args() else "") + ("-2" if "--page2" in OS.get_cmdline_user_args() else "") + ("-blue" if "--blue" in OS.get_cmdline_user_args() else "") + ".png")
  get_tree().quit()

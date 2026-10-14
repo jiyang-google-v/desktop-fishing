@@ -31,7 +31,7 @@ func _initialize() -> void:
  old.pending_catch.erase("new_record")
  check(not m.restore(old).state.pending_catch.get("first_discovery",false),"Legacy catch does not invent discovery")
  var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://assets/production/collection_manifest.json"))
- check(manifest.assets.size() == 3,"Three sample assets only")
+ check(manifest.assets.size() == 14,"Complete stable fourteen species")
  for asset in manifest.assets:
   check(not m.species(asset.id).is_empty(),"Stable sample species")
   check(FileAccess.file_exists("res://"+asset.path),"Sample exists")
@@ -39,5 +39,11 @@ func _initialize() -> void:
   check(texture != null and texture.get_size() == Vector2(1254,1254),"Unified sample canvas")
  var config = JSON.parse_string(FileAccess.get_file_as_string("res://assets/production/collection.animation.json"))
  check(config.swim.duration > 0 and config.drift.duration > 0,"Valid movement timing")
+ for special_id in ["fish_004_seahorse","creature_013_jellyfish","creature_014_cuttlefish"]:
+  check(config.species.has(special_id),"Special species movement is configured")
+ var layers = JSON.parse_string(FileAccess.get_file_as_string("res://assets/production/aquarium_manifest.json"))
+ check(layers.assets.size() == 3,"Three independent aquarium layers")
+ for layer in layers.assets:
+  check(FileAccess.file_exists("res://"+layer.path),"Aquarium layer exists")
  print("Stage 3 collection checks: failures=%d" % failures)
  quit(1 if failures else 0)

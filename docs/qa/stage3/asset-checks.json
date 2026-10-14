@@ -1,6 +1,7 @@
 [
   {
-    "file": "assets/production/fish/fish_001_clownfish.png",
+    "path": "assets/production/fish/creature_013_jellyfish.png",
+    "mode": "RGBA",
     "size": [
       1254,
       1254
@@ -9,11 +10,41 @@
       0,
       255
     ],
-    "nonzero_bbox": [
-      0,
-      9,
-      1234,
+    "visible_bbox": [
+      274,
+      285,
+      985,
+      1009
+    ]
+  },
+  {
+    "path": "assets/production/fish/creature_014_cuttlefish.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
       1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      154,
+      418,
+      1173,
+      893
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_001_clownfish.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
     ],
     "visible_bbox": [
       89,
@@ -23,7 +54,8 @@
     ]
   },
   {
-    "file": "assets/production/fish/fish_011_lanternfish.png",
+    "path": "assets/production/fish/fish_002_blue_tang.png",
+    "mode": "RGBA",
     "size": [
       1254,
       1254
@@ -32,11 +64,167 @@
       0,
       255
     ],
-    "nonzero_bbox": [
+    "visible_bbox": [
+      202,
+      366,
+      1087,
+      913
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_003_butterflyfish.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
       0,
-      37,
-      1176,
-      1198
+      255
+    ],
+    "visible_bbox": [
+      196,
+      275,
+      1075,
+      977
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_004_seahorse.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      419,
+      222,
+      963,
+      1092
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_005_pufferfish.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      220,
+      313,
+      1072,
+      947
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_006_lionfish.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      181,
+      291,
+      1082,
+      970
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_007_red_seabream.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      191,
+      365,
+      1078,
+      900
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_008_yellowfin_tuna.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      76,
+      327,
+      1193,
+      961
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_009_grouper.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      121,
+      358,
+      1169,
+      915
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_010_bigeye_tuna.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      164,
+      381,
+      1102,
+      881
+    ]
+  },
+  {
+    "path": "assets/production/fish/fish_011_lanternfish.png",
+    "mode": "RGBA",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
     ],
     "visible_bbox": [
       190,
@@ -46,7 +234,8 @@
     ]
   },
   {
-    "file": "assets/production/fish/fish_004_seahorse.png",
+    "path": "assets/production/fish/fish_012_star_wish_fish.png",
+    "mode": "RGBA",
     "size": [
       1254,
       1254
@@ -55,17 +244,60 @@
       0,
       255
     ],
-    "nonzero_bbox": [
-      25,
-      39,
-      1200,
-      1244
+    "visible_bbox": [
+      175,
+      353,
+      1098,
+      920
+    ]
+  },
+  {
+    "path": "assets/production/aquarium/aquarium-background.png",
+    "mode": "RGBA",
+    "size": [
+      2172,
+      724
+    ],
+    "alpha_range": [
+      255,
+      255
+    ],
+    "visible_bbox": null
+  },
+  {
+    "path": "assets/production/aquarium/aquarium-foreground.png",
+    "mode": "RGBA",
+    "size": [
+      2172,
+      724
+    ],
+    "alpha_range": [
+      0,
+      255
     ],
     "visible_bbox": [
-      419,
-      222,
-      963,
-      1092
+      0,
+      447,
+      2172,
+      724
+    ]
+  },
+  {
+    "path": "assets/production/aquarium/aquarium-water.png",
+    "mode": "RGBA",
+    "size": [
+      2172,
+      724
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bbox": [
+      0,
+      74,
+      2172,
+      387
     ]
   }
 ]
