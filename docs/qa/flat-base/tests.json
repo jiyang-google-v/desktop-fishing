@@ -1,0 +1,27 @@
+[
+  {
+    "test": "reference_scene_tests",
+    "passed": true,
+    "output": "Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org\n\nReference scenes: transparent environment, right-facing scene rig and adaptive vertical toolbar passed\n"
+  },
+  {
+    "test": "pomodoro_card_tests",
+    "passed": true,
+    "output": "Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org\n\nCard A: both layouts, status/time/progress, pause click, drag exclusion, state preservation and day/night passed\n"
+  },
+  {
+    "test": "window_layout_tests",
+    "passed": true,
+    "output": "Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org\n\nThree window layouts: visibility, transparency, size, state preservation and bounds passed\n"
+  },
+  {
+    "test": "window_controls_tests",
+    "passed": true,
+    "output": "Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org\n\nAll nine layout transitions, rod-hover toolbar, collection entry points and brightness lift passed\n"
+  },
+  {
+    "test": "pomodoro_ui_tests",
+    "passed": true,
+    "output": "Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org\n\nPomodoro UI: duration, pause/resume, early failure cancel/confirm, successful C catch, grouped book and floating timer passed\n"
+  }
+]

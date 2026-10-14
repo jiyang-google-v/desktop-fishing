@@ -25,6 +25,8 @@ if ($ExportOnly) {
  Copy-Item docs/POMODORO_QA.md build/windows/POMODORO_QA.md
  Copy-Item docs/REFERENCE_SCENE_QA.md build/windows/REFERENCE_SCENE_QA.md
  Copy-Item docs/POMODORO_CARD_A_QA.md build/windows/POMODORO_CARD_A_QA.md
+ Copy-Item docs/FLAT_BASE_QA.md build/windows/FLAT_BASE_QA.md
+ Copy-Item docs/qa/flat-base build/windows/flat-base-preview -Recurse
  Copy-Item docs/qa/pomodoro-card build/windows/pomodoro-card-preview -Recurse
  Copy-Item docs/qa/pomodoro build/windows/pomodoro-preview -Recurse
  Copy-Item docs/WINDOWS_STAGE1_ACCEPTANCE.md build/windows/WINDOWS_STAGE1_ACCEPTANCE.md

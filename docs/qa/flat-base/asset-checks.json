@@ -1,0 +1,65 @@
+{
+  "before": {
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      254
+    ],
+    "lower_band_medians_px": [
+      959,
+      968,
+      967,
+      974,
+      981,
+      959,
+      963,
+      965,
+      970,
+      970,
+      973,
+      975,
+      981,
+      978,
+      970,
+      963
+    ],
+    "bottom_variation_px": 22
+  },
+  "after": {
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      254
+    ],
+    "lower_band_medians_px": [
+      959,
+      959,
+      958,
+      960,
+      959,
+      956,
+      957,
+      955,
+      955,
+      959,
+      960,
+      961,
+      960,
+      964,
+      962,
+      959
+    ],
+    "bottom_variation_px": 9
+  },
+  "sha256": "9644e349c993912cbe3115f00d7daefe7eb2335e0684ccdf53cff40e4b03fb49",
+  "path": "assets/production/scene/reference-floating-environment.png",
+  "pass_threshold_px": 18
+}

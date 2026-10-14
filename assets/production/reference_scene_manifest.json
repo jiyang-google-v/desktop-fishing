@@ -13,8 +13,8 @@
         0,
         254
       ],
-      "sha256": "c93cb5a28976814bc6ae34d92674b4f191aa7161485b9fe61231e3eb95e8b818",
-      "status": "integrated_pending_windows_visual_qa"
+      "sha256": "9644e349c993912cbe3115f00d7daefe7eb2335e0684ccdf53cff40e4b03fb49",
+      "status": "production_ready"
     },
     {
       "id": "reference-ocean-day",
@@ -50,5 +50,11 @@
     "Reference ocean background 16:9: tree, clouds, lighthouse, surface at43%, fish/coral/ship; remove all UI and independent foreground actors.",
     "Transparent floating environment 3:2: tree, clouds, lighthouse, shallow water at55%; no sky rectangle, UI or foreground actors.",
     "Transparent pier 2:1: orange planks and three posts, blue outline, no other objects."
-  ]
+  ],
+  "floating_base_revision": {
+    "date": "2026-10-14",
+    "request": "Original scene with flatter bottom; remove downward convex bulge, preserve connected rocks/seaweed edge.",
+    "scope": "Only mode 2 environment; same path and 1536x1024 RGBA canvas; actors, timer, rig and mini assets reused.",
+    "qa": "docs/FLAT_BASE_QA.md"
+  }
 }
