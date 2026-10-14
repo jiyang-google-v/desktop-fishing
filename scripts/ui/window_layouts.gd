@@ -68,7 +68,8 @@ func _ready() -> void:
   var b := Button.new()
   b.text = entry[0]
   b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  b.pressed.connect(apply.bind(entry[1]))
+  b.focus_mode = Control.FOCUS_NONE
+  b.pressed.connect(request_mode.bind(entry[1]))
   modes.add_child(b)
   mode_buttons[entry[1]] = b
  var actions := HBoxContainer.new()
@@ -118,9 +119,11 @@ func apply(next: String, persist: bool = true) -> void:
   return
  if persist:
   remember()
- tools.hide()
+ var keep_tools: bool = tools.visible and mode != "full" and next != "full"
+ if not keep_tools:
+  tools.hide()
  drag = false
- hover_grace = 0.0
+ hover_grace = .4 if keep_tools else 0.0
  mode = next
  var window := get_window()
  var compact: bool = mode != 'full'
@@ -234,9 +237,9 @@ func should_show_tools(screen_point: Vector2i) -> bool:
  return local.distance_to(Geometry2D.get_closest_point_to_segment(local,start,end)) <= 24.0
 func show_tools() -> void:
  sync_tools()
- tools.position = clamp_position(get_window().position+Vector2i(get_window().size.x-tools.size.x,-tools.size.y-6),tools.size)
  tools.always_on_top = pinned
  if not tools.visible:
+  tools.position = clamp_position(get_window().position+Vector2i(get_window().size.x-tools.size.x,-tools.size.y-6),tools.size)
   tools.show()
 func open_collection(kind: String) -> void:
  tools.hide()
@@ -248,3 +251,7 @@ func tool_action(kind: String) -> void:
   apply('full')
  elif not action_buttons.reel.disabled:
   main.perform_fishing('reel')
+
+func request_mode(next: String) -> void:
+ # Finish the native button event before changing its owner window.
+ apply.call_deferred(next)

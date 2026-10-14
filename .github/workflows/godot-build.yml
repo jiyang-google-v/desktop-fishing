@@ -41,6 +41,15 @@ jobs:
           Get-Content $logPath,$stdoutPath,$stderrPath -ErrorAction SilentlyContinue
           Write-Host "Native transparency process exit code: $($process.ExitCode)"
           if ($process.ExitCode -ne 0) { throw 'Native desktop transparency check failed' }
+      - name: Verify physical exported toolbar mode buttons
+        shell: pwsh
+        run: |
+          $logPath = Join-Path $PWD 'build/windows/toolbar-click.log'
+          $stdoutPath = Join-Path $PWD 'build/windows/toolbar-click-stdout.log'
+          $stderrPath = Join-Path $PWD 'build/windows/toolbar-click-stderr.log'
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file',$logPath,'--quit-after','1800','--','--tests','--toolbar-click-smoke' -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+          Get-Content $logPath,$stdoutPath,$stderrPath -ErrorAction SilentlyContinue
+          if ($process.ExitCode -ne 0) { throw 'Physical toolbar mode switch failed' }
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-fishing-godot-windows
@@ -54,5 +63,6 @@ jobs:
           name: transparency-diagnostics
           path: |
             build/windows/*transparency*.log
+            build/windows/*toolbar-click*.log
             build/windows/transparency-qa/**
           if-no-files-found: ignore

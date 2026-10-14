@@ -76,6 +76,8 @@ func _ready() -> void:
  add_child(layouts)
  Game.changed.connect(refresh)
  refresh()
+ if "--tests" in OS.get_cmdline_user_args() and "--toolbar-click-smoke" in OS.get_cmdline_user_args():
+  load("res://scripts/tools/verify_toolbar_clicks.gd").run.call_deferred(self)
  if "--tests" in OS.get_cmdline_user_args() and "--transparency-smoke" in OS.get_cmdline_user_args():
   load("res://scripts/tools/verify_window_transparency.gd").run.call_deferred(self)
  if "--export-smoke" in OS.get_cmdline_user_args():
