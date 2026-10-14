@@ -49,7 +49,8 @@ jobs:
           $stderrPath = Join-Path $PWD 'build/windows/toolbar-click-stderr.log'
           $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file',$logPath,'--quit-after','1800','--','--tests','--toolbar-click-smoke' -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
           Get-Content $logPath,$stdoutPath,$stderrPath -ErrorAction SilentlyContinue
-          if ($process.ExitCode -ne 0) { throw 'Physical toolbar mode switch failed' }
+          $nativeOutput = (Get-Content $logPath,$stdoutPath,$stderrPath -Raw -ErrorAction SilentlyContinue) -join [Environment]::NewLine
+          if ($process.ExitCode -ne 0 -or $nativeOutput -match '(SCRIPT ERROR:|(?m)^ERROR:)') { throw 'Physical toolbar mode switch failed or native engine errors were logged' }
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-fishing-godot-windows

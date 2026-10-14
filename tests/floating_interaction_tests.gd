@@ -9,10 +9,14 @@ func run() -> void:
  var layouts = main.layouts
  game.save_path = 'user://floating-actions-'+game.model.new_id()+'.json'
  game.state = game.model.fresh_state()
+ layouts.pinned = true
+ root.always_on_top = true
  for mode in ['scene','mini']:
   layouts.apply(mode,false)
   await process_frame
   assert(not layouts.toolbar.has_node('ToolbarTimer'))
+  assert(layouts.tools.transient and not layouts.tools.always_on_top)
+  assert(layouts.catch_popup.transient and not layouts.catch_popup.always_on_top)
   assert(layouts.action_buttons.has('cast') and layouts.action_buttons.has('opacity'))
   assert(not layouts.action_buttons.cast.disabled and layouts.action_buttons.reel.disabled)
   layouts.set_opacity_percent(45)

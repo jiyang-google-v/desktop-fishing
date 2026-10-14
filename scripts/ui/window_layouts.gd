@@ -196,8 +196,7 @@ func sync_catch(force: bool = false) -> void:
  if force:
   dismissed_catch = ''
  catch_popup.present(game)
- if catch_popup.always_on_top != pinned:
-  catch_popup.always_on_top = pinned
+ # Transient windows inherit their owner's stacking; a separate on-top flag conflicts.
  var offset := Vector2i(-catch_popup.size.x-8,0) if mode == 'scene' else Vector2i(get_window().size.x-catch_popup.size.x,-catch_popup.size.y-8)
  catch_popup.position = clamp_position(get_window().position+offset,catch_popup.size)
  if not catch_popup.visible:
@@ -370,8 +369,7 @@ func should_show_tools(screen_point: Vector2i) -> bool:
  return local.distance_to(Geometry2D.get_closest_point_to_segment(local,start,end)) <= 24.0
 func show_tools() -> void:
  sync_tools()
- if tools.always_on_top != pinned:
-  tools.always_on_top = pinned
+ # Native toolbar stays above its owner through transient ownership.
  if not tools.visible:
   var offset := Vector2i(-tools.size.x-6,0) if mode == "scene" else Vector2i(get_window().size.x-tools.size.x,-tools.size.y-6)
   tools.position = clamp_position(get_window().position+offset,tools.size)

@@ -78,5 +78,10 @@
     "test": "floating_interaction_capture",
     "passed": true,
     "output": "Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org\nWARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:364)\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nCaptured actual-size opacity, toolbar, reeling and catch cards in both floating layouts\n"
+  },
+  {
+    "test": "floating_interaction_native_pinned",
+    "passed": true,
+    "output": "Godot Engine v4.6.1.stable.official.14d19694e - https://godotengine.org\nWARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.\n     at: set_use_vsync (platform/linuxbsd/x11/gl_manager_x11.cpp:364)\nOpenGL API 4.5 (Core Profile) Mesa 25.2.8-0ubuntu0.24.04.2 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 20.1.2, 256 bits)\n\nFloating actions: opacity, cast, early cancel, reveal once, switch preservation, keep and repeated input lifecycle passed\n"
   }
 ]
