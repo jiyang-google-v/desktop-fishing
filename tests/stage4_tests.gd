@@ -47,7 +47,7 @@ func _initialize() -> void:
   var line: PackedVector2Array = ocean.fishing_line_points(Vector2(120,80),bobber,hook,true,.7,1.0)
   check(line.size() == 31,"Split fishing line includes a stable float attachment point")
   check(line[15].distance_to(bobber) < .01,"Fishing line meets the bobber")
-  check(line.back().distance_to(hook) < .01,"Fishing line reaches the hook")
+  check(line[line.size()-1].distance_to(hook) < .01,"Fishing line reaches the hook")
   for i in range(15,line.size()):
    check(absf(line[i].x-bobber.x) < .01,"Line below the bobber hangs vertically at depth %dm" % int(depth))
  ocean.free()
