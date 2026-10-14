@@ -1,5 +1,61 @@
 {
   "style_version": "V2.6",
-  "assets": [],
-  "note": "No approved production PNGs yet. Concept sheets must not be registered."
+  "assets": [
+    {
+      "id": "ocean-day",
+      "path": "assets/production/scene/ocean-day.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0,
+        0
+      ],
+      "style_version": "V2.6",
+      "role": "opaque_background",
+      "status": "production_ready",
+      "source": "built-in imagegen",
+      "facing": "none",
+      "qa": "docs/STAGE2_ART_QA.md"
+    },
+    {
+      "id": "pier-cat",
+      "path": "assets/production/scene/pier-cat.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0,
+        0.5
+      ],
+      "style_version": "V2.6",
+      "role": "transparent_overlay",
+      "status": "production_ready",
+      "source": "built-in imagegen",
+      "facing": "right",
+      "qa": "docs/STAGE2_ART_QA.md"
+    },
+    {
+      "id": "fisher",
+      "path": "assets/production/scene/fisher.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.55,
+        0.78
+      ],
+      "style_version": "V2.6",
+      "role": "transparent_overlay",
+      "status": "production_ready",
+      "source": "built-in imagegen",
+      "facing": "right",
+      "qa": "docs/STAGE2_ART_QA.md"
+    }
+  ],
+  "animation": "assets/production/scene.animation.json",
+  "note": "This batch passed internal G1-G4 checks; user visual review pending. Background is intentionally opaque. Not the full eight art batches."
 }

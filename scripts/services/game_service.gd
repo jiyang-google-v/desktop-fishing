@@ -123,6 +123,11 @@ func remove_from_tank(catch_id: String) -> Dictionary:
 func pause_reason() -> String:
  return Policy.reason(state,focus_status,blocked,get_window().has_focus())
 
+func set_sound_enabled(enabled: bool) -> Dictionary:
+ return commit(func(s):
+  s.sound_enabled = enabled
+  return {"ok":true})
+
 func set_idle_minutes(minutes: int) -> Dictionary:
  if minutes not in [5,10,20]:
   return {"ok":false,"reason":"invalid_setting"}
@@ -156,4 +161,4 @@ func retry_detection() -> void:
 
 func diagnostic_text() -> String:
  var detail: String = probe.detail if probe != null else "not_started"
- return "版本：0.3.1\n系统：%s\n状态：%s\n检测：%s\n空闲宽限：%d 分钟\n有效专注：%.1f 秒\n深度：%.1f 米\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.idle_minutes,state.focus_seconds,model.depth_for(state.focus_seconds),last_saved,str(save_failed)]
+ return "版本：0.4.0\n系统：%s\n状态：%s\n检测：%s\n空闲宽限：%d 分钟\n有效专注：%.1f 秒\n深度：%.1f 米\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.idle_minutes,state.focus_seconds,model.depth_for(state.focus_seconds),last_saved,str(save_failed)]

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "ocean-day",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      255,
+      255
+    ],
+    "transparent_pixels": 0,
+    "alpha_bounds": [
+      0,
+      0,
+      1254,
+      1254
+    ],
+    "visible_bounds_alpha_over_16": [
+      0,
+      0,
+      1254,
+      1254
+    ],
+    "passed": true
+  },
+  {
+    "id": "pier-cat",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 1184695,
+    "alpha_bounds": [
+      39,
+      65,
+      1721,
+      887
+    ],
+    "visible_bounds_alpha_over_16": [
+      64,
+      181,
+      1709,
+      719
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 1060890,
+    "alpha_bounds": [
+      0,
+      15,
+      1234,
+      1254
+    ],
+    "visible_bounds_alpha_over_16": [
+      235,
+      137,
+      1067,
+      1159
+    ],
+    "passed": true
+  }
+]

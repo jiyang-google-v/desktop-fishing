@@ -1,0 +1,18 @@
+{
+ "style_version":"V2.6",
+ "type":"procedural_transform",
+ "reference_canvas":[1000,1000],
+ "layers":[
+  {"id":"ocean","path":"scene/ocean-day.png","pivot":[0,0]},
+  {"id":"pier","path":"scene/pier-cat.png","pivot":[0,0.5]},
+  {"id":"fisher","path":"scene/fisher.png","pivot":[0.55,0.78]}
+ ],
+ "animations":{
+  "cast":{"duration":1.25,"splash_at":0.65,"rod_rotation_degrees":[-38,12,0]},
+  "reel":{"duration":1.1,"rod_rotation_degrees":[0,-24,-8]},
+  "breathe":{"duration":4.8,"amplitude":1.5},
+  "water":{"duration":6.0,"amplitude":2.0},
+  "bubbles":{"duration":8.0,"count":7,"only_while_working":true}
+ },
+ "note":"Single independent PNG layers animated by transforms, not a frame sprite sheet. Runtime line/waves/bubbles use Godot drawing."
+}

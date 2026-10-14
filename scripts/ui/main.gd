@@ -1,5 +1,6 @@
 extends Control
 
+const SceneAudio = preload("res://scripts/services/scene_audio.gd")
 const Ocean = preload("res://scripts/ui/ocean_view.gd")
 const RARITY := {"common":"常见","uncommon":"少见","rare":"稀有","legendary":"传说"}
 const STATUS := {
@@ -14,6 +15,9 @@ const STATUS := {
  "blocked":["存档需要处理","为保护已有数据，已暂停游戏操作。"]
 }
 var ocean
+var scene_audio
+var sound_button: Button
+var skip_button: Button
 var status_title: Label
 var status_text: Label
 var depth_text: Label
@@ -46,14 +50,18 @@ func _ready() -> void:
  OS.low_processor_usage_mode = true
  OS.low_processor_usage_mode_sleep_usec = 33000
  get_window().min_size = Vector2i(940,700)
- get_window().title = "桌面钓鱼 · Godot 试玩版"
+ get_window().title = "桌面钓鱼 · 海边日常"
+ scene_audio = SceneAudio.new()
+ add_child(scene_audio)
  theme = make_theme()
  build_ui()
  Game.changed.connect(refresh)
  refresh()
  if "--export-smoke" in OS.get_cmdline_user_args():
-  var valid: bool = Game.model.roster.size() == 14 and FileAccess.file_exists("res://platform/windows/focus-worker.ps1")
+  var valid: bool = Game.model.roster.size() == 14 and FileAccess.file_exists("res://platform/windows/focus-worker.ps1") and not ocean.motion.config.is_empty() and Ocean.BACKGROUND != null and SceneAudio.WATER != null
   get_tree().quit(0 if valid else 1)
+ if "--scene-capture" in OS.get_cmdline_user_args():
+  call_deferred("scene_capture")
  if "--ui-smoke" in OS.get_cmdline_user_args():
   call_deferred("ui_smoke")
 
@@ -66,20 +74,22 @@ func make_theme() -> Theme:
  t.set_color("font_color","Label",Color("486575"))
  for type in ["Button","Window","ConfirmationDialog"]:
   t.set_color("font_color",type,Color("486575"))
- t.set_stylebox("normal","Button",style(Color("edf4ef"),12))
- t.set_stylebox("hover","Button",style(Color("dceae3"),12))
- t.set_stylebox("pressed","Button",style(Color("c9ded5"),12))
+ t.set_stylebox("normal","Button",style(Color("f6f7ed"),12))
+ t.set_stylebox("hover","Button",style(Color("dfedf3"),12))
+ t.set_stylebox("pressed","Button",style(Color("c8e0ed"),12))
  t.set_stylebox("disabled","Button",style(Color("e7eae4"),12))
  t.set_color("font_disabled_color","Button",Color("a4b4b3"))
- t.set_stylebox("panel","PanelContainer",style(Color("fafaf4"),22))
+ t.set_stylebox("panel","PanelContainer",style(Color("fffbee"),22))
  t.set_stylebox("background","ProgressBar",style(Color("d6e3db"),5))
- t.set_stylebox("fill","ProgressBar",style(Color("8fb4a9"),5))
+ t.set_stylebox("fill","ProgressBar",style(Color("85bace"),5))
  return t
 
 func style(color: Color, radius: int) -> StyleBoxFlat:
  var result := StyleBoxFlat.new()
  result.bg_color = color
  result.set_corner_radius_all(radius)
+ result.border_color = Color("bfd5df")
+ result.set_border_width_all(1)
  result.content_margin_left = 16
  result.content_margin_right = 16
  result.content_margin_top = 12
@@ -110,6 +120,7 @@ func button(text: String, parent: Node, callback: Callable) -> Button:
 
 func build_ui() -> void:
  var margin := MarginContainer.new()
+ margin.name = "LayoutMargin"
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  for edge in ["left","right","top","bottom"]:
   margin.add_theme_constant_override("margin_"+edge,24)
@@ -123,8 +134,8 @@ func build_ui() -> void:
  var title_box := VBoxContainer.new()
  title_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  header.add_child(title_box)
- title_box.add_child(label("DESKTOP FISHING  /  GODOT",10,true))
- title_box.add_child(label("一小片属于你的海",24))
+ title_box.add_child(label("DESKTOP FISHING",10,true))
+ title_box.add_child(label("把忙碌，交给一片海",24))
  book_button = button("鱼类图鉴",header,func(): open_collection("book"))
  tank_button = button("精选鱼缸",header,func(): open_collection("tank"))
  var body := HBoxContainer.new()
@@ -135,6 +146,8 @@ func build_ui() -> void:
  ocean.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  ocean.custom_minimum_size = Vector2(480,500)
  body.add_child(ocean)
+ ocean.animation_finished.connect(refresh)
+ ocean.splash.connect(func(): scene_audio.play("cast"))
  var ocean_margin := MarginContainer.new()
  ocean_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  ocean_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -145,13 +158,15 @@ func build_ui() -> void:
  overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
  ocean_margin.add_child(overlay)
  scene_text = label("白昼的海",14)
+ scene_text.add_theme_color_override("font_color",Color("426b89"))
  overlay.add_child(scene_text)
- depth_text = label("0.0 米",32)
+ depth_text = label("0.0 米",24)
+ depth_text.add_theme_color_override("font_color",Color("426b89"))
  overlay.add_child(depth_text)
  var spacer := Control.new()
  spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
  overlay.add_child(spacer)
- overlay.add_child(label("功能示意场景 · 正式 V2.6 美术待接入",11,true))
+ overlay.add_child(label("海风很轻，今天也慢慢来。",12,true))
  var side_panel := PanelContainer.new()
  side_panel.custom_minimum_size.x = 310
  body.add_child(side_panel)
@@ -169,7 +184,7 @@ func build_ui() -> void:
  status_text = paragraph("",side)
  status_text.custom_minimum_size.y = 58
  var card := PanelContainer.new()
- card.add_theme_stylebox_override("panel",style(Color("e9f0e9"),14))
+ card.add_theme_stylebox_override("panel",style(Color("edf4ef"),14))
  side.add_child(card)
  var time_box := VBoxContainer.new()
  time_box.add_theme_constant_override("separation",8)
@@ -186,12 +201,14 @@ func build_ui() -> void:
  var actions := HBoxContainer.new()
  actions.add_theme_constant_override("separation",8)
  side.add_child(actions)
- cast_button = button("放下鱼钩",actions,func(): handle(Game.cast_line()))
- reel_button = button("收杆看看",actions,func(): handle(Game.reel_line()))
+ cast_button = button("放下鱼钩",actions,func(): perform_fishing("cast"))
+ reel_button = button("收杆看看",actions,func(): perform_fishing("reel"))
  cast_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  reel_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  cast_button.add_theme_stylebox_override("normal",style(Color("d1e5da"),12))
  reel_button.add_theme_stylebox_override("normal",style(Color("efdfd2"),12))
+ skip_button = button("跳过动画",side,func(): ocean.skip())
+ skip_button.visible = false
  catch_box = VBoxContainer.new()
  catch_box.add_theme_constant_override("separation",8)
  side.add_child(catch_box)
@@ -200,6 +217,7 @@ func build_ui() -> void:
  var side_spacer := Control.new()
  side_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
  side.add_child(side_spacer)
+ sound_button = button("声音：关闭",side,func(): handle(Game.set_sound_enabled(not Game.state.sound_enabled)))
  paragraph("空闲宽限",side,11)
  idle_select = OptionButton.new()
  for minutes in [5,10,20]:
@@ -214,7 +232,7 @@ func build_ui() -> void:
  paragraph("游戏前台暂停。后台且键鼠空闲未超时才下潜。锁屏、休眠与退出期间不累计。F8 保存退出（游戏窗口内）。",side,11)
  var footer := HBoxContainer.new()
  root.add_child(footer)
- var version := label("桌面钓鱼 · 0.3.1 Godot 功能试玩版",11,true)
+ var version := label("桌面钓鱼 · 0.4.0 · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
  footer.add_child(label("不记录按键内容或窗口标题",11,true))
@@ -230,6 +248,7 @@ func show_diagnostics() -> void:
 
 func build_dialogs() -> void:
  diagnostic_dialog = AcceptDialog.new()
+ diagnostic_dialog.visible = false
  diagnostic_dialog.title = "运行诊断"
  diagnostic_dialog.ok_button_text = "关闭"
  diagnostic_dialog.add_button("复制诊断",false,"copy")
@@ -242,6 +261,7 @@ func build_dialogs() -> void:
    show_diagnostics())
  add_child(diagnostic_dialog)
  collection = Window.new()
+ collection.visible = false
  collection.title = "收藏"
  collection.theme = theme
  collection.size = Vector2i(750,520)
@@ -278,6 +298,7 @@ func build_dialogs() -> void:
  collection_grid.add_theme_constant_override("v_separation",12)
  scroll.add_child(collection_grid)
  confirmation = ConfirmationDialog.new()
+ confirmation.visible = false
  confirmation.title = "确认操作"
  confirmation.theme = theme
  confirmation.ok_button_text = "确认"
@@ -292,6 +313,17 @@ func build_dialogs() -> void:
   if action.is_valid():
    action.call())
  confirmation.canceled.connect(func(): confirm_action = Callable())
+
+func perform_fishing(action: String) -> void:
+ if ocean.is_busy():
+  return
+ var result: Dictionary = Game.cast_line() if action == "cast" else Game.reel_line()
+ handle(result)
+ if result.ok:
+  ocean.play(action)
+  if action == "reel":
+   scene_audio.play("reel")
+  refresh()
 
 func handle(result: Dictionary) -> void:
  if not result.ok:
@@ -312,7 +344,7 @@ func refresh() -> void:
  var s: Dictionary = Game.state
  var reason: String = Game.pause_reason()
  var status: Array = STATUS.get(reason,STATUS.ready)
- status_title.text = status[0]
+ status_title.text = "轻轻放钩…" if ocean.motion.active == "cast" else ("这次会遇见谁？" if ocean.motion.active == "reel" else status[0])
  status_text.text = status[1]
  if reason == "idle":
   status_text.text = "键鼠空闲超过 %d 分钟，已暂停并保留深度。" % s.idle_minutes
@@ -331,8 +363,13 @@ func refresh() -> void:
  ocean.queue_redraw()
  var layer := "表层" if depth < 30 else ("浅海" if depth < 100 else "深水")
  scene_text.text = ("夜晚的海" if ocean.night else "白昼的海") + " · " + layer
- cast_button.disabled = Game.blocked or s.cast or not s.pending_catch.is_empty()
- reel_button.disabled = Game.blocked or not s.cast
+ cast_button.disabled = ocean.is_busy() or Game.blocked or s.cast or not s.pending_catch.is_empty()
+ reel_button.disabled = ocean.is_busy() or Game.blocked or not s.cast
+ skip_button.visible = ocean.is_busy()
+ catch_box.visible = ocean.motion.active != "reel"
+ sound_button.text = "声音：开启" if s.sound_enabled else "声音：关闭"
+ sound_button.disabled = Game.blocked
+ scene_audio.set_enabled(s.sound_enabled)
  book_button.text = "图鉴 %d / %d" % [s.encyclopedia.size(),Game.model.roster.size()]
  tank_button.text = "鱼缸 %d / 6" % s.aquarium.size()
  notice.text = Game.warning
@@ -436,7 +473,7 @@ func render_collection() -> void:
 func ui_smoke() -> void:
  await get_tree().process_frame
  await get_tree().process_frame
- var layout_root: Control = get_child(0).get_child(0)
+ var layout_root: Control = get_node("LayoutMargin").get_child(0)
  assert(layout_root.get_combined_minimum_size().y + 48 <= get_window().size.y)
  # Isolated in-memory UI check; no save writes or Windows sampling.
  Game.state = Game.model.fresh_state()
@@ -486,6 +523,18 @@ func ui_smoke() -> void:
  idle_select.select(idle_select.get_item_index(20))
  idle_select.item_selected.emit(idle_select.selected)
  assert(Game.state.idle_minutes == 20)
+ scene_audio.set_enabled(false)
+ assert(Game.set_sound_enabled(true).ok and Game.state.sound_enabled)
+ assert(Game.set_sound_enabled(false).ok and not scene_audio.enabled)
+ assert(Game.model.cast_line(Game.state).ok)
+ refresh()
+ perform_fishing("reel")
+ var caught: Dictionary = Game.state.pending_catch.duplicate(true)
+ assert(ocean.is_busy() and not catch_box.visible and reel_button.disabled)
+ perform_fishing("reel")
+ assert(Game.state.pending_catch == caught)
+ ocean.skip()
+ assert(not ocean.is_busy() and catch_box.visible)
  show_diagnostics()
  assert(diagnostic_dialog.visible)
  assert(diagnostic_dialog.dialog_text.contains("20 分钟"))
@@ -495,5 +544,33 @@ func ui_smoke() -> void:
  if "--capture-ui" in OS.get_cmdline_user_args():
   await RenderingServer.frame_post_draw
   get_viewport().get_texture().get_image().save_png("user://stage1-ui.png")
+ await get_tree().create_timer(0.2).timeout
  print("Godot UI smoke: cast, reel, keep, book, full-tank cancel and replacement passed")
+ get_tree().quit()
+
+func scene_capture() -> void:
+ Game.state = Game.model.fresh_state()
+ Game.model.cast_line(Game.state)
+ Game.state.focus_seconds = 1200.0
+ Game.focus_status = {"supported":true,"foreground":false,"locked":false,"idle_seconds":0}
+ refresh()
+ ocean.night = "--night" in OS.get_cmdline_user_args()
+ scene_text.text = ("夜晚的海" if ocean.night else "白昼的海") + " · 浅海"
+ if "--cast-pose" in OS.get_cmdline_user_args():
+  ocean.play("cast")
+  ocean.motion.advance(.45)
+ elif "--reel-pose" in OS.get_cmdline_user_args():
+  ocean.play("reel")
+  ocean.motion.advance(.5)
+ await get_tree().process_frame
+ await get_tree().process_frame
+ await RenderingServer.frame_post_draw
+ var name: String = "stage2-night" if ocean.night else "stage2-day"
+ if "--cast-pose" in OS.get_cmdline_user_args():
+  name = "stage2-cast"
+ elif "--reel-pose" in OS.get_cmdline_user_args():
+  name = "stage2-reel"
+ if "--small" in OS.get_cmdline_user_args():
+  name += "-small"
+ get_viewport().get_texture().get_image().save_png("user://" + name + ".png")
  get_tree().quit()
