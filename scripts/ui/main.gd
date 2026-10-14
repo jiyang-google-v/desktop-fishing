@@ -67,11 +67,13 @@ func _ready() -> void:
  Engine.max_fps = 30
  OS.low_processor_usage_mode = true
  OS.low_processor_usage_mode_sleep_usec = 33000
- get_window().min_size = Vector2i(940,700)
+ get_window().min_size = Vector2i(940,736)
  if "--tests" in OS.get_cmdline_user_args() and "--small" in OS.get_cmdline_user_args():
-  get_window().content_scale_size = Vector2i(940,700)
-  get_window().size = Vector2i(940,700)
- get_window().title = "桌面钓鱼 · 海边日常"
+  get_window().content_scale_size = Vector2i(940,736)
+  get_window().size = Vector2i(940,736)
+ get_window().title = "桌面钓鱼"
+ if DisplayServer.get_name() != "headless":
+  DisplayServer.set_icon(load("res://assets/production/ui/app-icon.png").get_image())
  scene_audio = SceneAudio.new()
  add_child(scene_audio)
  theme = make_theme()
@@ -80,6 +82,8 @@ func _ready() -> void:
  add_child(layouts)
  Game.changed.connect(refresh)
  refresh()
+ if "--tests" in OS.get_cmdline_user_args() and "--titlebar-click-smoke" in OS.get_cmdline_user_args():
+  load("res://scripts/tools/verify_window_frame.gd").run.call_deferred(self)
  if "--tests" in OS.get_cmdline_user_args() and "--toolbar-click-smoke" in OS.get_cmdline_user_args():
   load("res://scripts/tools/verify_toolbar_clicks.gd").run.call_deferred(self)
  if "--tests" in OS.get_cmdline_user_args() and "--transparency-smoke" in OS.get_cmdline_user_args():
@@ -170,6 +174,7 @@ func build_ui() -> void:
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  for edge in ["left","right","top","bottom"]:
   margin.add_theme_constant_override("margin_"+edge,24)
+ margin.add_theme_constant_override("margin_top",60)
  add_child(margin)
  var root := VBoxContainer.new()
  root.add_theme_constant_override("separation",18)

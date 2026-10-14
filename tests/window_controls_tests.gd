@@ -16,7 +16,7 @@ func run() -> void:
    await process_frame
    assert(layouts.mode == target)
    if DisplayServer.get_name() != 'headless':
-    assert(root.size == (Vector2i(1100,760) if target == 'full' else layouts.SIZES[target]))
+    assert(root.size == (layouts.SIZES[target]))
    assert(JSON.stringify(game.state) == initial)
  for origin in ['scene','mini']:
   for target in ['full','scene','mini']:

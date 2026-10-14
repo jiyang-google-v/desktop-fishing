@@ -1,10 +1,12 @@
 extends Control
+const WindowFrame = preload('res://scripts/ui/window_frame.gd')
 const TimerCard = preload('res://scripts/ui/pomodoro_card.gd')
 const CatchPopup = preload('res://scripts/ui/floating_catch_popup.gd')
 const Floating = preload('res://scripts/ui/floating_art_view.gd')
-const SIZES := {'full':Vector2i(1100,760),'scene':Vector2i(420,280),'mini':Vector2i(180,176)}
+const SIZES := {'full':Vector2i(1100,796),'scene':Vector2i(420,280),'mini':Vector2i(180,176)}
 var mode := 'full'
 var main
+var frame
 var view
 var timer_card
 var background: ColorRect
@@ -69,8 +71,21 @@ func _ready() -> void:
  menu.id_pressed.connect(menu_action)
  if not test_mode:
   settings.load('user://window-layouts.cfg')
+ migrate_frame_settings()
  pinned = bool(settings.get_value('window','pinned',false))
+ frame = WindowFrame.new()
+ frame.main = main
+ add_child(frame)
+ get_window().size_changed.connect(on_window_resized)
  apply(str(settings.get_value('window','mode','full')),false)
+func migrate_frame_settings() -> void:
+ if int(settings.get_value('window','frame_version',0)) >= 1:
+  return
+ if settings.has_section_key('full','size'):
+  var previous: Vector2i = settings.get_value('full','size',Vector2i(1100,760))
+  previous.y += WindowFrame.HEIGHT
+  settings.set_value('full','size',previous)
+ settings.set_value('window','frame_version',1)
 func build_tools() -> void:
  # Native Windows viewport/input ownership is recreated AFTER the parent changes.
  # Reusing a differently sized native child can retain stale mouse/focus state.
@@ -205,10 +220,19 @@ func sync_catch(force: bool = false) -> void:
 func clamp_position(value: Vector2i, dimensions: Vector2i) -> Vector2i:
  var area := DisplayServer.screen_get_usable_rect()
  return Vector2i(clampi(value.x,area.position.x,maxi(area.position.x,area.end.x-dimensions.x)),clampi(value.y,area.position.y,maxi(area.position.y,area.end.y-dimensions.y)))
-func remember() -> void:
- settings.set_value(mode,'position',get_window().position)
+func on_window_resized() -> void:
  if mode == 'full':
+  get_window().content_scale_size = get_window().size
+func remember() -> void:
+ if mode == 'full':
+  if get_window().mode == Window.MODE_MINIMIZED:
+   return
+  var maximized: bool = get_window().mode == Window.MODE_MAXIMIZED
+  settings.set_value('full','maximized',maximized)
+  if maximized:
+   return
   settings.set_value(mode,'size',get_window().size)
+ settings.set_value(mode,'position',get_window().position)
 func save_settings() -> void:
  if test_mode:
   return
@@ -234,6 +258,9 @@ func apply(next: String, persist: bool = true) -> void:
  opacity_open = false
  var window := get_window()
  var compact: bool = mode != 'full'
+ window.mode = Window.MODE_WINDOWED
+ frame.visible = not compact
+ frame.last_mode = -1
  main.get_node('LayoutMargin').visible = not compact
  view.visible = compact
  view.profile = mode if compact else 'scene'
@@ -247,9 +274,9 @@ func apply(next: String, persist: bool = true) -> void:
  # Clear old size limits before applying new ones, including mini -> full.
  window.max_size = Vector2i.ZERO
  window.min_size = Vector2i.ZERO
- window.min_size = Vector2i(940,700) if not compact else SIZES[mode]
+ window.min_size = Vector2i(940,736) if not compact else SIZES[mode]
  window.max_size = Vector2i.ZERO if not compact else SIZES[mode]
- window.borderless = compact
+ window.borderless = true
  window.unresizable = compact
  background.visible = not compact
  window.transparent_bg = true
@@ -268,6 +295,8 @@ func apply(next: String, persist: bool = true) -> void:
   tools.position = clamp_position(tool_position,tools.size)
   tools.show()
  view.queue_redraw()
+ if not compact and bool(settings.get_value('full','maximized',false)):
+  window.mode = Window.MODE_MAXIMIZED
  if persist:
   save_settings()
 func menu_action(id: int) -> void:

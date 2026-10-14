@@ -3,6 +3,7 @@ config_version=5
 
 [application]
 config/name="Desktop Fishing"
+config/icon="res://assets/production/ui/app-icon.png"
 boot_splash/bg_color=Color(0, 0, 0, 0)
 config/version="0.7.0-preview"
 run/main_scene="res://scenes/main.tscn"
@@ -17,9 +18,9 @@ Game="*res://scripts/services/game_service.gd"
 window/per_pixel_transparency/allowed=true
 window/size/transparent=true
 window/size/viewport_width=1100
-window/size/viewport_height=760
+window/size/viewport_height=796
 window/size/window_width_override=1100
-window/size/window_height_override=760
+window/size/window_height_override=796
 window/stretch/mode="canvas_items"
 window/energy_saving/keep_screen_on=false
 
