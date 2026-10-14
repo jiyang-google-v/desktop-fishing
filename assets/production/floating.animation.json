@@ -39,41 +39,41 @@
           0.4
         ]
       },
-      "surface": 0.64,
+      "surface": 0.55,
       "pier": [
-        0.46,
-        0.64,
-        0.55
+        0,
+        0.55,
+        0.46
       ],
       "fisher": {
         "anchor": [
-          0.57,
-          0.64
+          0.36,
+          0.55
         ],
-        "canvas_width": 0.25,
-        "flip_h": true
+        "canvas_width": 0.29,
+        "flip_h": false
       },
       "cat": {
         "anchor": [
-          0.79,
-          0.64
+          0.22,
+          0.55
         ],
-        "canvas_width": 0.14,
-        "flip_h": true
+        "canvas_width": 0.13,
+        "flip_h": false
       },
       "bucket": {
         "anchor": [
-          0.92,
-          0.64
+          0.105,
+          0.55
         ],
         "canvas_width": 0.1
       },
       "rod": {
         "canvas_width": 0.27,
-        "rotation_degrees": -25,
-        "flip_h": true
+        "rotation_degrees": 0,
+        "flip_h": false
       },
-      "bobber_y": 0.86
+      "bobber_y": 0.59
     },
     "mini": {
       "design_size": [

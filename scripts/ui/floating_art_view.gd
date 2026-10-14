@@ -1,7 +1,8 @@
 # Art integration component. Native desktop window switching is intentionally separate.
 extends Control
 const Frames = preload('res://scripts/core/motion_frames.gd')
-const PIER = preload('res://assets/production/scene/pier-clear.png')
+const PIER = preload('res://assets/production/scene/reference-pier.png')
+const ENVIRONMENT = preload('res://assets/production/scene/reference-floating-environment.png')
 var frames = Frames.new()
 var config: Dictionary = JSON.parse_string(FileAccess.get_file_as_string('res://assets/production/floating.animation.json'))
 var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string('res://assets/production/floating_manifest.json'))
@@ -51,11 +52,13 @@ func rig_geometry() -> Dictionary:
  else:
   var box: Rect2 = actor_box('fisher')
   var grip: Vector2 = frames.grip(action,age)
-  grip.x = 1.0-grip.x
+  if config.profiles.scene.fisher.get('flip_h',false):
+   grip.x = 1.0-grip.x
   hand = box.position+grip*box.size.x
  var pivot: Vector2 = point(frames.config.gear.rod.pivot)
  var delta: Vector2 = point(frames.config.gear.rod.tip)-pivot
- delta.x = -delta.x
+ if profile == 'mini':
+  delta.x = -delta.x
  var rotation: float = deg_to_rad(float(spec.rotation_degrees))
  var tip: Vector2 = hand+(delta*canvas_width).rotated(rotation)
  return {'hand':hand,'tip':tip,'bobber':Vector2(tip.x,size.y*float(config.profiles[profile].bobber_y)),'canvas_width':canvas_width,'rotation':rotation,'pivot':pivot}
@@ -77,14 +80,13 @@ func _draw() -> void:
  var rig: Dictionary = rig_geometry()
  var scale_value: float = size.x/600.0
  if profile == 'scene':
-  for id in ['cloud-large','cloud-small','distant-island','corner-water']:
-   draw_layer(id,tint)
+  sprite(ENVIRONMENT,Vector2.ZERO,size,false,tint)
   var pier: Array = config.profiles.scene.pier
   var pw: float = float(pier[2])*size.x
-  sprite(PIER,Vector2(float(pier[0])*size.x,float(pier[1])*size.y-pw*.25),Vector2(pw,pw*.5),true,tint)
+  sprite(PIER,Vector2(float(pier[0])*size.x,float(pier[1])*size.y-pw*.205),Vector2(pw,pw*.5),false,tint)
   var cat: Rect2 = actor_box('cat')
   var cat_clip: String = 'alert' if action in ['cast','reel'] else ('happy' if action == 'happy' else 'idle')
-  sprite(frames.texture('cat',cat_clip,age),cat.position,cat.size,true,tint)
+  sprite(frames.texture('cat',cat_clip,age),cat.position,cat.size,false,tint)
   var bucket: Dictionary = config.profiles.scene.bucket
   var width: float = float(bucket.canvas_width)*size.x
   sprite(frames.gear('bucket'),position_from(bucket.anchor)-Vector2(.5,.825)*width,Vector2.ONE*width,false,tint)
@@ -96,15 +98,14 @@ func _draw() -> void:
  # Line is geometry, never baked into art. Both profiles share the same rig anchor.
  draw_line(rig.tip,rig.bobber,Color('f9f1dc'),maxf(1,1.4*scale_value),true)
  var rod_width: float = rig.canvas_width
- draw_set_transform(rig.hand,rig.rotation,Vector2(-1,1))
+ draw_set_transform(rig.hand,rig.rotation,Vector2(-1 if profile == 'mini' else 1,1))
  draw_texture_rect(frames.gear('rod'),Rect2(-rig.pivot*rod_width,Vector2.ONE*rod_width),false,tint)
  draw_set_transform(Vector2.ZERO)
  if profile == 'scene':
   var actor: Rect2 = actor_box('fisher')
-  sprite(frames.texture('fisher',action,age),actor.position,actor.size,true,tint)
+  sprite(frames.texture('fisher',action,age),actor.position,actor.size,false,tint)
   var hook: Vector2 = rig.bobber+Vector2(0,28*scale_value)
   draw_line(rig.bobber,hook,Color('f9f1dc'),maxf(1,scale_value),true)
   sprite(frames.gear('hook'),hook-Vector2.ONE*10*scale_value,Vector2.ONE*20*scale_value,false,tint)
-  draw_layer('shore-rocks',tint)
  var bobber_width: float = 20*scale_value if profile == 'scene' else 16*size.x/240.0
  sprite(frames.gear('bobber'),rig.bobber-Vector2.ONE*bobber_width*.5,Vector2.ONE*bobber_width,false,tint)

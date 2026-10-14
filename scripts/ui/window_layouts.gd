@@ -7,9 +7,12 @@ var view
 var background: ColorRect
 var toolbar: VBoxContainer
 var tools: Window
+var mode_grid: GridContainer
+var action_grid: GridContainer
 var mode_buttons := {}
 var action_buttons := {}
 var hover_grace := 0.0
+var timer_grid: GridContainer
 var timer_label: Label
 var pause_control: Button
 var menu: PopupMenu
@@ -65,30 +68,82 @@ func _ready() -> void:
  toolbar = VBoxContainer.new()
  toolbar.add_theme_constant_override('separation',6)
  panel.add_child(toolbar)
- var timer_row := HBoxContainer.new()
+ timer_grid = GridContainer.new()
+ timer_grid.columns = 2
+ var timer_row = timer_grid
  toolbar.add_child(timer_row)
  timer_label = Label.new()
+ timer_label.add_theme_font_size_override("font_size",12)
+ timer_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  timer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  timer_row.add_child(timer_label)
  pause_control = Button.new()
  pause_control.text = '暂停'
  pause_control.pressed.connect(func(): main.handle(main.get_node('/root/Game').toggle_pause()))
  timer_row.add_child(pause_control)
- var modes := HBoxContainer.new()
+ mode_grid = GridContainer.new()
+ mode_grid.columns = 3
+ var modes = mode_grid
  toolbar.add_child(modes)
  for entry in [['完整','full'],['悬浮','scene'],['极简','mini']]:
   var b := Button.new()
   b.text = entry[0]
+  b.icon = load("res://assets/production/ui/"+entry[1]+".svg")
+  b.expand_icon = true
+  b.add_theme_constant_override("icon_max_width",18)
+  b.custom_minimum_size.y = 38
+  b.add_theme_color_override('font_color',Color('2086b0'))
+  var button_style := StyleBoxFlat.new()
+  button_style.bg_color = Color('fffef5')
+  button_style.border_color = Color('39b8e5')
+  button_style.set_border_width_all(2)
+  button_style.set_corner_radius_all(8)
+  button_style.content_margin_left = 4
+  button_style.content_margin_right = 4
+  b.add_theme_stylebox_override('normal',button_style)
+  var disabled_style := button_style.duplicate()
+  disabled_style.bg_color = Color('e5f0ef')
+  b.add_theme_stylebox_override('disabled',disabled_style)
+  var pressed_style := button_style.duplicate()
+  pressed_style.bg_color = Color('bce9f6')
+  b.add_theme_stylebox_override('pressed',pressed_style)
+  var hover_style := button_style.duplicate()
+  hover_style.bg_color = Color('dcf8ff')
+  b.add_theme_stylebox_override('hover',hover_style)
   b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   b.focus_mode = Control.FOCUS_NONE
   b.pressed.connect(request_mode.bind(entry[1]))
   modes.add_child(b)
   mode_buttons[entry[1]] = b
- var actions := HBoxContainer.new()
+ action_grid = GridContainer.new()
+ action_grid.columns = 3
+ var actions = action_grid
  toolbar.add_child(actions)
  for entry in [['收杆','reel'],['图鉴','book'],['鱼缸','tank']]:
   var b := Button.new()
   b.text = entry[0]
+  b.icon = load("res://assets/production/ui/"+entry[1]+".svg")
+  b.expand_icon = true
+  b.add_theme_constant_override("icon_max_width",18)
+  b.custom_minimum_size.y = 38
+  b.add_theme_color_override('font_color',Color('2086b0'))
+  var button_style := StyleBoxFlat.new()
+  button_style.bg_color = Color('fffef5')
+  button_style.border_color = Color('39b8e5')
+  button_style.set_border_width_all(2)
+  button_style.set_corner_radius_all(8)
+  button_style.content_margin_left = 4
+  button_style.content_margin_right = 4
+  b.add_theme_stylebox_override('normal',button_style)
+  var disabled_style := button_style.duplicate()
+  disabled_style.bg_color = Color('e5f0ef')
+  b.add_theme_stylebox_override('disabled',disabled_style)
+  var pressed_style := button_style.duplicate()
+  pressed_style.bg_color = Color('bce9f6')
+  b.add_theme_stylebox_override('pressed',pressed_style)
+  var hover_style := button_style.duplicate()
+  hover_style.bg_color = Color('dcf8ff')
+  b.add_theme_stylebox_override('hover',hover_style)
   b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
   b.pressed.connect(request_action.bind(entry[1]))
   actions.add_child(b)
@@ -137,6 +192,11 @@ func apply(next: String, persist: bool = true) -> void:
  drag = false
  hover_grace = .4 if keep_tools else 0.0
  mode = next
+ timer_grid.columns = 1 if mode == "scene" else 2
+ mode_grid.columns = 1 if mode == "scene" else 3
+ action_grid.columns = 1 if mode == "scene" else 3
+ tools.size = Vector2i(104,356) if mode == "scene" else Vector2i(320,160)
+ tools.content_scale_size = tools.size
  var window := get_window()
  var compact: bool = mode != 'full'
  main.get_node('LayoutMargin').visible = not compact
@@ -235,9 +295,9 @@ func sync_tools() -> void:
  var remaining: int = int(ceil(game.remaining_seconds()))
  timer_label.text = '%s · %02d:%02d' % [game.model.group_for(game.state.duration_minutes),remaining/60,remaining%60]
  if game.model.completed(game.state):
-  timer_label.text = '专注完成 · 可以起竿'
+  timer_label.text = '专注完成\n可以起竿'
  elif game.state.paused:
-  timer_label.text += ' · 已暂停'
+  timer_label.text += '\n已暂停'
  pause_control.text = '继续' if game.state.paused else '暂停'
  pause_control.disabled = game.blocked or not game.state.cast or game.model.completed(game.state)
  action_buttons.reel.text = '安置鱼获' if not game.state.pending_catch.is_empty() else ('起竿' if game.model.completed(game.state) else '提前起竿')
@@ -259,7 +319,8 @@ func show_tools() -> void:
  sync_tools()
  tools.always_on_top = pinned
  if not tools.visible:
-  tools.position = clamp_position(get_window().position+Vector2i(get_window().size.x-tools.size.x,-tools.size.y-6),tools.size)
+  var offset := Vector2i(-tools.size.x-6,0) if mode == "scene" else Vector2i(get_window().size.x-tools.size.x,-tools.size.y-6)
+  tools.position = clamp_position(get_window().position+offset,tools.size)
   tools.show()
 func open_collection(kind: String) -> void:
  tools.hide()

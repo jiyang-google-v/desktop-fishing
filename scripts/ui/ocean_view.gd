@@ -3,8 +3,8 @@ extends Control
 signal animation_finished
 signal splash
 const Motion = preload("res://scripts/core/scene_motion.gd")
-const BACKGROUND = preload("res://assets/production/scene/ocean-day.png")
-const PIER = preload("res://assets/production/scene/pier-clear.png")
+const BACKGROUND = preload("res://assets/production/scene/reference-ocean-day.png")
+const PIER = preload("res://assets/production/scene/reference-pier.png")
 const Frames = preload("res://scripts/core/motion_frames.gd")
 var frames = Frames.new()
 var motion = Motion.new()
@@ -149,7 +149,7 @@ func _draw() -> void:
   fish_shape(Vector2(w*0.5+sin(phase)*12,h*0.5),0.8,fish_color)
   return
  var scale_value: float = minf(w,h)/1000.0
- var surface: float = h*0.28
+ var surface: float = h*0.43
  draw_texture_rect(BACKGROUND,Rect2(Vector2.ZERO,size),false,Color("a3b1da") if night else Color.WHITE)
  draw_rect(Rect2(Vector2.ZERO,size),Color(1.0,.99,.94,.035 if night else .09))
  # A subtle depth wash does not obscure the artwork.
@@ -168,7 +168,7 @@ func _draw() -> void:
  var pier_width: float = w*.47
  var pier_height: float = pier_width*.5
  var actor_tint: Color = Color("d5d9ee") if night else Color.WHITE
- draw_texture_rect(PIER,Rect2(Vector2(-w*.018,surface-pier_height*.54),Vector2(pier_width,pier_height)),false,actor_tint)
+ draw_texture_rect(PIER,Rect2(Vector2(-w*.018,surface-pier_height*.41),Vector2(pier_width,pier_height)),false,actor_tint)
  # Independent authored cat and gear layers share a stable deck baseline.
  var cat_size: float = minf(w,h)*.14
  var cat_pos := Vector2(w*.185,surface-6*scale_value)-Vector2(.58,.82)*cat_size
@@ -176,8 +176,8 @@ func _draw() -> void:
  var bucket_size: float = minf(w,h)*.10
  var bucket_pos := Vector2(w*.085,surface-5*scale_value)-Vector2(.5,.825)*bucket_size
  draw_texture_rect(frames.gear("bucket"),Rect2(bucket_pos,Vector2.ONE*bucket_size),false,actor_tint)
- var actor_size: float = minf(w,h)*.33
- var actor_pos := Vector2(w*.405,surface-3*scale_value)-Vector2(.55,.71)*actor_size
+ var actor_size: float = minf(w,h)*.28
+ var actor_pos := Vector2(w*.365,surface-3*scale_value)-Vector2(.55,.71)*actor_size
  var clip: String = actor_clip()
  var clock: float = actor_clock()
  var hand: Vector2 = actor_pos + frames.grip(clip,clock)*actor_size
@@ -192,8 +192,8 @@ func _draw() -> void:
  draw_texture_rect(frames.gear("rod"),Rect2(-pivot*rod_size,Vector2.ONE*rod_size),false,actor_tint)
  draw_set_transform(Vector2.ZERO)
  draw_texture_rect(frames.texture("fisher",clip,clock),Rect2(actor_pos,Vector2.ONE*actor_size),false,actor_tint)
- var bobber_anchor := Vector2(w*.59,surface+12*scale_value+sin(progress_phase*2)*2*scale_value)
- var target := Vector2(w*.59,surface+30*scale_value+(h-surface-90*scale_value)*depth/200.0)
+ var bobber_anchor := Vector2(w*.51,surface+12*scale_value+sin(progress_phase*2)*2*scale_value)
+ var target := Vector2(w*.51,surface+30*scale_value+(h-surface-90*scale_value)*depth/200.0)
  if cast or motion.busy():
   if motion.active == "cast":
    var splash_at: float = float(motion.config.animations.cast.splash_at)
@@ -204,7 +204,7 @@ func _draw() -> void:
     var drop_t: float = smoothstep(0.0,1.0,(motion.progress-splash_at)/maxf(1.0-splash_at,.001))
     target = bobber_anchor.lerp(target,drop_t)
   elif motion.active == "reel":
-   var start := Vector2(w*.59,surface+30*scale_value+(h-surface-90*scale_value)*reel_depth/200.0)
+   var start := Vector2(w*.51,surface+30*scale_value+(h-surface-90*scale_value)*reel_depth/200.0)
    target = start.lerp(rod_end,smoothstep(0.0,1.0,motion.progress))
   var bobber_visible: bool = motion.active != "reel" and (motion.active != "cast" or motion.progress >= float(motion.config.animations.cast.splash_at))
   var line := fishing_line_points(rod_end,bobber_anchor,target,bobber_visible,progress_phase,scale_value)
@@ -224,7 +224,7 @@ func _draw() -> void:
    var center := Vector2(w*(.25+i*.24)+sin(progress_phase*.2+i)*12*scale_value,h*(.49+i*.14))
    effect("shadow",center,(125+i*15)*scale_value,progress_phase+i,.15 if working else .08)
  if splash_age < frames.duration("fx","splash"):
-  effect("splash",Vector2(w*.59,surface+5*scale_value),125*scale_value,splash_age,.85)
+  effect("splash",Vector2(w*.51,surface+5*scale_value),125*scale_value,splash_age,.85)
  # Depth ruler is exact UI information over the scene, never baked into art.
  for i in range(5):
   var y: float = surface+42*scale_value+(h-surface-110*scale_value)*i/4.0

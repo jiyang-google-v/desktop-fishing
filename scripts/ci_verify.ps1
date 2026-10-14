@@ -23,6 +23,7 @@ if ($ExportOnly) {
  Copy-Item README.md build/windows/README.md
  Copy-Item docs/POMODORO_SPEC.md build/windows/POMODORO_SPEC.md
  Copy-Item docs/POMODORO_QA.md build/windows/POMODORO_QA.md
+ Copy-Item docs/REFERENCE_SCENE_QA.md build/windows/REFERENCE_SCENE_QA.md
  Copy-Item docs/qa/pomodoro build/windows/pomodoro-preview -Recurse
  Copy-Item docs/WINDOWS_STAGE1_ACCEPTANCE.md build/windows/WINDOWS_STAGE1_ACCEPTANCE.md
  Copy-Item docs/STAGE2_ART_QA.md build/windows/STAGE2_ART_QA.md
@@ -48,6 +49,7 @@ if ($ExportOnly) {
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_ui_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/floating_art_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/window_layout_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/reference_scene_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/window_controls_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/window_controls_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/window_layout_capture.gd','--','--tests')
