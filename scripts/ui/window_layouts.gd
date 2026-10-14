@@ -1,5 +1,6 @@
 extends Control
 const TimerCard = preload('res://scripts/ui/pomodoro_card.gd')
+const CatchPopup = preload('res://scripts/ui/floating_catch_popup.gd')
 const Floating = preload('res://scripts/ui/floating_art_view.gd')
 const SIZES := {'full':Vector2i(1100,760),'scene':Vector2i(420,280),'mini':Vector2i(180,176)}
 var mode := 'full'
@@ -14,9 +15,13 @@ var action_grid: GridContainer
 var mode_buttons := {}
 var action_buttons := {}
 var hover_grace := 0.0
-var timer_grid: GridContainer
-var timer_label: Label
-var pause_control: Button
+var opacity_row: HBoxContainer
+var opacity_slider: HSlider
+var opacity_label: Label
+var opacity_open := false
+var switching := false
+var catch_popup
+var dismissed_catch := ""
 var menu: PopupMenu
 var settings := ConfigFile.new()
 var drag := false
@@ -43,116 +48,11 @@ func _ready() -> void:
  timer_card = TimerCard.new()
  add_child(timer_card)
  timer_card.pause_requested.connect(func(): main.handle(main.get_node('/root/Game').toggle_pause()))
- tools = Window.new()
- tools.visible = false
- tools.force_native = true
- tools.borderless = true
- tools.unresizable = true
- tools.transparent_bg = true
- tools.transparent = true
- # Interactive native windows must accept focus for Windows to deliver button clicks.
- tools.unfocusable = false
- tools.transient = true
- tools.size = Vector2i(320,160)
- tools.content_scale_size = tools.size
- tools.theme = main.theme
- add_child(tools)
- var panel := PanelContainer.new()
- panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
- var style := StyleBoxFlat.new()
- style.bg_color = Color('fffbee')
- style.border_color = Color('a9c8d4')
- style.set_border_width_all(1)
- style.set_corner_radius_all(12)
- style.content_margin_left = 8
- style.content_margin_right = 8
- style.content_margin_top = 8
- style.content_margin_bottom = 8
- panel.add_theme_stylebox_override('panel',style)
- tools.add_child(panel)
- toolbar = VBoxContainer.new()
- toolbar.add_theme_constant_override('separation',6)
- panel.add_child(toolbar)
- timer_grid = GridContainer.new()
- timer_grid.columns = 2
- var timer_row = timer_grid
- toolbar.add_child(timer_row)
- timer_label = Label.new()
- timer_label.add_theme_font_size_override("font_size",12)
- timer_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
- timer_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- timer_row.add_child(timer_label)
- pause_control = Button.new()
- pause_control.text = '暂停'
- pause_control.pressed.connect(func(): main.handle(main.get_node('/root/Game').toggle_pause()))
- timer_row.add_child(pause_control)
- mode_grid = GridContainer.new()
- mode_grid.columns = 3
- var modes = mode_grid
- toolbar.add_child(modes)
- for entry in [['完整','full'],['悬浮','scene'],['极简','mini']]:
-  var b := Button.new()
-  b.text = entry[0]
-  b.icon = load("res://assets/production/ui/"+entry[1]+".svg")
-  b.expand_icon = true
-  b.add_theme_constant_override("icon_max_width",18)
-  b.custom_minimum_size.y = 38
-  b.add_theme_color_override('font_color',Color('2086b0'))
-  var button_style := StyleBoxFlat.new()
-  button_style.bg_color = Color('fffef5')
-  button_style.border_color = Color('39b8e5')
-  button_style.set_border_width_all(2)
-  button_style.set_corner_radius_all(8)
-  button_style.content_margin_left = 4
-  button_style.content_margin_right = 4
-  b.add_theme_stylebox_override('normal',button_style)
-  var disabled_style := button_style.duplicate()
-  disabled_style.bg_color = Color('e5f0ef')
-  b.add_theme_stylebox_override('disabled',disabled_style)
-  var pressed_style := button_style.duplicate()
-  pressed_style.bg_color = Color('bce9f6')
-  b.add_theme_stylebox_override('pressed',pressed_style)
-  var hover_style := button_style.duplicate()
-  hover_style.bg_color = Color('dcf8ff')
-  b.add_theme_stylebox_override('hover',hover_style)
-  b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  b.focus_mode = Control.FOCUS_NONE
-  b.pressed.connect(request_mode.bind(entry[1]))
-  modes.add_child(b)
-  mode_buttons[entry[1]] = b
- action_grid = GridContainer.new()
- action_grid.columns = 3
- var actions = action_grid
- toolbar.add_child(actions)
- for entry in [['收杆','reel'],['图鉴','book'],['鱼缸','tank']]:
-  var b := Button.new()
-  b.text = entry[0]
-  b.icon = load("res://assets/production/ui/"+entry[1]+".svg")
-  b.expand_icon = true
-  b.add_theme_constant_override("icon_max_width",18)
-  b.custom_minimum_size.y = 38
-  b.add_theme_color_override('font_color',Color('2086b0'))
-  var button_style := StyleBoxFlat.new()
-  button_style.bg_color = Color('fffef5')
-  button_style.border_color = Color('39b8e5')
-  button_style.set_border_width_all(2)
-  button_style.set_corner_radius_all(8)
-  button_style.content_margin_left = 4
-  button_style.content_margin_right = 4
-  b.add_theme_stylebox_override('normal',button_style)
-  var disabled_style := button_style.duplicate()
-  disabled_style.bg_color = Color('e5f0ef')
-  b.add_theme_stylebox_override('disabled',disabled_style)
-  var pressed_style := button_style.duplicate()
-  pressed_style.bg_color = Color('bce9f6')
-  b.add_theme_stylebox_override('pressed',pressed_style)
-  var hover_style := button_style.duplicate()
-  hover_style.bg_color = Color('dcf8ff')
-  b.add_theme_stylebox_override('hover',hover_style)
-  b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  b.pressed.connect(request_action.bind(entry[1]))
-  actions.add_child(b)
-  action_buttons[entry[1]] = b
+ catch_popup = CatchPopup.new()
+ catch_popup.main = main
+ catch_popup.theme = main.theme
+ add_child(catch_popup)
+ catch_popup.dismissed.connect(func(): dismissed_catch = str(main.get_node('/root/Game').state.pending_catch.get('catch_id','')))
  menu = PopupMenu.new()
  menu.force_native = true
  add_child(menu)
@@ -171,6 +71,137 @@ func _ready() -> void:
   settings.load('user://window-layouts.cfg')
  pinned = bool(settings.get_value('window','pinned',false))
  apply(str(settings.get_value('window','mode','full')),false)
+func build_tools() -> void:
+ # Native Windows viewport/input ownership is recreated AFTER the parent changes.
+ # Reusing a differently sized native child can retain stale mouse/focus state.
+ if is_instance_valid(tools):
+  tools.hide()
+  tools.queue_free()
+ mode_buttons.clear()
+ action_buttons.clear()
+ tools = Window.new()
+ tools.visible = false
+ tools.force_native = true
+ tools.borderless = true
+ tools.unresizable = true
+ tools.transparent_bg = true
+ tools.transparent = true
+ tools.unfocusable = false
+ tools.transient = true
+ tools.theme = main.theme
+ add_child(tools)
+ var panel := PanelContainer.new()
+ panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ var skin: StyleBoxFlat = main.style(Color('fffbee'),12)
+ skin.set_content_margin_all(8)
+ panel.add_theme_stylebox_override('panel',skin)
+ tools.add_child(panel)
+ toolbar = VBoxContainer.new()
+ toolbar.add_theme_constant_override('separation',6)
+ panel.add_child(toolbar)
+ mode_grid = GridContainer.new()
+ mode_grid.columns = 1 if mode == 'scene' else 3
+ toolbar.add_child(mode_grid)
+ for entry in [['完整','full'],['悬浮','scene'],['极简','mini']]:
+  var b := tool_button(entry[0],entry[1],mode_grid)
+  b.pressed.connect(request_mode.bind(entry[1]))
+  mode_buttons[entry[1]] = b
+ action_grid = GridContainer.new()
+ action_grid.columns = 1 if mode == 'scene' else 3
+ toolbar.add_child(action_grid)
+ for entry in [['放竿','cast'],['起竿','reel'],['图鉴','book'],['鱼缸','tank'],['透明度','opacity']]:
+  var b := tool_button(entry[0],entry[1],action_grid)
+  b.pressed.connect(request_action.bind(entry[1]))
+  action_buttons[entry[1]] = b
+ opacity_row = HBoxContainer.new()
+ opacity_row.visible = opacity_open
+ toolbar.add_child(opacity_row)
+ opacity_slider = HSlider.new()
+ opacity_slider.min_value = 30
+ opacity_slider.max_value = 100
+ opacity_slider.step = 5
+ opacity_slider.value = opacity_percent()
+ opacity_slider.custom_minimum_size = Vector2(54,28)
+ opacity_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ opacity_slider.tooltip_text = '当前浮窗不透明度：30%–100%'
+ opacity_slider.value_changed.connect(set_opacity_percent)
+ opacity_row.add_child(opacity_slider)
+ opacity_label = Label.new()
+ opacity_label.add_theme_font_size_override('font_size',11)
+ opacity_row.add_child(opacity_label)
+ fit_tools()
+func tool_button(text: String, icon_id: String, parent: Control) -> Button:
+ var b := Button.new()
+ b.text = text
+ b.icon = load('res://assets/production/ui/'+icon_id+'.svg')
+ b.expand_icon = true
+ b.add_theme_constant_override('icon_max_width',18)
+ b.add_theme_font_size_override('font_size',12)
+ b.custom_minimum_size.y = 38
+ b.add_theme_color_override('font_color',Color('2086b0'))
+ for entry in [['normal','fffef5'],['hover','dcf8ff'],['pressed','bce9f6'],['disabled','e5f0ef']]:
+  var skin: StyleBoxFlat = main.style(Color(entry[1]),8)
+  skin.border_color = Color('83bed6')
+  skin.set_border_width_all(1)
+  skin.content_margin_left = 4
+  skin.content_margin_right = 4
+  skin.content_margin_top = 4
+  skin.content_margin_bottom = 4
+  b.add_theme_stylebox_override(entry[0],skin)
+ b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ b.focus_mode = Control.FOCUS_NONE
+ parent.add_child(b)
+ return b
+func fit_tools() -> void:
+ var dimensions := Vector2i(132,364) if mode == 'scene' else Vector2i(320,160)
+ if opacity_open:
+  dimensions.y += 34
+ tools.min_size = Vector2i.ZERO
+ tools.max_size = Vector2i.ZERO
+ tools.size = dimensions
+ tools.min_size = dimensions
+ tools.max_size = dimensions
+ tools.content_scale_size = dimensions
+ if tools.visible:
+  tools.position = clamp_position(tools.position,dimensions)
+func opacity_percent() -> int:
+ return clampi(int(settings.get_value(mode,'opacity',100)),30,100)
+func set_opacity_percent(value: float) -> void:
+ if mode == 'full':
+  return
+ settings.set_value(mode,'opacity',clampi(roundi(value),30,100))
+ apply_opacity()
+ save_settings()
+func apply_opacity() -> void:
+ var alpha: float = opacity_percent()/100.0
+ view.modulate.a = alpha
+ timer_card.modulate.a = alpha
+ if is_instance_valid(catch_popup):
+  catch_popup.panel.modulate.a = alpha
+ if is_instance_valid(opacity_label):
+  opacity_label.text = '%d%%' % opacity_percent()
+  opacity_slider.set_value_no_signal(opacity_percent())
+func sync_catch(force: bool = false) -> void:
+ var game = main.get_node('/root/Game')
+ var id: String = str(game.state.pending_catch.get('catch_id',''))
+ if id.is_empty():
+  dismissed_catch = ''
+  catch_popup.hide()
+  return
+ if mode == 'full' or main.ocean.is_busy() or main.collection.visible or main.confirmation.visible:
+  catch_popup.hide()
+  return
+ if not force and dismissed_catch == id:
+  return
+ if force:
+  dismissed_catch = ''
+ catch_popup.present(game)
+ # Transient windows inherit their owner's stacking; a separate on-top flag conflicts.
+ var offset := Vector2i(-catch_popup.size.x-8,0) if mode == 'scene' else Vector2i(get_window().size.x-catch_popup.size.x,-catch_popup.size.y-8)
+ catch_popup.position = clamp_position(get_window().position+offset,catch_popup.size)
+ if not catch_popup.visible:
+  tools.hide()
+  catch_popup.show()
 func clamp_position(value: Vector2i, dimensions: Vector2i) -> Vector2i:
  var area := DisplayServer.screen_get_usable_rect()
  return Vector2i(clampi(value.x,area.position.x,maxi(area.position.x,area.end.x-dimensions.x)),clampi(value.y,area.position.y,maxi(area.position.y,area.end.y-dimensions.y)))
@@ -191,17 +222,16 @@ func apply(next: String, persist: bool = true) -> void:
   return
  if persist:
   remember()
- var keep_tools: bool = tools.visible and mode != "full" and next != "full"
- if not keep_tools:
+ var keep_tools: bool = is_instance_valid(tools) and tools.visible and mode != 'full' and next != 'full'
+ var tool_position: Vector2i = tools.position if is_instance_valid(tools) else Vector2i.ZERO
+ if is_instance_valid(tools):
   tools.hide()
+ catch_popup.hide()
+ switching = false
  drag = false
- hover_grace = .4 if keep_tools else 0.0
+ hover_grace = 1.0 if keep_tools else 0.0
  mode = next
- timer_grid.columns = 1 if mode == "scene" else 2
- mode_grid.columns = 1 if mode == "scene" else 3
- action_grid.columns = 1 if mode == "scene" else 3
- tools.size = Vector2i(104,356) if mode == "scene" else Vector2i(320,160)
- tools.content_scale_size = tools.size
+ opacity_open = false
  var window := get_window()
  var compact: bool = mode != 'full'
  main.get_node('LayoutMargin').visible = not compact
@@ -230,8 +260,13 @@ func apply(next: String, persist: bool = true) -> void:
  var area := DisplayServer.screen_get_usable_rect()
  var fallback := area.end-window.size-Vector2i(16,16) if compact else area.position+(area.size-window.size)/2
  window.position = clamp_position(settings.get_value(mode,'position',fallback),window.size)
+ build_tools()
  toolbar.visible = true
+ apply_opacity()
  sync_tools()
+ if keep_tools:
+  tools.position = clamp_position(tool_position,tools.size)
+  tools.show()
  view.queue_redraw()
  if persist:
   save_settings()
@@ -240,11 +275,11 @@ func menu_action(id: int) -> void:
   apply(['full','scene','mini'][id])
  elif id == 3:
   if not main.get_node('/root/Game').state.pending_catch.is_empty():
-   apply('full')
+   sync_catch(true)
   else:
    main.perform_fishing('reel' if main.get_node('/root/Game').state.cast else 'cast')
  elif id == 4:
-  apply('full')
+  sync_catch(true)
  elif id == 5:
   pinned = not pinned
   get_window().always_on_top = pinned
@@ -285,8 +320,9 @@ func _process(_delta: float) -> void:
  if mode == 'full':
   return
  sync_tools()
+ sync_catch()
  view.night = main.ocean.night
- if main.collection.visible or main.confirmation.visible:
+ if main.collection.visible or main.confirmation.visible or catch_popup.visible:
   tools.hide()
   return
  if should_show_tools(DisplayServer.mouse_get_position()) and not drag:
@@ -297,6 +333,8 @@ func _process(_delta: float) -> void:
   if hover_grace <= 0:
    tools.hide()
  var action: String = main.ocean.motion.active
+ view.action_progress = main.ocean.motion.progress
+ view.caught_texture = main.Portrait.texture_for(str(main.get_node('/root/Game').state.pending_catch.get('species_id',''))) if not main.get_node('/root/Game').state.pending_catch.is_empty() else null
  if action in ['cast','reel']:
   view.action = action
   view.age = main.ocean.motion.elapsed
@@ -308,17 +346,12 @@ func sync_tools() -> void:
   mode_buttons[key].disabled = key == mode
  var game = main.get_node('/root/Game')
  timer_card.sync(game,main.ocean.night)
- var remaining: int = int(ceil(game.remaining_seconds()))
- timer_label.text = '%s · %02d:%02d' % [game.model.group_for(game.state.duration_minutes),remaining/60,remaining%60]
- if game.model.completed(game.state):
-  timer_label.text = '专注完成\n可以起竿'
- elif game.state.paused:
-  timer_label.text += '\n已暂停'
- pause_control.text = '继续' if game.state.paused else '暂停'
- pause_control.disabled = game.blocked or not game.state.cast or game.model.completed(game.state)
- action_buttons.reel.text = '安置鱼获' if not game.state.pending_catch.is_empty() else ('起竿' if game.model.completed(game.state) else '提前起竿')
- action_buttons.reel.disabled = main.ocean.is_busy() or game.blocked or (not game.state.cast and game.state.pending_catch.is_empty())
- action_buttons.reel.tooltip_text = '请先在完整窗口放钩。' if action_buttons.reel.disabled else ('提前起竿会失败，需确认。' if game.state.cast and not game.model.completed(game.state) else '完成后起竿揭晓鱼获。')
+ action_buttons.cast.disabled = switching or main.ocean.is_busy() or game.blocked or game.state.cast or not game.state.pending_catch.is_empty()
+ action_buttons.cast.tooltip_text = '按当前设定的%d分钟开始番茄钟' % game.state.duration_minutes
+ action_buttons.reel.text = '鱼获' if not game.state.pending_catch.is_empty() else ('起竿' if game.model.completed(game.state) else '提前起竿')
+ action_buttons.reel.disabled = switching or main.ocean.is_busy() or game.blocked or (not game.state.cast and game.state.pending_catch.is_empty())
+ action_buttons.reel.tooltip_text = '提前起竿会失败，需确认。' if game.state.cast and not game.model.completed(game.state) else '查看并安置本次鱼获。'
+ action_buttons.opacity.tooltip_text = '调节当前浮窗透明度 · 不透明度%d%%' % opacity_percent()
 func should_show_tools(screen_point: Vector2i) -> bool:
  if mode == 'full':
   return false
@@ -336,7 +369,7 @@ func should_show_tools(screen_point: Vector2i) -> bool:
  return local.distance_to(Geometry2D.get_closest_point_to_segment(local,start,end)) <= 24.0
 func show_tools() -> void:
  sync_tools()
- tools.always_on_top = pinned
+ # Native toolbar stays above its owner through transient ownership.
  if not tools.visible:
   var offset := Vector2i(-tools.size.x-6,0) if mode == "scene" else Vector2i(get_window().size.x-tools.size.x,-tools.size.y-6)
   tools.position = clamp_position(get_window().position+offset,tools.size)
@@ -347,13 +380,25 @@ func open_collection(kind: String) -> void:
 func tool_action(kind: String) -> void:
  if kind in ['book','tank']:
   open_collection(kind)
- elif not main.get_node('/root/Game').state.pending_catch.is_empty():
-  apply('full')
- elif not action_buttons.reel.disabled:
-  main.perform_fishing('reel')
+ elif kind == 'opacity':
+  opacity_open = not opacity_open
+  opacity_row.visible = opacity_open
+  fit_tools()
+  hover_grace = 1.0
+ elif kind == 'cast' and not action_buttons.cast.disabled:
+  main.perform_fishing('cast')
+ elif kind == 'reel':
+  if not main.get_node('/root/Game').state.pending_catch.is_empty():
+   sync_catch(true)
+  elif not action_buttons.reel.disabled:
+   main.perform_fishing('reel')
+ sync_tools()
 
 func request_mode(next: String) -> void:
- # Finish the native button event before changing its owner window.
+ # Ignore duplicate native requests until the current release is completely handled.
+ if switching:
+  return
+ switching = true
  apply.call_deferred(next)
 
 func request_action(kind: String) -> void:

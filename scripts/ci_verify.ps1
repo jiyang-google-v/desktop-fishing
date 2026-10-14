@@ -25,6 +25,8 @@ if ($ExportOnly) {
  Copy-Item docs/POMODORO_QA.md build/windows/POMODORO_QA.md
  Copy-Item docs/REFERENCE_SCENE_QA.md build/windows/REFERENCE_SCENE_QA.md
  Copy-Item docs/POMODORO_CARD_A_QA.md build/windows/POMODORO_CARD_A_QA.md
+ Copy-Item docs/FLOATING_CONTROLS_QA.md build/windows/FLOATING_CONTROLS_QA.md
+ Copy-Item docs/qa/floating-controls build/windows/floating-controls-preview -Recurse
  Copy-Item docs/FLAT_BASE_QA.md build/windows/FLAT_BASE_QA.md
  Copy-Item docs/qa/flat-base build/windows/flat-base-preview -Recurse
  Copy-Item docs/qa/pomodoro-card build/windows/pomodoro-card-preview -Recurse
@@ -56,7 +58,10 @@ if ($ExportOnly) {
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/floating_art_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/window_layout_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/reference_scene_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/floating_interaction_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/window_controls_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/floating_interaction_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/floating_interaction_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/window_controls_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/window_layout_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_windows_focus.gd','--','--tests')

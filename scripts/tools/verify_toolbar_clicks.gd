@@ -22,7 +22,7 @@ static func run(main: Control) -> void:
   return
  file.store_string(FileAccess.get_file_as_string('res://platform/windows/toolbar-click-test.ps1'))
  file.close()
- for target in ['mini','scene','mini','scene']:
+ for target in ['mini','scene','mini','scene','mini','scene','mini','scene','mini','scene','mini','scene']:
   var button: Button = layouts.mode_buttons[target]
   var center: Vector2i = layouts.tools.position+Vector2i(button.get_global_rect().get_center())
   var output := []
@@ -62,6 +62,54 @@ static func run(main: Control) -> void:
     tree.quit(1)
     return
   print('Physical Windows Card A pause/resume passed: '+origin)
+  game.state = game.model.fresh_state()
+  main.ocean.skip()
+  main.refresh()
+  layouts.show_tools()
+  layouts.hover_grace = 8.0
+  for i in 4:
+   await tree.process_frame
+  var cast_result: bool = await click_control(main,layouts.action_buttons.cast,layouts.tools,helper)
+  if not cast_result or not game.state.cast or layouts.mode != origin:
+   push_error('Physical floating cast failed: '+origin)
+   tree.quit(1)
+   return
+  main.ocean.skip()
+  layouts.show_tools()
+  layouts.hover_grace = 8.0
+  for i in 4:
+   await tree.process_frame
+  if not await click_control(main,layouts.action_buttons.opacity,layouts.tools,helper) or not layouts.opacity_open:
+   push_error('Physical opacity button failed: '+origin)
+   tree.quit(1)
+   return
+  for i in 4:
+   await tree.process_frame
+  if not await click_control(main,layouts.opacity_slider,layouts.tools,helper) or layouts.opacity_percent() == 100:
+   push_error('Physical opacity slider failed: '+origin)
+   tree.quit(1)
+   return
+  layouts.set_opacity_percent(100)
+  game.state.focus_seconds = game.state.duration_minutes*60.0
+  main.refresh()
+  layouts.show_tools()
+  layouts.hover_grace = 8.0
+  for i in 4:
+   await tree.process_frame
+  if not await click_control(main,layouts.action_buttons.reel,layouts.tools,helper) or game.state.pending_catch.is_empty():
+   push_error('Physical completed reel failed: '+origin)
+   tree.quit(1)
+   return
+  await tree.create_timer(2.0).timeout
+  if not layouts.catch_popup.visible:
+   push_error('Floating catch reveal failed: '+origin)
+   tree.quit(1)
+   return
+  if not await click_control(main,layouts.catch_popup.keep_button,layouts.catch_popup,helper) or not game.state.pending_catch.is_empty():
+   push_error('Physical catch keep failed: '+origin)
+   tree.quit(1)
+   return
+  print('Physical cast / opacity slider / reel / catch keep passed: '+origin)
   for kind in ['book','tank','reel']:
    game.state = game.model.fresh_state()
    game.model.cast_line(game.state)
@@ -104,3 +152,10 @@ static func run(main: Control) -> void:
  DirAccess.remove_absolute(ProjectSettings.globalize_path(helper))
  print('Exported native toolbar physical clicks passed: scene <-> mini and return to full.')
  tree.quit(0)
+
+static func click_control(main: Control, control: Control, window: Window, helper: String) -> bool:
+ var center: Vector2i = window.position+Vector2i(control.get_global_rect().get_center())
+ var output := []
+ var result := OS.execute('powershell.exe',PackedStringArray(['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',ProjectSettings.globalize_path(helper),'-X',str(center.x),'-Y',str(center.y)]),output)
+ await main.get_tree().create_timer(.35).timeout
+ return result == 0
