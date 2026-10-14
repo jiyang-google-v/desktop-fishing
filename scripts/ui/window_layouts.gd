@@ -4,6 +4,7 @@ const SIZES := {'full':Vector2i(1100,760),'scene':Vector2i(420,280),'mini':Vecto
 var mode := 'full'
 var main
 var view
+var background: ColorRect
 var toolbar: HBoxContainer
 var menu: PopupMenu
 var settings := ConfigFile.new()
@@ -14,6 +15,14 @@ var pinned := false
 var test_mode := false
 func _ready() -> void:
  main = get_parent()
+ # Keep the native alpha surface alive in every layout. Full mode paints its own opaque backdrop.
+ background = ColorRect.new()
+ background.name = 'FullWindowBackground'
+ background.color = Color(0.929,0.949,0.929,1)
+ background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ main.add_child(background)
+ main.move_child(background,0)
  test_mode = '--tests' in OS.get_cmdline_user_args()
  mouse_filter = Control.MOUSE_FILTER_IGNORE
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -73,8 +82,9 @@ func apply(next: String, persist: bool = true) -> void:
  window.max_size = Vector2i.ZERO if not compact else SIZES[mode]
  window.borderless = compact
  window.unresizable = compact
- window.transparent = compact
- window.transparent_bg = compact
+ background.visible = not compact
+ window.transparent_bg = true
+ window.transparent = true
  window.always_on_top = pinned
  window.size = settings.get_value('full','size',SIZES.full) if not compact else SIZES[mode]
  window.content_scale_size = window.size

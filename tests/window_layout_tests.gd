@@ -6,6 +6,9 @@ func run() -> void:
  root.add_child(main)
  await process_frame
  var layouts = main.layouts
+ assert(ProjectSettings.get_setting('display/window/size/transparent'))
+ assert(ProjectSettings.get_setting('rendering/viewport/transparent_background'))
+ assert(ProjectSettings.get_setting('rendering/gl_compatibility/driver.windows') == 'opengl3_angle')
  var snapshot: String = JSON.stringify(main.get_node('/root/Game').state)
  for mode in ['scene','mini','full','mini','scene','full']:
   layouts.apply(mode, false)
@@ -15,7 +18,8 @@ func run() -> void:
   assert(layouts.view.visible == (mode != 'full'))
   if DisplayServer.get_name() != 'headless':
    assert(root.borderless == (mode != 'full'))
-  assert(root.transparent_bg == (mode != 'full'))
+  assert(root.transparent_bg)
+  assert(layouts.background.visible == (mode == 'full'))
   assert(JSON.stringify(main.get_node('/root/Game').state) == snapshot)
   if mode != 'full':
    assert(layouts.view.profile == mode)

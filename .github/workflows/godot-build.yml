@@ -31,8 +31,13 @@ jobs:
         run: |
           $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--headless','--quit-after','10','--','--tests','--export-smoke' -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw 'Exported game failed to launch' }
+      - name: Verify exported native desktop transparency
+        shell: pwsh
+        run: |
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--quit-after','600','--','--tests','--transparency-smoke' -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw 'Native desktop transparency check failed' }
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-fishing-godot-windows
-          path: build/windows/*
+          path: build/windows/**
           if-no-files-found: error

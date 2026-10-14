@@ -20,6 +20,9 @@ function Invoke-GodotCheck([string[]]$GodotArgs) {
 if ($ExportOnly) {
  New-Item -ItemType Directory -Force build/windows | Out-Null
  Invoke-GodotCheck -GodotArgs @('--headless','--export-release','Windows Desktop','build/windows/DesktopFishing.exe')
+ foreach ($dll in @('libEGL.dll','libGLESv2.dll')) {
+  if (-not (Test-Path (Join-Path build/windows $dll))) { throw "Missing ANGLE runtime: $dll" }
+ }
  Copy-Item README.md build/windows/README.md
  Copy-Item docs/WINDOWS_STAGE1_ACCEPTANCE.md build/windows/WINDOWS_STAGE1_ACCEPTANCE.md
  Copy-Item docs/STAGE2_ART_QA.md build/windows/STAGE2_ART_QA.md

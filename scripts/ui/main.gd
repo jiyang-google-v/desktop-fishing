@@ -76,6 +76,8 @@ func _ready() -> void:
  add_child(layouts)
  Game.changed.connect(refresh)
  refresh()
+ if "--tests" in OS.get_cmdline_user_args() and "--transparency-smoke" in OS.get_cmdline_user_args():
+  load("res://scripts/tools/verify_window_transparency.gd").run.call_deferred(self)
  if "--export-smoke" in OS.get_cmdline_user_args():
   var valid: bool = Game.model.roster.size() == 14 and FileAccess.file_exists("res://platform/windows/focus-worker.ps1") and not ocean.motion.config.is_empty() and Ocean.BACKGROUND != null and SceneAudio.WATER != null
   for fish in Game.model.roster:
