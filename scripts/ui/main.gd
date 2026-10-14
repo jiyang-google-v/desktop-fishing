@@ -203,12 +203,26 @@ func build_ui() -> void:
  var overlay := VBoxContainer.new()
  overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
  ocean_margin.add_child(overlay)
+ var clock_card := PanelContainer.new()
+ clock_card.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+ var clock_style := style(Color("fffef2"),8)
+ clock_style.border_color = Color("43b5e2")
+ clock_style.set_border_width_all(2)
+ clock_style.content_margin_left = 10
+ clock_style.content_margin_right = 10
+ clock_style.content_margin_top = 6
+ clock_style.content_margin_bottom = 6
+ clock_card.add_theme_stylebox_override("panel",clock_style)
+ clock_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ overlay.add_child(clock_card)
+ var clock_box := VBoxContainer.new()
+ clock_card.add_child(clock_box)
  scene_text = label("白昼的海",14)
  scene_text.add_theme_color_override("font_color",Color("426b89"))
- overlay.add_child(scene_text)
+ clock_box.add_child(scene_text)
  depth_text = label("0.0 米",24)
  depth_text.add_theme_color_override("font_color",Color("426b89"))
- overlay.add_child(depth_text)
+ clock_box.add_child(depth_text)
  var spacer := Control.new()
  spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
  overlay.add_child(spacer)

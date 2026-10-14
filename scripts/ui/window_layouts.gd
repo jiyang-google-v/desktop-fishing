@@ -295,9 +295,9 @@ func sync_tools() -> void:
  var remaining: int = int(ceil(game.remaining_seconds()))
  timer_label.text = '%s · %02d:%02d' % [game.model.group_for(game.state.duration_minutes),remaining/60,remaining%60]
  if game.model.completed(game.state):
-  timer_label.text = '专注完成 · 可以起竿'
+  timer_label.text = '专注完成\n可以起竿'
  elif game.state.paused:
-  timer_label.text += ' · 已暂停'
+  timer_label.text += '\n已暂停'
  pause_control.text = '继续' if game.state.paused else '暂停'
  pause_control.disabled = game.blocked or not game.state.cast or game.model.completed(game.state)
  action_buttons.reel.text = '安置鱼获' if not game.state.pending_catch.is_empty() else ('起竿' if game.model.completed(game.state) else '提前起竿')
