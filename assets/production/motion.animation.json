@@ -1,0 +1,341 @@
+{
+  "style_version": "V2.6",
+  "type": "independent_authored_png_frames",
+  "groups": {
+    "fisher": {
+      "canvas": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            "assets/production/motion/fisher/idle-01.png",
+            "assets/production/motion/fisher/idle-02.png",
+            "assets/production/motion/fisher/idle-03.png",
+            "assets/production/motion/fisher/idle-04.png"
+          ],
+          "duration": 3.2,
+          "loop": true,
+          "grip": [
+            [
+              0.753,
+              0.644
+            ],
+            [
+              0.753,
+              0.644
+            ],
+            [
+              0.787,
+              0.644
+            ],
+            [
+              0.764,
+              0.644
+            ]
+          ]
+        },
+        "cast": {
+          "frames": [
+            "assets/production/motion/fisher/cast-01.png",
+            "assets/production/motion/fisher/cast-02.png",
+            "assets/production/motion/fisher/cast-03.png",
+            "assets/production/motion/fisher/cast-04.png",
+            "assets/production/motion/fisher/cast-05.png",
+            "assets/production/motion/fisher/cast-06.png"
+          ],
+          "duration": 1.25,
+          "loop": false,
+          "grip": [
+            [
+              0.782,
+              0.655
+            ],
+            [
+              0.707,
+              0.552
+            ],
+            [
+              0.73,
+              0.483
+            ],
+            [
+              0.856,
+              0.552
+            ],
+            [
+              0.833,
+              0.586
+            ],
+            [
+              0.747,
+              0.649
+            ]
+          ],
+          "rod_degrees": [
+            18,
+            -2,
+            -25,
+            30,
+            23,
+            18
+          ]
+        },
+        "reel": {
+          "frames": [
+            "assets/production/motion/fisher/reel-01.png",
+            "assets/production/motion/fisher/reel-02.png",
+            "assets/production/motion/fisher/reel-03.png",
+            "assets/production/motion/fisher/reel-04.png",
+            "assets/production/motion/fisher/reel-05.png",
+            "assets/production/motion/fisher/reel-06.png"
+          ],
+          "duration": 1.1,
+          "loop": false,
+          "grip": [
+            [
+              0.764,
+              0.655
+            ],
+            [
+              0.707,
+              0.552
+            ],
+            [
+              0.73,
+              0.506
+            ],
+            [
+              0.649,
+              0.529
+            ],
+            [
+              0.764,
+              0.655
+            ],
+            [
+              0.747,
+              0.655
+            ]
+          ],
+          "rod_degrees": [
+            18,
+            10,
+            0,
+            -8,
+            7,
+            18
+          ]
+        },
+        "happy": {
+          "frames": [
+            "assets/production/motion/fisher/happy-01.png",
+            "assets/production/motion/fisher/happy-02.png",
+            "assets/production/motion/fisher/happy-03.png",
+            "assets/production/motion/fisher/happy-04.png",
+            "assets/production/motion/fisher/happy-05.png",
+            "assets/production/motion/fisher/happy-06.png"
+          ],
+          "duration": 1.8,
+          "loop": false,
+          "grip": [
+            [
+              0.741,
+              0.655
+            ],
+            [
+              0.736,
+              0.655
+            ],
+            [
+              0.736,
+              0.655
+            ],
+            [
+              0.741,
+              0.655
+            ],
+            [
+              0.753,
+              0.655
+            ],
+            [
+              0.747,
+              0.655
+            ]
+          ]
+        }
+      }
+    },
+    "cat": {
+      "canvas": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "clips": {
+        "idle": {
+          "frames": [
+            "assets/production/motion/cat/idle-01.png",
+            "assets/production/motion/cat/idle-02.png",
+            "assets/production/motion/cat/idle-03.png",
+            "assets/production/motion/cat/idle-04.png"
+          ],
+          "duration": 3.2,
+          "loop": true
+        },
+        "blink": {
+          "frames": [
+            "assets/production/motion/cat/blink-01.png",
+            "assets/production/motion/cat/blink-02.png",
+            "assets/production/motion/cat/blink-03.png",
+            "assets/production/motion/cat/blink-04.png"
+          ],
+          "duration": 0.8,
+          "loop": false
+        },
+        "alert": {
+          "frames": [
+            "assets/production/motion/cat/alert-01.png",
+            "assets/production/motion/cat/alert-02.png",
+            "assets/production/motion/cat/alert-03.png",
+            "assets/production/motion/cat/alert-04.png"
+          ],
+          "duration": 1.25,
+          "loop": false
+        },
+        "happy": {
+          "frames": [
+            "assets/production/motion/cat/happy-01.png",
+            "assets/production/motion/cat/happy-02.png",
+            "assets/production/motion/cat/happy-03.png",
+            "assets/production/motion/cat/happy-04.png"
+          ],
+          "duration": 1.8,
+          "loop": false
+        }
+      }
+    },
+    "fx": {
+      "canvas": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "clips": {
+        "splash": {
+          "frames": [
+            "assets/production/motion/fx/splash-01.png",
+            "assets/production/motion/fx/splash-02.png",
+            "assets/production/motion/fx/splash-03.png",
+            "assets/production/motion/fx/splash-04.png",
+            "assets/production/motion/fx/splash-05.png",
+            "assets/production/motion/fx/splash-06.png",
+            "assets/production/motion/fx/splash-07.png",
+            "assets/production/motion/fx/splash-08.png"
+          ],
+          "duration": 1.0,
+          "loop": false
+        },
+        "ripple": {
+          "frames": [
+            "assets/production/motion/fx/ripple-01.png",
+            "assets/production/motion/fx/ripple-02.png",
+            "assets/production/motion/fx/ripple-03.png",
+            "assets/production/motion/fx/ripple-04.png",
+            "assets/production/motion/fx/ripple-05.png",
+            "assets/production/motion/fx/ripple-06.png",
+            "assets/production/motion/fx/ripple-07.png",
+            "assets/production/motion/fx/ripple-08.png"
+          ],
+          "duration": 2.4,
+          "loop": true
+        },
+        "bubbles": {
+          "frames": [
+            "assets/production/motion/fx/bubbles-01.png",
+            "assets/production/motion/fx/bubbles-02.png",
+            "assets/production/motion/fx/bubbles-03.png",
+            "assets/production/motion/fx/bubbles-04.png",
+            "assets/production/motion/fx/bubbles-05.png",
+            "assets/production/motion/fx/bubbles-06.png"
+          ],
+          "duration": 2.4,
+          "loop": true
+        },
+        "glimmer": {
+          "frames": [
+            "assets/production/motion/fx/glimmer-01.png",
+            "assets/production/motion/fx/glimmer-02.png",
+            "assets/production/motion/fx/glimmer-03.png",
+            "assets/production/motion/fx/glimmer-04.png",
+            "assets/production/motion/fx/glimmer-05.png",
+            "assets/production/motion/fx/glimmer-06.png"
+          ],
+          "duration": 2.4,
+          "loop": true
+        },
+        "shadow": {
+          "frames": [
+            "assets/production/motion/fx/shadow-01.png",
+            "assets/production/motion/fx/shadow-02.png",
+            "assets/production/motion/fx/shadow-03.png",
+            "assets/production/motion/fx/shadow-04.png",
+            "assets/production/motion/fx/shadow-05.png",
+            "assets/production/motion/fx/shadow-06.png"
+          ],
+          "duration": 3.6,
+          "loop": true
+        }
+      }
+    }
+  },
+  "gear": {
+    "rod": {
+      "path": "assets/production/gear/rod.png",
+      "pivot": [
+        0.22,
+        0.77
+      ],
+      "tip": [
+        0.93,
+        0.13
+      ]
+    },
+    "bobber": {
+      "path": "assets/production/gear/bobber.png",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "hook": {
+      "path": "assets/production/gear/hook.png",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "bucket": {
+      "path": "assets/production/gear/bucket.png",
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    }
+  },
+  "scene": {
+    "pier": "assets/production/scene/pier-clear.png"
+  }
+}

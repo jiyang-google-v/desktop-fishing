@@ -25,14 +25,22 @@ if ($ExportOnly) {
  Copy-Item docs/STAGE2_ART_QA.md build/windows/STAGE2_ART_QA.md
  Copy-Item docs/STAGE3_ART_QA.md build/windows/STAGE3_ART_QA.md
  Copy-Item docs/qa/stage3 build/windows/stage3-preview -Recurse
+ Copy-Item docs/STAGE4_ART_QA.md build/windows/STAGE4_ART_QA.md
+ Copy-Item docs/qa/stage4 build/windows/stage4-preview -Recurse
 } else {
  Invoke-GodotCheck -GodotArgs @('--headless','--editor','--import','--quit')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage2_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage3_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_ui_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_windows_focus.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke')
  foreach ($mode in @('--catch','--book','--tank','--samples')) {
   Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','180','--','--tests','--collection-capture',$mode)
  }
+ foreach ($mode in @('--day','--night','--cast-pose','--reel-pose')) {
+  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','180','--','--tests','--scene-capture','--stage4',$mode)
+ }
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','180','--','--tests','--scene-capture','--stage4','--small')
 }

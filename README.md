@@ -1,6 +1,6 @@
 # Desktop Fishing · 桌面钓鱼
 
-**Godot 4.6.1 + GDScript，0.5.0-preview 完整生物素材预览。** 当前工程已移除 Electron、Node.js 和网页 UI 实现。
+**Godot 4.6.1 + GDScript，0.6.0-preview 人物、猫与钓具特效预览。** 当前工程已移除 Electron、Node.js 和网页 UI 实现。
 
 ## 下载直接试玩
 
@@ -29,6 +29,12 @@ godot --path .
 - 图鉴记录发现次数和最大体长。放生不删除图鉴。
 - 退出后恢复会话或待安置鱼获；退出、休眠间隔不补计。
 
+## 人物、猫、钓具与特效补齐
+
+小渔22帧、猫16帧、特效34帧和鱼竿/浮漂/鱼钩/水桶已接入。猫和桶从码头拆开，人物放钩/收杆有实际手臂姿态，揭晓后人物与猫短暂高兴，再恢复待机。待机、眨眼、尾巴、水花、水纹、气泡、钩端微光和鱼影由独立PNG与motion.animation.json驱动。手部逐帧握点与固定杆长的天空角度限制保证完整显示。探索特效暂停时停止推进。
+
+[本轮计划](docs/STAGE4_VISUAL_PLAN.md)、[资源与集成验收](docs/STAGE4_ART_QA.md)、[实际场景动画](docs/qa/stage4/in-game.mp4)、[13动作预览](docs/qa/stage4/motion-preview.gif)。当前候选资源供用户最终视觉确认。
+
 ## 第三阶段：14生物与鱼缸分层素材
 
 14种生物插画已全部接入鱼获、图鉴与鱼缸，未发现生物显示实际轮廓剪影。鱼缸使用独立背景、水面、前景三个图层。六鱼共同观赏区支持点击选择个体，已有替换/放生确认逻辑保留。普通鱼缓游，海马/水母漂浮，墨鱼缓慢推进，参数实际读取 `collection.animation.json`。首次发现/新纪录标记随鱼获持久化，旧存档不补造标签。
@@ -43,7 +49,7 @@ godot --path .
 
 - [第二阶段美术与交互验收](docs/STAGE2_ART_QA.md)
 - [生成素材提示词](docs/STAGE2_ART_PROMPTS.md)
-- 场景动画配置：`assets/production/scene.animation.json`；本批使用独立图层补间，不是逐帧角色动作集。
+- 场景动画配置：`assets/production/scene.animation.json`；第二阶段原始图层补间已由本轮motion.animation.json的独立动作帧接替。
 
 ## 第一阶段稳定性版本
 
@@ -69,6 +75,10 @@ godot --path .
 ```powershell
 godot --headless --editor --import --quit
 godot --headless --script res://tests/run_tests.gd -- --tests
+godot --headless --script res://tests/stage2_tests.gd -- --tests
+godot --headless --script res://tests/stage3_tests.gd -- --tests
+godot --headless --script res://tests/stage4_tests.gd -- --tests
+godot --headless --script res://tests/stage4_ui_tests.gd -- --tests
 godot --headless --quit-after 180 -- --tests --ui-smoke
 godot --headless --script res://tests/run_windows_focus.gd -- --tests
 powershell -NoProfile -File tests/windows_focus_smoke.ps1
@@ -93,4 +103,4 @@ Windows 查询脚本使用系统自带 PowerShell 调用 Win32，只返回空闲
 
 ## 当前限制
 
-V2.6 主场景素材和分层动作已接入；14生物与鱼缸三层插画已接入，完整收藏演出仍待完善。主场景使用图层补间，尚未制作完整逐帧角色/猫动作集。鱼获仍使用收杆时抽取的 MVP 模型，生态范围和体长是玩法占位值。第一阶段用户已报告 Windows 实机验收通过；本轮视觉交互仍需实际试玩反馈。其他平台可打开 UI，但专注计时暂停。
+V2.6 主场景素材和分层动作已接入；14生物与鱼缸三层插画已接入，完整收藏演出仍待完善。主场景已补齐人物22帧、猫16帧与特效34帧；UI收尾仍待完成。鱼获仍使用收杆时抽取的 MVP 模型，生态范围和体长是玩法占位值。第一阶段用户已报告 Windows 实机验收通过；本轮视觉交互仍需实际试玩反馈。其他平台可打开 UI，但专注计时暂停。

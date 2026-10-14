@@ -54,6 +54,9 @@ func _ready() -> void:
  OS.low_processor_usage_mode = true
  OS.low_processor_usage_mode_sleep_usec = 33000
  get_window().min_size = Vector2i(940,700)
+ if "--tests" in OS.get_cmdline_user_args() and "--small" in OS.get_cmdline_user_args():
+  get_window().content_scale_size = Vector2i(940,700)
+  get_window().size = Vector2i(940,700)
  get_window().title = "桌面钓鱼 · 海边日常"
  scene_audio = SceneAudio.new()
  add_child(scene_audio)
@@ -66,6 +69,13 @@ func _ready() -> void:
   for fish in Game.model.roster:
    valid = valid and Portrait.texture_for(fish.id) != null
   valid = valid and FileAccess.file_exists("res://assets/production/aquarium_manifest.json")
+  for group in ocean.frames.config.groups:
+   for clip in ocean.frames.config.groups[group].clips:
+    var sequence: Dictionary = ocean.frames.sequence(group,clip)
+    for i in sequence.frames.size():
+     valid = valid and ocean.frames.texture(group,clip,(i+.5)/sequence.frames.size()*float(sequence.duration)) != null
+  for gear in ocean.frames.config.gear:
+   valid = valid and ocean.frames.gear(gear) != null
   get_tree().quit(0 if valid else 1)
  if "--collection-capture" in OS.get_cmdline_user_args():
   call_deferred("collection_capture")
@@ -244,7 +254,7 @@ func build_ui() -> void:
  paragraph("游戏前台暂停。后台且键鼠空闲未超时才下潜。锁屏、休眠与退出期间不累计。F8 保存退出（游戏窗口内）。",side,11)
  var footer := HBoxContainer.new()
  root.add_child(footer)
- var version := label("桌面钓鱼 · 0.5.0-preview · 海边日常",11,true)
+ var version := label("桌面钓鱼 · 0.6.0-preview · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
  footer.add_child(label("不记录按键内容或窗口标题",11,true))
@@ -378,6 +388,7 @@ func refresh() -> void:
  ocean.cast = s.cast
  ocean.night = hour < 6 or hour >= 18
  ocean.working = reason == "working"
+ ocean.show_catch(not s.pending_catch.is_empty())
  ocean.queue_redraw()
  var layer := "表层" if depth < 30 else ("浅海" if depth < 100 else "深水")
  scene_text.text = ("夜晚的海" if ocean.night else "白昼的海") + " · " + layer
@@ -594,6 +605,7 @@ func ui_smoke() -> void:
  get_tree().quit()
 
 func scene_capture() -> void:
+ OS.low_processor_usage_mode = false
  Game.state = Game.model.fresh_state()
  Game.model.cast_line(Game.state)
  Game.state.focus_seconds = 1200.0
@@ -609,7 +621,7 @@ func scene_capture() -> void:
   ocean.motion.advance(.5)
  await get_tree().process_frame
  await get_tree().process_frame
- await RenderingServer.frame_post_draw
+ RenderingServer.force_draw()
  var name: String = "stage2-night" if ocean.night else "stage2-day"
  if "--cast-pose" in OS.get_cmdline_user_args():
   name = "stage2-cast"
@@ -617,7 +629,8 @@ func scene_capture() -> void:
   name = "stage2-reel"
  if "--small" in OS.get_cmdline_user_args():
   name += "-small"
- get_viewport().get_texture().get_image().save_png("user://" + name + ".png")
+ var destination: String = "res://docs/qa/stage4/" + name.replace("stage2-","") + ".png" if "--stage4" in OS.get_cmdline_user_args() else "user://" + name + ".png"
+ get_viewport().get_texture().get_image().save_png(destination)
  get_tree().quit()
 
 func collection_capture() -> void:

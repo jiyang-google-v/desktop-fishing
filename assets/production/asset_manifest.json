@@ -54,8 +54,1544 @@
       "source": "built-in imagegen",
       "facing": "right",
       "qa": "docs/STAGE2_ART_QA.md"
+    },
+    {
+      "id": "fisher-idle-01",
+      "path": "assets/production/motion/fisher/idle-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-idle-02",
+      "path": "assets/production/motion/fisher/idle-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-idle-03",
+      "path": "assets/production/motion/fisher/idle-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-idle-04",
+      "path": "assets/production/motion/fisher/idle-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-cast-01",
+      "path": "assets/production/motion/fisher/cast-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "cast",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-cast-02",
+      "path": "assets/production/motion/fisher/cast-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "cast",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-cast-03",
+      "path": "assets/production/motion/fisher/cast-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "cast",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-cast-04",
+      "path": "assets/production/motion/fisher/cast-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "cast",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-cast-05",
+      "path": "assets/production/motion/fisher/cast-05.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "cast",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-cast-06",
+      "path": "assets/production/motion/fisher/cast-06.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "cast",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-reel-01",
+      "path": "assets/production/motion/fisher/reel-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "reel",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-reel-02",
+      "path": "assets/production/motion/fisher/reel-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "reel",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-reel-03",
+      "path": "assets/production/motion/fisher/reel-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "reel",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-reel-04",
+      "path": "assets/production/motion/fisher/reel-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "reel",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-reel-05",
+      "path": "assets/production/motion/fisher/reel-05.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "reel",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-reel-06",
+      "path": "assets/production/motion/fisher/reel-06.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "reel",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-happy-01",
+      "path": "assets/production/motion/fisher/happy-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-happy-02",
+      "path": "assets/production/motion/fisher/happy-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-happy-03",
+      "path": "assets/production/motion/fisher/happy-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-happy-04",
+      "path": "assets/production/motion/fisher/happy-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-happy-05",
+      "path": "assets/production/motion/fisher/happy-05.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fisher-happy-06",
+      "path": "assets/production/motion/fisher/happy-06.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.55,
+        0.71
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fisher",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-idle-01",
+      "path": "assets/production/motion/cat/idle-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-idle-02",
+      "path": "assets/production/motion/cat/idle-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-idle-03",
+      "path": "assets/production/motion/cat/idle-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-idle-04",
+      "path": "assets/production/motion/cat/idle-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "idle",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-blink-01",
+      "path": "assets/production/motion/cat/blink-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "blink",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-blink-02",
+      "path": "assets/production/motion/cat/blink-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "blink",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-blink-03",
+      "path": "assets/production/motion/cat/blink-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "blink",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-blink-04",
+      "path": "assets/production/motion/cat/blink-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "blink",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-alert-01",
+      "path": "assets/production/motion/cat/alert-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "alert",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-alert-02",
+      "path": "assets/production/motion/cat/alert-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "alert",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-alert-03",
+      "path": "assets/production/motion/cat/alert-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "alert",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-alert-04",
+      "path": "assets/production/motion/cat/alert-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "alert",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-happy-01",
+      "path": "assets/production/motion/cat/happy-01.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-happy-02",
+      "path": "assets/production/motion/cat/happy-02.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-happy-03",
+      "path": "assets/production/motion/cat/happy-03.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "cat-happy-04",
+      "path": "assets/production/motion/cat/happy-04.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.58,
+        0.82
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "cat",
+      "clip": "happy",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-01",
+      "path": "assets/production/motion/fx/splash-01.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-02",
+      "path": "assets/production/motion/fx/splash-02.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-03",
+      "path": "assets/production/motion/fx/splash-03.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-04",
+      "path": "assets/production/motion/fx/splash-04.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-05",
+      "path": "assets/production/motion/fx/splash-05.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-06",
+      "path": "assets/production/motion/fx/splash-06.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-07",
+      "path": "assets/production/motion/fx/splash-07.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-splash-08",
+      "path": "assets/production/motion/fx/splash-08.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "splash",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-01",
+      "path": "assets/production/motion/fx/ripple-01.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-02",
+      "path": "assets/production/motion/fx/ripple-02.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-03",
+      "path": "assets/production/motion/fx/ripple-03.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-04",
+      "path": "assets/production/motion/fx/ripple-04.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-05",
+      "path": "assets/production/motion/fx/ripple-05.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-06",
+      "path": "assets/production/motion/fx/ripple-06.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-07",
+      "path": "assets/production/motion/fx/ripple-07.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-ripple-08",
+      "path": "assets/production/motion/fx/ripple-08.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "ripple",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-bubbles-01",
+      "path": "assets/production/motion/fx/bubbles-01.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "bubbles",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-bubbles-02",
+      "path": "assets/production/motion/fx/bubbles-02.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "bubbles",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-bubbles-03",
+      "path": "assets/production/motion/fx/bubbles-03.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "bubbles",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-bubbles-04",
+      "path": "assets/production/motion/fx/bubbles-04.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "bubbles",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-bubbles-05",
+      "path": "assets/production/motion/fx/bubbles-05.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "bubbles",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-bubbles-06",
+      "path": "assets/production/motion/fx/bubbles-06.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "bubbles",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-glimmer-01",
+      "path": "assets/production/motion/fx/glimmer-01.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "glimmer",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-glimmer-02",
+      "path": "assets/production/motion/fx/glimmer-02.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "glimmer",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-glimmer-03",
+      "path": "assets/production/motion/fx/glimmer-03.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "glimmer",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-glimmer-04",
+      "path": "assets/production/motion/fx/glimmer-04.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "glimmer",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-glimmer-05",
+      "path": "assets/production/motion/fx/glimmer-05.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "glimmer",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-glimmer-06",
+      "path": "assets/production/motion/fx/glimmer-06.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "glimmer",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-shadow-01",
+      "path": "assets/production/motion/fx/shadow-01.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "shadow",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-shadow-02",
+      "path": "assets/production/motion/fx/shadow-02.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "shadow",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-shadow-03",
+      "path": "assets/production/motion/fx/shadow-03.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "shadow",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-shadow-04",
+      "path": "assets/production/motion/fx/shadow-04.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "shadow",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-shadow-05",
+      "path": "assets/production/motion/fx/shadow-05.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "shadow",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "fx-shadow-06",
+      "path": "assets/production/motion/fx/shadow-06.png",
+      "size": [
+        256,
+        256
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "fx",
+      "clip": "shadow",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "gear-rod",
+      "path": "assets/production/gear/rod.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.22,
+        0.77
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "gear",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "gear-bobber",
+      "path": "assets/production/gear/bobber.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "none",
+      "role": "transparent_overlay",
+      "group": "gear",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "gear-hook",
+      "path": "assets/production/gear/hook.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "none",
+      "role": "transparent_overlay",
+      "group": "gear",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "gear-bucket",
+      "path": "assets/production/gear/bucket.png",
+      "size": [
+        512,
+        512
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "none",
+      "role": "transparent_overlay",
+      "group": "gear",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
+    },
+    {
+      "id": "pier-clear",
+      "path": "assets/production/scene/pier-clear.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0,
+        0.5
+      ],
+      "facing": "right",
+      "role": "transparent_overlay",
+      "group": "scene",
+      "style_version": "V2.6",
+      "status": "integration_candidate",
+      "source": "built-in imagegen; fixed-grid extraction and registration",
+      "qa": "docs/STAGE4_ART_QA.md"
     }
   ],
   "animation": "assets/production/scene.animation.json",
-  "note": "This batch passed internal G1-G4 checks; user visual review pending. Background is intentionally opaque. Not the full eight art batches."
+  "note": "Stage4 independent authored frames are integration candidates pending final visual acceptance; legacy scene sources retained for traceability.",
+  "motion_animation": "assets/production/motion.animation.json"
 }

@@ -1,0 +1,1542 @@
+[
+  {
+    "id": "fisher-idle-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 174156,
+    "visible_bounds_alpha_over_16": [
+      123,
+      55,
+      467,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-idle-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 170907,
+    "visible_bounds_alpha_over_16": [
+      111,
+      51,
+      461,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-idle-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 168052,
+    "visible_bounds_alpha_over_16": [
+      109,
+      43,
+      459,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-idle-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 170590,
+    "visible_bounds_alpha_over_16": [
+      122,
+      51,
+      479,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-cast-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 166803,
+    "visible_bounds_alpha_over_16": [
+      112,
+      50,
+      459,
+      483
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-cast-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 166446,
+    "visible_bounds_alpha_over_16": [
+      92,
+      50,
+      446,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-cast-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 163070,
+    "visible_bounds_alpha_over_16": [
+      85,
+      49,
+      443,
+      483
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-cast-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 162280,
+    "visible_bounds_alpha_over_16": [
+      106,
+      58,
+      491,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-cast-05",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 161245,
+    "visible_bounds_alpha_over_16": [
+      103,
+      54,
+      471,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-cast-06",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 165572,
+    "visible_bounds_alpha_over_16": [
+      100,
+      53,
+      457,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-reel-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 169002,
+    "visible_bounds_alpha_over_16": [
+      107,
+      54,
+      446,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-reel-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 166873,
+    "visible_bounds_alpha_over_16": [
+      75,
+      55,
+      443,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-reel-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 163980,
+    "visible_bounds_alpha_over_16": [
+      68,
+      50,
+      446,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-reel-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 163986,
+    "visible_bounds_alpha_over_16": [
+      62,
+      51,
+      443,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-reel-05",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 166225,
+    "visible_bounds_alpha_over_16": [
+      91,
+      51,
+      444,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-reel-06",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 166445,
+    "visible_bounds_alpha_over_16": [
+      99,
+      51,
+      443,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-happy-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 168872,
+    "visible_bounds_alpha_over_16": [
+      108,
+      53,
+      460,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-happy-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 167206,
+    "visible_bounds_alpha_over_16": [
+      101,
+      51,
+      446,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-happy-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 166666,
+    "visible_bounds_alpha_over_16": [
+      99,
+      50,
+      448,
+      481
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-happy-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 165003,
+    "visible_bounds_alpha_over_16": [
+      92,
+      51,
+      443,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-happy-05",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 166774,
+    "visible_bounds_alpha_over_16": [
+      95,
+      53,
+      446,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "fisher-happy-06",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 165156,
+    "visible_bounds_alpha_over_16": [
+      91,
+      50,
+      450,
+      482
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-idle-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 170002,
+    "visible_bounds_alpha_over_16": [
+      100,
+      62,
+      506,
+      421
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-idle-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 169517,
+    "visible_bounds_alpha_over_16": [
+      97,
+      62,
+      493,
+      421
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-idle-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 170356,
+    "visible_bounds_alpha_over_16": [
+      107,
+      61,
+      494,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-idle-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 169182,
+    "visible_bounds_alpha_over_16": [
+      96,
+      62,
+      507,
+      421
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-blink-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 173603,
+    "visible_bounds_alpha_over_16": [
+      106,
+      62,
+      499,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-blink-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 173673,
+    "visible_bounds_alpha_over_16": [
+      104,
+      61,
+      496,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-blink-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 174081,
+    "visible_bounds_alpha_over_16": [
+      104,
+      66,
+      500,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-blink-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 173773,
+    "visible_bounds_alpha_over_16": [
+      105,
+      65,
+      501,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-alert-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 172895,
+    "visible_bounds_alpha_over_16": [
+      88,
+      69,
+      496,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-alert-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 174983,
+    "visible_bounds_alpha_over_16": [
+      93,
+      62,
+      480,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-alert-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 167888,
+    "visible_bounds_alpha_over_16": [
+      86,
+      55,
+      480,
+      421
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-alert-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 175924,
+    "visible_bounds_alpha_over_16": [
+      95,
+      73,
+      499,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-happy-01",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 171746,
+    "visible_bounds_alpha_over_16": [
+      96,
+      63,
+      502,
+      421
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-happy-02",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 171162,
+    "visible_bounds_alpha_over_16": [
+      103,
+      61,
+      465,
+      420
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-happy-03",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 168959,
+    "visible_bounds_alpha_over_16": [
+      69,
+      57,
+      482,
+      419
+    ],
+    "passed": true
+  },
+  {
+    "id": "cat-happy-04",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 172732,
+    "visible_bounds_alpha_over_16": [
+      100,
+      63,
+      504,
+      419
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-01",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 52671,
+    "visible_bounds_alpha_over_16": [
+      84,
+      158,
+      173,
+      210
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-02",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 47462,
+    "visible_bounds_alpha_over_16": [
+      64,
+      133,
+      191,
+      211
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-03",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 41698,
+    "visible_bounds_alpha_over_16": [
+      62,
+      99,
+      194,
+      211
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-04",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 41287,
+    "visible_bounds_alpha_over_16": [
+      36,
+      62,
+      220,
+      210
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-05",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 45454,
+    "visible_bounds_alpha_over_16": [
+      43,
+      84,
+      213,
+      210
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-06",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 45220,
+    "visible_bounds_alpha_over_16": [
+      40,
+      157,
+      217,
+      211
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-07",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 44299,
+    "visible_bounds_alpha_over_16": [
+      48,
+      150,
+      209,
+      210
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-splash-08",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      245
+    ],
+    "transparent_pixels": 53131,
+    "visible_bounds_alpha_over_16": [
+      46,
+      182,
+      211,
+      211
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-01",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 62829,
+    "visible_bounds_alpha_over_16": [
+      83,
+      114,
+      173,
+      143
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-02",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61607,
+    "visible_bounds_alpha_over_16": [
+      64,
+      111,
+      194,
+      145
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-03",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61755,
+    "visible_bounds_alpha_over_16": [
+      50,
+      102,
+      208,
+      155
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-04",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 58540,
+    "visible_bounds_alpha_over_16": [
+      36,
+      96,
+      222,
+      160
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-05",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61025,
+    "visible_bounds_alpha_over_16": [
+      32,
+      96,
+      225,
+      161
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-06",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 60441,
+    "visible_bounds_alpha_over_16": [
+      36,
+      97,
+      222,
+      161
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-07",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 57832,
+    "visible_bounds_alpha_over_16": [
+      32,
+      97,
+      224,
+      161
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-ripple-08",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 62758,
+    "visible_bounds_alpha_over_16": [
+      87,
+      114,
+      170,
+      142
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-bubbles-01",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 62735,
+    "visible_bounds_alpha_over_16": [
+      108,
+      140,
+      152,
+      210
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-bubbles-02",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61731,
+    "visible_bounds_alpha_over_16": [
+      107,
+      106,
+      156,
+      186
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-bubbles-03",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 59560,
+    "visible_bounds_alpha_over_16": [
+      106,
+      94,
+      163,
+      188
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-bubbles-04",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61760,
+    "visible_bounds_alpha_over_16": [
+      110,
+      72,
+      168,
+      158
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-bubbles-05",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 60459,
+    "visible_bounds_alpha_over_16": [
+      110,
+      75,
+      164,
+      176
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-bubbles-06",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 60884,
+    "visible_bounds_alpha_over_16": [
+      108,
+      123,
+      154,
+      201
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-glimmer-01",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 62878,
+    "visible_bounds_alpha_over_16": [
+      77,
+      96,
+      187,
+      185
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-glimmer-02",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61835,
+    "visible_bounds_alpha_over_16": [
+      65,
+      94,
+      186,
+      201
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-glimmer-03",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61497,
+    "visible_bounds_alpha_over_16": [
+      65,
+      69,
+      178,
+      186
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-glimmer-04",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 63273,
+    "visible_bounds_alpha_over_16": [
+      80,
+      81,
+      189,
+      169
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-glimmer-05",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 61914,
+    "visible_bounds_alpha_over_16": [
+      63,
+      79,
+      192,
+      184
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-glimmer-06",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 62822,
+    "visible_bounds_alpha_over_16": [
+      66,
+      82,
+      180,
+      168
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-shadow-01",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 52541,
+    "visible_bounds_alpha_over_16": [
+      28,
+      93,
+      231,
+      192
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-shadow-02",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 53039,
+    "visible_bounds_alpha_over_16": [
+      32,
+      90,
+      231,
+      192
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-shadow-03",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 53273,
+    "visible_bounds_alpha_over_16": [
+      34,
+      89,
+      227,
+      192
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-shadow-04",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 52810,
+    "visible_bounds_alpha_over_16": [
+      28,
+      75,
+      230,
+      175
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-shadow-05",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 52501,
+    "visible_bounds_alpha_over_16": [
+      28,
+      75,
+      231,
+      175
+    ],
+    "passed": true
+  },
+  {
+    "id": "fx-shadow-06",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 53512,
+    "visible_bounds_alpha_over_16": [
+      34,
+      75,
+      227,
+      175
+    ],
+    "passed": true
+  },
+  {
+    "id": "gear-rod",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 241951,
+    "visible_bounds_alpha_over_16": [
+      29,
+      57,
+      489,
+      472
+    ],
+    "passed": true
+  },
+  {
+    "id": "gear-bobber",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 197299,
+    "visible_bounds_alpha_over_16": [
+      115,
+      89,
+      397,
+      422
+    ],
+    "passed": true
+  },
+  {
+    "id": "gear-hook",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 226926,
+    "visible_bounds_alpha_over_16": [
+      143,
+      89,
+      368,
+      422
+    ],
+    "passed": true
+  },
+  {
+    "id": "gear-bucket",
+    "size": [
+      512,
+      512
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 191554,
+    "visible_bounds_alpha_over_16": [
+      89,
+      129,
+      422,
+      383
+    ],
+    "passed": true
+  },
+  {
+    "id": "pier-clear",
+    "size": [
+      1774,
+      887
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "transparent_pixels": 1260071,
+    "visible_bounds_alpha_over_16": [
+      64,
+      422,
+      1710,
+      721
+    ],
+    "passed": true
+  }
+]
