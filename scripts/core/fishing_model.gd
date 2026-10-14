@@ -60,7 +60,7 @@ func reel_line(s: Dictionary, hour: int, rng: RandomNumberGenerator) -> Dictiona
  var length: float = snappedf(10.0 + rng.randf() * 70.0,0.1)
  var record: Dictionary = s.encyclopedia.get(selected.id,{"count":0,"record_cm":0.0})
  s.encyclopedia[selected.id] = {"count":record.count + 1,"record_cm":maxf(record.record_cm,length)}
- s.pending_catch = {"catch_id":new_id(),"species_id":selected.id,"length_cm":length,"depth":depth,"caught_at":Time.get_datetime_string_from_system(true)}
+ s.pending_catch = {"catch_id":new_id(),"species_id":selected.id,"length_cm":length,"depth":depth,"caught_at":Time.get_datetime_string_from_system(true),"first_discovery":record.count == 0,"new_record":length > float(record.record_cm)}
  return {"ok":true}
 
 func settle(s: Dictionary, action: String, target_id: String = "") -> Dictionary:
@@ -115,7 +115,11 @@ func clean_catch(value, camel_case: bool = false) -> Dictionary:
   return {}
  if not (length is float or length is int) or not is_finite(float(length)) or length < 0:
   return {}
- return {"catch_id":cid,"species_id":sid,"length_cm":float(length),"depth":finite_number(value.get("depth",0),MAX_DEPTH),"caught_at":str(value.get("caughtAt" if camel_case else "caught_at",""))}
+ var cleaned := {"catch_id":cid,"species_id":sid,"length_cm":float(length),"depth":finite_number(value.get("depth",0),MAX_DEPTH),"caught_at":str(value.get("caughtAt" if camel_case else "caught_at",""))}
+ for flag in ["first_discovery","new_record"]:
+  if value.has(flag):
+   cleaned[flag] = value[flag] == true
+ return cleaned
 
 func restore(data) -> Dictionary:
  if not data is Dictionary:

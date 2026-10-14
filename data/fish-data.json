@@ -7,7 +7,7 @@
     "maxDepth": 40,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_002_blue_tang",
@@ -37,7 +37,7 @@
     "maxDepth": 80,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_005_pufferfish",
@@ -107,7 +107,7 @@
     "maxDepth": 200,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_012_star_wish_fish",

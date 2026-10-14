@@ -1,0 +1,52 @@
+{
+  "assets": [
+    {
+      "id": "fish_001_clownfish",
+      "path": "assets/production/fish/fish_001_clownfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json"
+    },
+    {
+      "id": "fish_004_seahorse",
+      "path": "assets/production/fish/fish_004_seahorse.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json"
+    },
+    {
+      "id": "fish_011_lanternfish",
+      "path": "assets/production/fish/fish_011_lanternfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json"
+    }
+  ]
+}

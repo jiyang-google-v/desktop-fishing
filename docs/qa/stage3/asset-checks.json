@@ -1,0 +1,71 @@
+[
+  {
+    "file": "assets/production/fish/fish_001_clownfish.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nonzero_bbox": [
+      0,
+      9,
+      1234,
+      1254
+    ],
+    "visible_bbox": [
+      89,
+      268,
+      1195,
+      1018
+    ]
+  },
+  {
+    "file": "assets/production/fish/fish_011_lanternfish.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nonzero_bbox": [
+      0,
+      37,
+      1176,
+      1198
+    ],
+    "visible_bbox": [
+      190,
+      366,
+      1074,
+      889
+    ]
+  },
+  {
+    "file": "assets/production/fish/fish_004_seahorse.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "nonzero_bbox": [
+      25,
+      39,
+      1200,
+      1244
+    ],
+    "visible_bbox": [
+      419,
+      222,
+      963,
+      1092
+    ]
+  }
+]
