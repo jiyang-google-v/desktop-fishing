@@ -1,0 +1,461 @@
+[
+  {
+    "id": "fisher-idle",
+    "clip": "idle",
+    "directory": "assets/production/motion/fisher",
+    "columns": 2,
+    "rows": 2,
+    "count": 4,
+    "canvas": 512,
+    "source_rects": [
+      [
+        135,
+        69,
+        443,
+        547
+      ],
+      [
+        683,
+        66,
+        448,
+        552
+      ],
+      [
+        130,
+        644,
+        450,
+        563
+      ],
+      [
+        690,
+        657,
+        457,
+        552
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/fisher-idle-01.json",
+      "art/concepts/motion/regions/fisher-idle-02.json",
+      "art/concepts/motion/regions/fisher-idle-03.json",
+      "art/concepts/motion/regions/fisher-idle-04.json"
+    ]
+  },
+  {
+    "id": "fisher-cast",
+    "clip": "cast",
+    "directory": "assets/production/motion/fisher",
+    "columns": 3,
+    "rows": 2,
+    "count": 6,
+    "canvas": 512,
+    "source_rects": [
+      [
+        130,
+        55,
+        381,
+        473
+      ],
+      [
+        587,
+        57,
+        389,
+        471
+      ],
+      [
+        1060,
+        54,
+        393,
+        474
+      ],
+      [
+        129,
+        543,
+        422,
+        463
+      ],
+      [
+        603,
+        541,
+        404,
+        468
+      ],
+      [
+        1085,
+        541,
+        392,
+        469
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/fisher-cast-01.json",
+      "art/concepts/motion/regions/fisher-cast-02.json",
+      "art/concepts/motion/regions/fisher-cast-03.json",
+      "art/concepts/motion/regions/fisher-cast-04.json",
+      "art/concepts/motion/regions/fisher-cast-05.json",
+      "art/concepts/motion/regions/fisher-cast-06.json"
+    ]
+  },
+  {
+    "id": "fisher-reel",
+    "clip": "reel",
+    "directory": "assets/production/motion/fisher",
+    "columns": 3,
+    "rows": 2,
+    "count": 6,
+    "canvas": 512,
+    "source_rects": [
+      [
+        104,
+        33,
+        381,
+        479
+      ],
+      [
+        564,
+        34,
+        414,
+        478
+      ],
+      [
+        1036,
+        30,
+        422,
+        482
+      ],
+      [
+        97,
+        518,
+        427,
+        482
+      ],
+      [
+        572,
+        520,
+        397,
+        482
+      ],
+      [
+        1042,
+        518,
+        386,
+        482
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/fisher-reel-01.json",
+      "art/concepts/motion/regions/fisher-reel-02.json",
+      "art/concepts/motion/regions/fisher-reel-03.json",
+      "art/concepts/motion/regions/fisher-reel-04.json",
+      "art/concepts/motion/regions/fisher-reel-05.json",
+      "art/concepts/motion/regions/fisher-reel-06.json"
+    ]
+  },
+  {
+    "id": "fisher-happy",
+    "clip": "happy",
+    "directory": "assets/production/motion/fisher",
+    "columns": 3,
+    "rows": 2,
+    "count": 6,
+    "canvas": 512,
+    "source_rects": [
+      [
+        89,
+        21,
+        411,
+        499
+      ],
+      [
+        575,
+        21,
+        402,
+        501
+      ],
+      [
+        1065,
+        21,
+        407,
+        501
+      ],
+      [
+        74,
+        515,
+        409,
+        502
+      ],
+      [
+        567,
+        519,
+        410,
+        498
+      ],
+      [
+        1053,
+        514,
+        418,
+        503
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/fisher-happy-01.json",
+      "art/concepts/motion/regions/fisher-happy-02.json",
+      "art/concepts/motion/regions/fisher-happy-03.json",
+      "art/concepts/motion/regions/fisher-happy-04.json",
+      "art/concepts/motion/regions/fisher-happy-05.json",
+      "art/concepts/motion/regions/fisher-happy-06.json"
+    ]
+  },
+  {
+    "id": "cat-idle",
+    "clip": "idle",
+    "directory": "assets/production/motion/cat",
+    "columns": 2,
+    "rows": 2,
+    "count": 4,
+    "canvas": 512,
+    "source": "cat-idle-v2",
+    "source_rects": [
+      [
+        93,
+        159,
+        481,
+        423
+      ],
+      [
+        688,
+        158,
+        467,
+        424
+      ],
+      [
+        119,
+        706,
+        458,
+        424
+      ],
+      [
+        673,
+        706,
+        486,
+        424
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/cat-idle-01.json",
+      "art/concepts/motion/regions/cat-idle-02.json",
+      "art/concepts/motion/regions/cat-idle-03.json",
+      "art/concepts/motion/regions/cat-idle-04.json"
+    ]
+  },
+  {
+    "id": "cat-blink",
+    "clip": "blink",
+    "directory": "assets/production/motion/cat",
+    "columns": 2,
+    "rows": 2,
+    "count": 4,
+    "canvas": 512,
+    "source": "cat-blink-v2",
+    "source_rects": [
+      [
+        87,
+        137,
+        524,
+        478
+      ],
+      [
+        653,
+        137,
+        523,
+        478
+      ],
+      [
+        87,
+        692,
+        528,
+        473
+      ],
+      [
+        653,
+        692,
+        526,
+        473
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/cat-blink-01.json",
+      "art/concepts/motion/regions/cat-blink-02.json",
+      "art/concepts/motion/regions/cat-blink-03.json",
+      "art/concepts/motion/regions/cat-blink-04.json"
+    ]
+  },
+  {
+    "id": "cat-alert",
+    "clip": "alert",
+    "directory": "assets/production/motion/cat",
+    "columns": 2,
+    "rows": 2,
+    "count": 4,
+    "canvas": 512,
+    "source": "cat-alert-v2",
+    "source_rects": [
+      [
+        89,
+        164,
+        506,
+        438
+      ],
+      [
+        671,
+        156,
+        482,
+        446
+      ],
+      [
+        120,
+        669,
+        490,
+        455
+      ],
+      [
+        675,
+        693,
+        501,
+        431
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/cat-alert-01.json",
+      "art/concepts/motion/regions/cat-alert-02.json",
+      "art/concepts/motion/regions/cat-alert-03.json",
+      "art/concepts/motion/regions/cat-alert-04.json"
+    ]
+  },
+  {
+    "id": "cat-happy",
+    "clip": "happy",
+    "directory": "assets/production/motion/cat",
+    "columns": 2,
+    "rows": 2,
+    "count": 4,
+    "canvas": 512,
+    "source": "cat-happy-v2",
+    "source_rects": [
+      [
+        80,
+        159,
+        493,
+        435
+      ],
+      [
+        705,
+        157,
+        441,
+        436
+      ],
+      [
+        80,
+        696,
+        501,
+        440
+      ],
+      [
+        659,
+        703,
+        489,
+        434
+      ]
+    ],
+    "source_masks": [
+      "art/concepts/motion/regions/cat-happy-01.json",
+      "art/concepts/motion/regions/cat-happy-02.json",
+      "art/concepts/motion/regions/cat-happy-03.json",
+      "art/concepts/motion/regions/cat-happy-04.json"
+    ]
+  },
+  {
+    "id": "fx-splash",
+    "clip": "splash",
+    "directory": "assets/production/motion/fx",
+    "columns": 4,
+    "rows": 2,
+    "count": 8,
+    "canvas": 256
+  },
+  {
+    "id": "fx-ripple",
+    "clip": "ripple",
+    "directory": "assets/production/motion/fx",
+    "columns": 4,
+    "rows": 2,
+    "count": 8,
+    "canvas": 256
+  },
+  {
+    "id": "fx-bubbles",
+    "clip": "bubbles",
+    "directory": "assets/production/motion/fx",
+    "columns": 3,
+    "rows": 2,
+    "count": 6,
+    "canvas": 256
+  },
+  {
+    "id": "fx-glimmer",
+    "clip": "glimmer",
+    "directory": "assets/production/motion/fx",
+    "columns": 3,
+    "rows": 2,
+    "count": 6,
+    "canvas": 256
+  },
+  {
+    "id": "fx-shadow",
+    "clip": "shadow",
+    "directory": "assets/production/motion/fx",
+    "columns": 3,
+    "rows": 2,
+    "count": 6,
+    "canvas": 256
+  },
+  {
+    "id": "gear-rod",
+    "clip": "rod",
+    "directory": "assets/production/gear",
+    "columns": 1,
+    "rows": 1,
+    "count": 1,
+    "canvas": 512,
+    "file": "rod.png"
+  },
+  {
+    "id": "gear-bobber",
+    "clip": "bobber",
+    "directory": "assets/production/gear",
+    "columns": 1,
+    "rows": 1,
+    "count": 1,
+    "canvas": 512,
+    "file": "bobber.png"
+  },
+  {
+    "id": "gear-hook",
+    "clip": "hook",
+    "directory": "assets/production/gear",
+    "columns": 1,
+    "rows": 1,
+    "count": 1,
+    "canvas": 512,
+    "file": "hook.png"
+  },
+  {
+    "id": "gear-bucket",
+    "clip": "bucket",
+    "directory": "assets/production/gear",
+    "columns": 1,
+    "rows": 1,
+    "count": 1,
+    "canvas": 512,
+    "file": "bucket.png"
+  }
+]

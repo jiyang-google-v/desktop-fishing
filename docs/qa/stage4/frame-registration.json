@@ -1,0 +1,686 @@
+[
+  {
+    "frame": "idle-01.png",
+    "offset": [
+      121,
+      54
+    ],
+    "scale": 0.784817518248175,
+    "source": "fisher-idle"
+  },
+  {
+    "frame": "idle-02.png",
+    "offset": [
+      110,
+      50
+    ],
+    "scale": 0.784817518248175,
+    "source": "fisher-idle"
+  },
+  {
+    "frame": "idle-03.png",
+    "offset": [
+      108,
+      41
+    ],
+    "scale": 0.784817518248175,
+    "source": "fisher-idle"
+  },
+  {
+    "frame": "idle-04.png",
+    "offset": [
+      121,
+      50
+    ],
+    "scale": 0.784817518248175,
+    "source": "fisher-idle"
+  },
+  {
+    "frame": "cast-01.png",
+    "offset": [
+      110,
+      48
+    ],
+    "scale": 0.920942184154176,
+    "source": "fisher-cast"
+  },
+  {
+    "frame": "cast-02.png",
+    "offset": [
+      90,
+      49
+    ],
+    "scale": 0.920942184154176,
+    "source": "fisher-cast"
+  },
+  {
+    "frame": "cast-03.png",
+    "offset": [
+      83,
+      47
+    ],
+    "scale": 0.920942184154176,
+    "source": "fisher-cast"
+  },
+  {
+    "frame": "cast-04.png",
+    "offset": [
+      104,
+      57
+    ],
+    "scale": 0.920942184154176,
+    "source": "fisher-cast"
+  },
+  {
+    "frame": "cast-05.png",
+    "offset": [
+      101,
+      52
+    ],
+    "scale": 0.920942184154176,
+    "source": "fisher-cast"
+  },
+  {
+    "frame": "cast-06.png",
+    "offset": [
+      98,
+      51
+    ],
+    "scale": 0.920942184154176,
+    "source": "fisher-cast"
+  },
+  {
+    "frame": "reel-01.png",
+    "offset": [
+      105,
+      52
+    ],
+    "scale": 0.899748953974895,
+    "source": "fisher-reel"
+  },
+  {
+    "frame": "reel-02.png",
+    "offset": [
+      73,
+      53
+    ],
+    "scale": 0.899748953974895,
+    "source": "fisher-reel"
+  },
+  {
+    "frame": "reel-03.png",
+    "offset": [
+      67,
+      49
+    ],
+    "scale": 0.899748953974895,
+    "source": "fisher-reel"
+  },
+  {
+    "frame": "reel-04.png",
+    "offset": [
+      61,
+      49
+    ],
+    "scale": 0.899748953974895,
+    "source": "fisher-reel"
+  },
+  {
+    "frame": "reel-05.png",
+    "offset": [
+      89,
+      49
+    ],
+    "scale": 0.899748953974895,
+    "source": "fisher-reel"
+  },
+  {
+    "frame": "reel-06.png",
+    "offset": [
+      98,
+      49
+    ],
+    "scale": 0.899748953974895,
+    "source": "fisher-reel"
+  },
+  {
+    "frame": "happy-01.png",
+    "offset": [
+      106,
+      51
+    ],
+    "scale": 0.865352112676056,
+    "source": "fisher-happy"
+  },
+  {
+    "frame": "happy-02.png",
+    "offset": [
+      100,
+      49
+    ],
+    "scale": 0.865352112676056,
+    "source": "fisher-happy"
+  },
+  {
+    "frame": "happy-03.png",
+    "offset": [
+      98,
+      49
+    ],
+    "scale": 0.865352112676056,
+    "source": "fisher-happy"
+  },
+  {
+    "frame": "happy-04.png",
+    "offset": [
+      91,
+      49
+    ],
+    "scale": 0.865352112676056,
+    "source": "fisher-happy"
+  },
+  {
+    "frame": "happy-05.png",
+    "offset": [
+      93,
+      52
+    ],
+    "scale": 0.865352112676056,
+    "source": "fisher-happy"
+  },
+  {
+    "frame": "happy-06.png",
+    "offset": [
+      89,
+      48
+    ],
+    "scale": 0.865352112676056,
+    "source": "fisher-happy"
+  },
+  {
+    "frame": "idle-01.png",
+    "offset": [
+      98,
+      61
+    ],
+    "scale": 0.853333333333333,
+    "source": "cat-idle"
+  },
+  {
+    "frame": "idle-02.png",
+    "offset": [
+      95,
+      60
+    ],
+    "scale": 0.853333333333333,
+    "source": "cat-idle"
+  },
+  {
+    "frame": "idle-03.png",
+    "offset": [
+      105,
+      60
+    ],
+    "scale": 0.853333333333333,
+    "source": "cat-idle"
+  },
+  {
+    "frame": "idle-04.png",
+    "offset": [
+      94,
+      60
+    ],
+    "scale": 0.853333333333333,
+    "source": "cat-idle"
+  },
+  {
+    "frame": "blink-01.png",
+    "offset": [
+      104,
+      60
+    ],
+    "scale": 0.756118143459916,
+    "source": "cat-blink"
+  },
+  {
+    "frame": "blink-02.png",
+    "offset": [
+      103,
+      60
+    ],
+    "scale": 0.756118143459916,
+    "source": "cat-blink"
+  },
+  {
+    "frame": "blink-03.png",
+    "offset": [
+      102,
+      64
+    ],
+    "scale": 0.756118143459916,
+    "source": "cat-blink"
+  },
+  {
+    "frame": "blink-04.png",
+    "offset": [
+      104,
+      64
+    ],
+    "scale": 0.756118143459916,
+    "source": "cat-blink"
+  },
+  {
+    "frame": "alert-01.png",
+    "offset": [
+      87,
+      67
+    ],
+    "scale": 0.810859728506787,
+    "source": "cat-alert"
+  },
+  {
+    "frame": "alert-02.png",
+    "offset": [
+      91,
+      60
+    ],
+    "scale": 0.810859728506787,
+    "source": "cat-alert"
+  },
+  {
+    "frame": "alert-03.png",
+    "offset": [
+      85,
+      53
+    ],
+    "scale": 0.810859728506787,
+    "source": "cat-alert"
+  },
+  {
+    "frame": "alert-04.png",
+    "offset": [
+      94,
+      72
+    ],
+    "scale": 0.810859728506787,
+    "source": "cat-alert"
+  },
+  {
+    "frame": "happy-01.png",
+    "offset": [
+      94,
+      61
+    ],
+    "scale": 0.82962962962963,
+    "source": "cat-happy"
+  },
+  {
+    "frame": "happy-02.png",
+    "offset": [
+      101,
+      60
+    ],
+    "scale": 0.82962962962963,
+    "source": "cat-happy"
+  },
+  {
+    "frame": "happy-03.png",
+    "offset": [
+      67,
+      56
+    ],
+    "scale": 0.82962962962963,
+    "source": "cat-happy"
+  },
+  {
+    "frame": "happy-04.png",
+    "offset": [
+      99,
+      61
+    ],
+    "scale": 0.82962962962963,
+    "source": "cat-happy"
+  },
+  {
+    "frame": "splash-01.png",
+    "offset": [
+      23,
+      10
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "splash-02.png",
+    "offset": [
+      12,
+      3
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "splash-03.png",
+    "offset": [
+      14,
+      2
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "splash-04.png",
+    "offset": [
+      23,
+      4
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "splash-05.png",
+    "offset": [
+      12,
+      27
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "splash-06.png",
+    "offset": [
+      17,
+      30
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "splash-07.png",
+    "offset": [
+      17,
+      31
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "splash-08.png",
+    "offset": [
+      18,
+      35
+    ],
+    "scale": 1.0,
+    "source": "fx-splash"
+  },
+  {
+    "frame": "ripple-01.png",
+    "offset": [
+      17,
+      10
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "ripple-02.png",
+    "offset": [
+      16,
+      9
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "ripple-03.png",
+    "offset": [
+      17,
+      8
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "ripple-04.png",
+    "offset": [
+      21,
+      6
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "ripple-05.png",
+    "offset": [
+      17,
+      14
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "ripple-06.png",
+    "offset": [
+      16,
+      15
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "ripple-07.png",
+    "offset": [
+      18,
+      15
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "ripple-08.png",
+    "offset": [
+      20,
+      14
+    ],
+    "scale": 1.0,
+    "source": "fx-ripple"
+  },
+  {
+    "frame": "bubbles-01.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-bubbles"
+  },
+  {
+    "frame": "bubbles-02.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-bubbles"
+  },
+  {
+    "frame": "bubbles-03.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-bubbles"
+  },
+  {
+    "frame": "bubbles-04.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-bubbles"
+  },
+  {
+    "frame": "bubbles-05.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-bubbles"
+  },
+  {
+    "frame": "bubbles-06.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-bubbles"
+  },
+  {
+    "frame": "glimmer-01.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-glimmer"
+  },
+  {
+    "frame": "glimmer-02.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-glimmer"
+  },
+  {
+    "frame": "glimmer-03.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-glimmer"
+  },
+  {
+    "frame": "glimmer-04.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-glimmer"
+  },
+  {
+    "frame": "glimmer-05.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-glimmer"
+  },
+  {
+    "frame": "glimmer-06.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-glimmer"
+  },
+  {
+    "frame": "shadow-01.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-shadow"
+  },
+  {
+    "frame": "shadow-02.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-shadow"
+  },
+  {
+    "frame": "shadow-03.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-shadow"
+  },
+  {
+    "frame": "shadow-04.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-shadow"
+  },
+  {
+    "frame": "shadow-05.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-shadow"
+  },
+  {
+    "frame": "shadow-06.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "fx-shadow"
+  },
+  {
+    "frame": "rod.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "gear-rod"
+  },
+  {
+    "frame": "bobber.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "gear-bobber"
+  },
+  {
+    "frame": "hook.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "gear-hook"
+  },
+  {
+    "frame": "bucket.png",
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 1.0,
+    "source": "gear-bucket"
+  }
+]

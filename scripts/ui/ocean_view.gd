@@ -4,8 +4,9 @@ signal animation_finished
 signal splash
 const Motion = preload("res://scripts/core/scene_motion.gd")
 const BACKGROUND = preload("res://assets/production/scene/ocean-day.png")
-const PIER = preload("res://assets/production/scene/pier-cat.png")
-const FISHER = preload("res://assets/production/scene/fisher.png")
+const PIER = preload("res://assets/production/scene/pier-clear.png")
+const Frames = preload("res://scripts/core/motion_frames.gd")
+var frames = Frames.new()
 var motion = Motion.new()
 var depth := 0.0
 var cast := false
@@ -19,6 +20,37 @@ var elapsed := 0.0
 var splash_age := 10.0
 var splash_sent := false
 var reel_depth := 0.0
+var catch_pending := false
+var reaction_age := 10.0
+
+func show_catch(value: bool) -> void:
+ if value and not catch_pending and not motion.busy():
+  reaction_age = 0.0
+ catch_pending = value
+
+func actor_clip() -> String:
+ if motion.busy():
+  return motion.active
+ return "happy" if catch_pending and reaction_age < frames.duration("fisher","happy") else "idle"
+
+func actor_clock() -> float:
+ if motion.busy():
+  return motion.elapsed
+ return reaction_age if actor_clip() == "happy" else phase
+
+func cat_clip() -> String:
+ if motion.busy():
+  return "alert"
+ if actor_clip() == "happy":
+  return "happy"
+ return "blink" if fmod(phase,7.0) < frames.duration("cat","blink") else "idle"
+
+func cat_clock() -> float:
+ if motion.busy():
+  return motion.progress*frames.duration("cat","alert")
+ if actor_clip() == "happy":
+  return reaction_age
+ return fmod(phase,7.0) if cat_clip() == "blink" else phase
 
 func _ready() -> void:
  mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -36,7 +68,10 @@ func play(action: String) -> void:
 
 func skip() -> void:
  if motion.busy():
+  var was_reel: bool = motion.active == "reel"
   motion.skip()
+  if was_reel:
+   reaction_age = 0.0
   animation_finished.emit()
   queue_redraw()
 
@@ -48,6 +83,7 @@ func _process(delta: float) -> void:
  if elapsed < 1.0/30.0:
   return
  phase += elapsed
+ reaction_age += elapsed
  if working:
   progress_phase += elapsed
  splash_age += elapsed
@@ -60,9 +96,37 @@ func _process(delta: float) -> void:
  if not action.is_empty() and not motion.busy():
   if action == "reel":
    splash_age = 0.0
+   reaction_age = 0.0
   animation_finished.emit()
  elapsed = 0.0
  queue_redraw()
+
+func sprite(texture: Texture2D, center: Vector2, canvas: float, tint: Color = Color.WHITE) -> void:
+ if texture != null:
+  draw_texture_rect(texture,Rect2(center-Vector2.ONE*canvas*.5,Vector2.ONE*canvas),false,tint)
+
+func fishing_line_points(rod_end: Vector2, bobber_anchor: Vector2, hook: Vector2, split_at_bobber: bool, sway_clock: float, scale_value: float, segments: int = 30) -> PackedVector2Array:
+ var points := PackedVector2Array()
+ var divisions: int = maxi(2,segments)
+ for i in range(divisions+1):
+  var t: float = float(i)/divisions
+  var point: Vector2
+  if split_at_bobber and t <= .5:
+   var upper_t: float = t*2.0
+   point = rod_end.lerp(bobber_anchor,upper_t)
+   point.x += sin(sway_clock*1.5+upper_t*3.0)*2.0*scale_value*sin(upper_t*PI)
+  elif split_at_bobber:
+   var lower_t: float = (t-.5)*2.0
+   point = bobber_anchor.lerp(hook,lower_t)
+  else:
+   point = rod_end.lerp(hook,t)
+   point.x += sin(sway_clock*1.5+t*3.0)*2.0*scale_value*sin(t*PI)
+  points.append(point)
+ return points
+
+func effect(clip: String, center: Vector2, canvas: float, clock: float, opacity: float = 1.0) -> void:
+ var anchor := center-Vector2(0,canvas*.32) if clip == "splash" else center
+ sprite(frames.texture("fx",clip,clock),anchor,canvas,Color(1,1,1,opacity))
 
 func fish_shape(center: Vector2, scale_value: float, color: Color, facing: float = 1.0) -> void:
  var body: PackedVector2Array = []
@@ -105,71 +169,62 @@ func _draw() -> void:
  var pier_height: float = pier_width*.5
  var actor_tint: Color = Color("d5d9ee") if night else Color.WHITE
  draw_texture_rect(PIER,Rect2(Vector2(-w*.018,surface-pier_height*.54),Vector2(pier_width,pier_height)),false,actor_tint)
- var actor_size: float = minf(w,h)*.30
- var actor_pos := Vector2(w*.26,surface-actor_size*.78)
- var breathe: float = sin(phase*TAU/float(motion.config.animations.breathe.duration))*float(motion.config.animations.breathe.amplitude)*scale_value
- actor_pos.y += breathe
- var angle := 0.0
- if motion.active == "cast":
-  var keys: Array = motion.config.animations.cast.rod_rotation_degrees
-  angle = deg_to_rad(lerpf(float(keys[0]),float(keys[1]),motion.progress*2) if motion.progress < .5 else lerpf(float(keys[1]),float(keys[2]),(motion.progress-.5)*2))
- elif motion.active == "reel":
-  var keys: Array = motion.config.animations.reel.rod_rotation_degrees
-  angle = deg_to_rad(lerpf(float(keys[0]),float(keys[1]),motion.progress*2) if motion.progress < .5 else lerpf(float(keys[1]),float(keys[2]),(motion.progress-.5)*2))
- # Rod originates at the character's actual hand position, anchored to its layer.
- var hand: Vector2 = actor_pos + Vector2(.70,.65)*actor_size
- var rod_end: Vector2 = hand + Vector2(w*.22,-h*.16).rotated(angle)
- var rod_points := PackedVector2Array()
- for i in range(20):
-  var t: float = i/19.0
-  rod_points.append(hand.lerp(rod_end,t)+Vector2(0,sin(t*PI)*-5*scale_value))
- draw_polyline(rod_points,Color("758898"),maxf(2,4*scale_value),true)
- draw_polyline(rod_points,Color("d5cbb0"),maxf(1,1.8*scale_value),true)
- draw_texture_rect(FISHER,Rect2(actor_pos,Vector2.ONE*actor_size),false,actor_tint)
+ # Independent authored cat and gear layers share a stable deck baseline.
+ var cat_size: float = minf(w,h)*.14
+ var cat_pos := Vector2(w*.185,surface-6*scale_value)-Vector2(.58,.82)*cat_size
+ draw_texture_rect(frames.texture("cat",cat_clip(),cat_clock()),Rect2(cat_pos,Vector2.ONE*cat_size),false,actor_tint)
+ var bucket_size: float = minf(w,h)*.10
+ var bucket_pos := Vector2(w*.085,surface-5*scale_value)-Vector2(.5,.825)*bucket_size
+ draw_texture_rect(frames.gear("bucket"),Rect2(bucket_pos,Vector2.ONE*bucket_size),false,actor_tint)
+ var actor_size: float = minf(w,h)*.33
+ var actor_pos := Vector2(w*.405,surface-3*scale_value)-Vector2(.55,.71)*actor_size
+ var clip: String = actor_clip()
+ var clock: float = actor_clock()
+ var hand: Vector2 = actor_pos + frames.grip(clip,clock)*actor_size
+ var rod_size: float = minf(w,h)*.38
+ var rod_pivot: Array = frames.config.gear.rod.pivot
+ var rod_tip: Array = frames.config.gear.rod.tip
+ var pivot := Vector2(float(rod_pivot[0]),float(rod_pivot[1]))
+ var tip := Vector2(float(rod_tip[0]),float(rod_tip[1]))
+ var rotation: float = frames.fitted_rod_rotation(clip,clock,hand.y,rod_size,14*scale_value)
+ var rod_end: Vector2 = hand+(tip-pivot).rotated(rotation)*rod_size
+ draw_set_transform(hand,rotation)
+ draw_texture_rect(frames.gear("rod"),Rect2(-pivot*rod_size,Vector2.ONE*rod_size),false,actor_tint)
+ draw_set_transform(Vector2.ZERO)
+ draw_texture_rect(frames.texture("fisher",clip,clock),Rect2(actor_pos,Vector2.ONE*actor_size),false,actor_tint)
+ var bobber_anchor := Vector2(w*.59,surface+12*scale_value+sin(progress_phase*2)*2*scale_value)
  var target := Vector2(w*.59,surface+30*scale_value+(h-surface-90*scale_value)*depth/200.0)
  if cast or motion.busy():
   if motion.active == "cast":
-   var t: float = smoothstep(0.0,1.0,motion.progress)
-   target = rod_end.lerp(target,t)+Vector2(0,-sin(t*PI)*h*.12)
+   var splash_at: float = float(motion.config.animations.cast.splash_at)
+   if motion.progress < splash_at:
+    var cast_t: float = smoothstep(0.0,1.0,motion.progress/maxf(splash_at,.001))
+    target = rod_end.lerp(bobber_anchor,cast_t)+Vector2(0,-sin(cast_t*PI)*h*.08)
+   else:
+    var drop_t: float = smoothstep(0.0,1.0,(motion.progress-splash_at)/maxf(1.0-splash_at,.001))
+    target = bobber_anchor.lerp(target,drop_t)
   elif motion.active == "reel":
    var start := Vector2(w*.59,surface+30*scale_value+(h-surface-90*scale_value)*reel_depth/200.0)
    target = start.lerp(rod_end,smoothstep(0.0,1.0,motion.progress))
-  var bobber := Vector2(w*.59,surface+12*scale_value+sin(progress_phase*2)*2*scale_value)
-  var line := PackedVector2Array()
-  for i in range(30):
-   var t: float = i/29.0
-   var sway: float = sin(progress_phase*1.5+t*3)*3*scale_value*sin(t*PI)
-   var point: Vector2 = rod_end.lerp(target,t)
-   if not motion.busy():
-    point = rod_end.lerp(bobber,t*2) if t < .5 else bobber.lerp(target,(t-.5)*2)
-   line.append(point+Vector2(sway,0))
+  var bobber_visible: bool = motion.active != "reel" and (motion.active != "cast" or motion.progress >= float(motion.config.animations.cast.splash_at))
+  var line := fishing_line_points(rod_end,bobber_anchor,target,bobber_visible,progress_phase,scale_value)
   draw_polyline(line,Color("fbf6db"),maxf(1,1.6*scale_value),true)
-  draw_arc(target+Vector2(4,0)*scale_value,5*scale_value,0,PI*1.45,20,Color("ffedc4"),maxf(1,2*scale_value),true)
-  if motion.active != "reel":
-   if motion.active != "cast" or motion.progress > .65:
-    draw_circle(bobber,7*scale_value,Color("fcf6df"))
-    draw_arc(bobber,7*scale_value,PI,TAU,16,Color("e9a6b4"),6*scale_value,true)
- # Water strokes and clouds use quiet procedural movement, not gameplay time.
- for i in range(9):
-  var x: float = w*(.05+i*.115)+sin(phase*TAU/float(motion.config.animations.water.duration)+i)*float(motion.config.animations.water.amplitude)*scale_value
-  draw_arc(Vector2(x,surface+20*scale_value),20*scale_value,.25,2.8,20,Color(1,.98,.90,.40),1.3,true)
+  sprite(frames.gear("hook"),target,26*scale_value,actor_tint)
+  effect("glimmer",target,46*scale_value,progress_phase,.60 if working else .22)
+  if bobber_visible:
+   effect("ripple",bobber_anchor+Vector2(0,3*scale_value),115*scale_value,phase,.72)
+   sprite(frames.gear("bobber"),bobber_anchor-Vector2(0,3*scale_value),32*scale_value,actor_tint)
  if cast and motion.active != "cast":
-  for i in range(int(motion.config.animations.bubbles.count)):
-   var t: float = fmod(progress_phase/float(motion.config.animations.bubbles.duration)+i*.143,1.0)
-   var center := Vector2(w*(.52+sin(i*2.0)*.06),lerpf(h*.90,surface+30*scale_value,t))
-   draw_arc(center,(2.5+i%3)*scale_value,0,TAU,16,Color(.92,1,1,.38 if working else .12),1.0,true)
+  # Exploration clocks freeze with focus; quiet surface ambience continues.
+  for i in range(3):
+   var t: float = fmod(progress_phase/float(motion.config.animations.bubbles.duration)+i*.33,1.0)
+   var center := Vector2(w*(.52+sin(i*2.0)*.08),lerpf(h*.90,surface+50*scale_value,t))
+   effect("bubbles",center,80*scale_value,progress_phase+i*.8,.55 if working else .16)
   for i in range(3):
    var center := Vector2(w*(.25+i*.24)+sin(progress_phase*.2+i)*12*scale_value,h*(.49+i*.14))
-   fish_shape(center,(.38+i*.10)*scale_value,Color(.23,.49,.63,.16),-1 if i%2 else 1)
- if splash_age < 1.0:
-  var center := Vector2(w*.59,surface+12*scale_value)
-  var radius: float = (8+splash_age*34)*scale_value
-  draw_set_transform(center,0,Vector2(1,.35))
-  draw_arc(Vector2.ZERO,radius,0,TAU,40,Color(1,1,.96,1-splash_age),2.0,true)
-  draw_set_transform(Vector2.ZERO)
-  for i in range(5):
-   var offset := Vector2((i-2)*8*scale_value,-sin(splash_age*PI)*(18+i%2*8)*scale_value)
-   draw_circle(center+offset,2*scale_value,Color(1,1,.96,1-splash_age))
+   effect("shadow",center,(125+i*15)*scale_value,progress_phase+i,.15 if working else .08)
+ if splash_age < frames.duration("fx","splash"):
+  effect("splash",Vector2(w*.59,surface+5*scale_value),125*scale_value,splash_age,.85)
  # Depth ruler is exact UI information over the scene, never baked into art.
  for i in range(5):
   var y: float = surface+42*scale_value+(h-surface-110*scale_value)*i/4.0
