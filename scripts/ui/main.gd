@@ -12,7 +12,7 @@ const STATUS := {
  "idle":["等待你回来","键鼠空闲已超时，已暂停并保留深度。"],
  "locked":["海面暂时安静","锁屏、断开会话或安全桌面期间暂停计时。"],
  "unsupported":["专注检测暂不可用","检测失败时保守暂停；专注计时仅支持 Windows。"],
- "pending":["遇见一位新朋友","收进鱼缸或放生后，即可再次放钩。"],
+ "pending":["本次鱼获待安置","收进鱼缸或放生后，即可再次放钩。"],
  "max_depth":["抵达 200 米","已经到达最深处，可以收杆看看。"],
  "blocked":["存档需要处理","为保护已有数据，已暂停游戏操作。"]
 }
@@ -29,6 +29,7 @@ var focus_card: PanelContainer
 var progress: ProgressBar
 var cast_button: Button
 var reel_button: Button
+var fishing_actions: HBoxContainer
 var book_button: Button
 var tank_button: Button
 var catch_box: VBoxContainer
@@ -43,6 +44,10 @@ var diagnostic_dialog: AcceptDialog
 var collection: Window
 var collection_title: Label
 var collection_description: Label
+var collection_notice: Label
+var collection_feedback: Label
+var collection_close: Button
+var action_error := ""
 var aquarium_view
 var collection_grid: GridContainer
 var confirmation: ConfirmationDialog
@@ -105,6 +110,8 @@ func make_theme() -> Theme:
  t.set_stylebox("disabled","Button",style(Color("e7eae4"),12))
  t.set_color("font_disabled_color","Button",Color("a4b4b3"))
  t.set_stylebox("panel","PanelContainer",style(Color("fffbee"),22))
+ t.set_stylebox("panel","AcceptDialog",style(Color("fffbee"),18))
+ t.set_stylebox("panel","ConfirmationDialog",style(Color("fffbee"),18))
  t.set_stylebox("background","ProgressBar",style(Color("d6e3db"),5))
  t.set_stylebox("fill","ProgressBar",style(Color("85bace"),5))
  return t
@@ -225,6 +232,7 @@ func build_ui() -> void:
  time_box.add_child(progress)
  time_box.add_child(label("每分钟 4 米 · 最深 200 米",11,true))
  var actions := HBoxContainer.new()
+ fishing_actions = actions
  actions.add_theme_constant_override("separation",8)
  side.add_child(actions)
  cast_button = button("放下鱼钩",actions,func(): perform_fishing("cast"))
@@ -294,13 +302,13 @@ func build_dialogs() -> void:
  collection.title = "收藏"
  collection.theme = theme
  collection.size = Vector2i(750,620)
- collection.min_size = Vector2i(720,420)
+ collection.min_size = Vector2i(560,420)
  collection.transient = true
  collection.exclusive = true
- collection.close_requested.connect(func(): collection.hide())
+ collection.close_requested.connect(close_collection)
  collection.window_input.connect(func(event):
   if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-   collection.hide())
+   close_collection())
  add_child(collection)
  var margin := MarginContainer.new()
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -315,14 +323,22 @@ func build_dialogs() -> void:
  collection_title = label("",22)
  collection_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  header.add_child(collection_title)
- button("关闭",header,func(): collection.hide())
+ collection_close = button("关闭",header,close_collection)
  collection_description = paragraph("",box)
+ collection_notice = paragraph("",box,12)
+ collection_notice.add_theme_color_override("font_color",Color("9b745c"))
+ collection_notice.visible = false
+ collection_feedback = paragraph("",box,12)
+ collection_feedback.add_theme_color_override("font_color",Color("477c66"))
+ collection_feedback.visible = false
  aquarium_view = Aquarium.new()
  aquarium_view.custom_minimum_size = Vector2(0,190)
  aquarium_view.visible = false
  aquarium_view.fish_selected.connect(select_tank_fish)
  box.add_child(aquarium_view)
  var scroll := ScrollContainer.new()
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+ scroll.custom_minimum_size.y = 100
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
  box.add_child(scroll)
  collection_grid = GridContainer.new()
@@ -331,6 +347,8 @@ func build_dialogs() -> void:
  collection_grid.add_theme_constant_override("h_separation",12)
  collection_grid.add_theme_constant_override("v_separation",12)
  scroll.add_child(collection_grid)
+ collection.size_changed.connect(update_collection_layout)
+ update_collection_layout()
  confirmation = ConfirmationDialog.new()
  confirmation.visible = false
  confirmation.title = "确认操作"
@@ -338,6 +356,7 @@ func build_dialogs() -> void:
  confirmation.ok_button_text = "确认"
  confirmation.cancel_button_text = "取消"
  confirmation.min_size = Vector2i(420,180)
+ confirmation.dialog_autowrap = true
  confirmation.transient = true
  confirmation.exclusive = true
  add_child(confirmation)
@@ -360,16 +379,26 @@ func perform_fishing(action: String) -> void:
   refresh()
 
 func handle(result: Dictionary) -> void:
+ action_error = ""
  if not result.ok:
-  var messages := {"full":"鱼缸已满，请选择替换。","save_failed":"保存失败，操作未完成。","blocked":"存档不可用，已暂停操作。","pending":"请先安置本次鱼获。"}
-  notice.text = messages.get(result.get("reason",""),"操作未完成，请重试。")
+  var messages := {"full":"鱼缸已满（6 / 6），请选择替换。","save_failed":"保存失败，操作未完成。请检查磁盘空间和权限后重试。","blocked":"存档不可用，已暂停操作。请打开检测与诊断查看。","pending":"请先安置本次鱼获。","no_catch":"当前没有待安置的鱼获。","unknown":"这条鱼已不在鱼缸中，请重新选择。","not_cast":"请先放下鱼钩。","already_cast":"鱼钩已经放下，请稍后收杆。"}
+  action_error = messages.get(result.get("reason",""),"操作未完成，请重试。")
+ update_notices()
 
-func ask(text: String, action: Callable) -> void:
+func update_notices() -> void:
+ var message: String = Game.warning if not Game.warning.is_empty() else action_error
+ notice.text = message
+ notice.visible = not message.is_empty()
+ collection_notice.text = message
+ collection_notice.visible = not message.is_empty()
+
+func ask(text: String, action: Callable, confirm_text: String = "确认") -> void:
  confirm_action = action
  var parent: Node = collection if collection.visible else self
  if confirmation.get_parent() != parent:
   confirmation.reparent(parent)
  confirmation.dialog_text = text
+ confirmation.ok_button_text = confirm_text
  confirmation.popup_centered()
 
 func refresh() -> void:
@@ -390,6 +419,8 @@ func refresh() -> void:
  time_text.text = "%02d:%02d" % [int(s.focus_seconds)/60,int(s.focus_seconds)%60]
  progress.value = depth
  focus_card.visible = s.pending_catch.is_empty()
+ fishing_actions.visible = s.pending_catch.is_empty()
+ status_text.custom_minimum_size.y = 58 if s.pending_catch.is_empty() else 0
  var hour: int = Time.get_datetime_dict_from_system().hour
  ocean.depth = depth
  ocean.cast = s.cast
@@ -401,6 +432,9 @@ func refresh() -> void:
  scene_text.text = ("夜晚的海" if ocean.night else "白昼的海") + " · " + layer
  cast_button.disabled = ocean.is_busy() or Game.blocked or s.cast or not s.pending_catch.is_empty()
  reel_button.disabled = ocean.is_busy() or Game.blocked or not s.cast
+ var unavailable := "存档不可用，请查看检测与诊断。" if Game.blocked else ("动画播放中，可选择跳过动画。" if ocean.is_busy() else "")
+ cast_button.tooltip_text = unavailable if not unavailable.is_empty() else ("请先安置本次鱼获。" if not s.pending_catch.is_empty() else ("鱼钩已放下，切到工作窗口后继续下潜。" if s.cast else "放钩后切到工作窗口，开始积累有效专注。"))
+ reel_button.tooltip_text = unavailable if not unavailable.is_empty() else ("揭晓当前深度的鱼获。" if s.cast else "请先放下鱼钩。")
  skip_button.visible = ocean.is_busy()
  catch_box.visible = ocean.motion.active != "reel"
  sound_button.text = "声音：开启" if s.sound_enabled else "声音：关闭"
@@ -408,8 +442,7 @@ func refresh() -> void:
  scene_audio.set_enabled(s.sound_enabled)
  book_button.text = "图鉴 %d / %d" % [s.encyclopedia.size(),Game.model.roster.size()]
  tank_button.text = "鱼缸 %d / 6" % s.aquarium.size()
- notice.text = Game.warning
- notice.visible = not notice.text.is_empty()
+ update_notices()
  var signature: String = JSON.stringify([s.pending_catch,s.aquarium.size(),Game.blocked])
  if signature != catch_signature:
   catch_signature = signature
@@ -435,7 +468,7 @@ func select_tank_fish(catch_id: String) -> void:
   return
  var c: Dictionary = Game.state.aquarium[index]
  var f: Dictionary = Game.model.species(c.species_id)
- collection_description.text = "%s · %.1f cm · 在下方管理这条鱼" % [f.name,c.length_cm]
+ collection_description.text = tank_description() + "\n已选 %s · %.1f cm · 在下方管理这条鱼" % [f.name,c.length_cm]
  var card_panel: Control = collection_grid.get_child(index)
  card_panel.get_child(0).get_children().back().grab_focus()
 
@@ -459,8 +492,10 @@ func render_catch() -> void:
  if c.get("new_record",false):
   var previous: float = float(c.get("previous_record_cm",0.0))
   var record_text := "✦ 新纪录 · %.1f cm" % c.length_cm if previous <= 0.0 else "✦ 新纪录 · %.1f → %.1f cm" % [previous,c.length_cm]
-  catch_box.add_child(label(record_text,12,true))
- catch_box.add_child(label("%.1f cm · %.1f m" % [c.length_cm,c.depth],13,true))
+  paragraph(record_text,catch_box,12)
+ catch_box.add_child(label("%.1f cm · 水深 %.1f 米" % [c.length_cm,c.depth],13,true))
+ if Game.state.aquarium.size() >= 6:
+  paragraph("鱼缸已满（6 / 6）。可选择一条替换，或放生本次鱼获；取消替换会保留双方。",catch_box,12)
  var row := HBoxContainer.new()
  row.add_theme_constant_override("separation",8)
  catch_box.add_child(row)
@@ -469,7 +504,7 @@ func render_catch() -> void:
    open_collection("tank",true)
   else:
    settle_catch("keep"))
- var release := button("放生",row,func(): ask("放生这次鱼获？图鉴次数和体长纪录会保留。",func(): settle_catch("release")))
+ var release := button("放生",row,func(): ask("放生这次鱼获？图鉴次数和体长纪录会保留。",func(): settle_catch("release"),"确认放生"))
  keep.disabled = Game.blocked
  release.disabled = Game.blocked
  catch_box.scale = Vector2(0.96,0.96)
@@ -508,12 +543,18 @@ func show_feedback(message: String) -> void:
  feedback_toast.text = "✓ " + message
  feedback_toast.visible = true
  feedback_toast.modulate.a = 1.0
+ collection_feedback.text = feedback_toast.text
+ collection_feedback.visible = collection.visible
+ collection_feedback.modulate.a = 1.0
  if feedback_tween != null and feedback_tween.is_running():
   feedback_tween.kill()
  feedback_tween = create_tween()
  feedback_tween.tween_interval(2.4)
  feedback_tween.tween_property(feedback_toast,"modulate:a",0.0,0.4)
- feedback_tween.tween_callback(func(): feedback_toast.visible = false)
+ feedback_tween.parallel().tween_property(collection_feedback,"modulate:a",0.0,0.4)
+ feedback_tween.tween_callback(func():
+  feedback_toast.visible = false
+  collection_feedback.visible = false)
 
 func animate_tank_button() -> void:
  if tank_button == null:
@@ -528,10 +569,41 @@ func animate_tank_button() -> void:
 
 func open_collection(mode: String, replace: bool = false) -> void:
  panel_mode = mode
- replacing = replace
+ replacing = replace and mode == "tank" and not Game.state.pending_catch.is_empty() and not Game.state.aquarium.is_empty()
+ collection_feedback.visible = false
  panel_signature = ""
  render_collection()
+ update_notices()
+ update_collection_layout()
  collection.popup_centered()
+
+func close_collection() -> void:
+ confirmation.hide()
+ confirm_action = Callable()
+ replacing = false
+ collection.hide()
+
+func update_collection_layout() -> void:
+ collection_grid.columns = 2 if collection.size.x < 720 else 3
+ aquarium_view.visible = panel_mode == "tank" and collection.size.y >= 520
+ aquarium_view.custom_minimum_size.y = clampf(float(collection.size.y - 420) * 0.4 + 110.0,110.0,190.0)
+
+func tank_description() -> String:
+ var summary := "鱼缸 %d / 6 · 放生会保留图鉴纪录。" % Game.state.aquarium.size()
+ if replacing:
+  var incoming: Dictionary = Game.model.species(Game.state.pending_catch.get("species_id",""))
+  summary += "\n为 %s 选择替换对象。取消替换会保留原鱼和本次鱼获。" % incoming.get("name","本次鱼获")
+ elif Game.state.aquarium.size() >= 6:
+  summary += "\n鱼缸已满，新鱼获可通过替换入住。"
+ return summary
+
+func release_tank_fish(catch_id: String) -> void:
+ var index: int = Game.model.find_catch(Game.state.aquarium,catch_id)
+ var fish_name: String = Game.model.species(Game.state.aquarium[index].species_id).get("name","") if index >= 0 else ""
+ var result: Dictionary = Game.remove_from_tank(catch_id)
+ handle(result)
+ if result.ok:
+  show_feedback("%s 已放生 · 图鉴纪录已保留" % fish_name)
 
 func card() -> VBoxContainer:
  var panel := PanelContainer.new()
@@ -551,11 +623,12 @@ func render_collection() -> void:
   return
  panel_signature = signature
  clear_children(collection_grid)
- aquarium_view.visible = panel_mode == "tank"
+ update_collection_layout()
  aquarium_view.catches = s.aquarium.duplicate(true)
  aquarium_view.queue_redraw()
  collection_title.text = "鱼类图鉴" if panel_mode == "book" else "精选鱼缸"
- collection_description.text = "每次相遇都留下纪录。" if panel_mode == "book" else ("选择要替换的鱼。取消会保留原鱼和本次鱼获。" if replacing else "最多展示 6 条精选鱼。放生不删除图鉴纪录。")
+ collection_close.text = "取消替换" if replacing else "关闭"
+ collection_description.text = "已发现 %d / %d · 每次相遇都留下纪录。" % [s.encyclopedia.size(),Game.model.roster.size()] if panel_mode == "book" else tank_description()
  if panel_mode == "book":
   for f in Game.model.roster:
    var box: VBoxContainer = card()
@@ -565,7 +638,7 @@ func render_collection() -> void:
     box.add_child(label("插画待制作",11,true))
    box.add_child(label(f.name if not record.is_empty() else "尚未发现",16))
    if record.is_empty():
-    paragraph("等待一次惊喜相遇\n???",box,12)
+    paragraph("尚未解锁\n等待一次惊喜相遇",box,12)
    else:
     paragraph("%s · 捕获 %d 次\n最大体长 %.1f cm" % [RARITY.get(f.rarity,f.rarity),record.count,record.record_cm],box,12)
   return
@@ -586,9 +659,9 @@ func render_collection() -> void:
      var result: Dictionary = settle_catch("replace",catch_id)
      if result.ok:
       replacing = false
-      collection.hide())
+      close_collection(),"确认替换")
    else:
-    ask("放生 %s（%.1f cm）？图鉴纪录会保留。" % [f.name,c.length_cm],func(): handle(Game.remove_from_tank(catch_id))))
+    ask("放生 %s（%.1f cm）？图鉴纪录会保留。" % [f.name,c.length_cm],func(): release_tank_fish(catch_id),"确认放生"))
   chosen.disabled = Game.blocked
 
 func ui_smoke() -> void:
@@ -596,11 +669,28 @@ func ui_smoke() -> void:
  await get_tree().process_frame
  var layout_root: Control = get_node("LayoutMargin").get_child(0)
  assert(layout_root.get_combined_minimum_size().y + 48 <= get_window().size.y)
- # Isolated in-memory UI check; no save writes or Windows sampling.
+ # Isolated test save path; no player save writes or Windows sampling.
  var test_path: String = "user://ui-test-%s.json" % Game.model.new_id()
  Game.save_path = test_path
  Game.state = Game.model.fresh_state()
  refresh()
+ handle({"ok":false,"reason":"full"})
+ refresh()
+ assert(notice.visible and notice.text.contains("鱼缸已满"))
+ handle({"ok":true})
+ assert(not notice.visible)
+ open_collection("tank",true)
+ assert(not replacing and collection_grid.get_child_count() == 1)
+ handle({"ok":false,"reason":"save_failed"})
+ assert(collection_notice.visible and collection_notice.text.contains("保存失败"))
+ handle({"ok":true})
+ collection.size = Vector2i(560,420)
+ update_collection_layout()
+ assert(collection_grid.columns == 2 and not aquarium_view.visible)
+ collection.size = Vector2i(750,620)
+ update_collection_layout()
+ assert(collection_grid.columns == 3)
+ close_collection()
  assert(not cast_button.disabled)
  assert(reel_button.disabled)
  assert(Game.model.cast_line(Game.state).ok)
@@ -629,15 +719,39 @@ func ui_smoke() -> void:
   existing.catch_id = "ui-old-%d" % i
   Game.state.aquarium.append(existing)
  refresh()
+ await get_tree().process_frame
+ await get_tree().process_frame
+ var catch_actions: Control = catch_box.get_children().back()
+ var sidebar_scroll: Control = catch_box.get_parent().get_parent()
+ assert(sidebar_scroll.get_global_rect().encloses(catch_actions.get_global_rect()))
  open_collection("tank",true)
+ assert(collection_description.text.contains("6 / 6") and collection_close.text == "取消替换")
+ Game.blocked = true
+ refresh()
+ for entry in collection_grid.get_children():
+  assert(entry.get_child(0).get_children().back().disabled)
+ Game.blocked = false
+ refresh()
  var original: Dictionary = Game.state.duplicate(true)
+ close_collection()
+ assert(Game.state == original and not replacing)
+ open_collection("tank",true)
  var target_panel: Node = collection_grid.get_child(2)
  var target_button: Button = target_panel.get_child(0).get_children().back()
  target_button.pressed.emit()
  assert(confirmation.visible)
+ assert(confirmation.ok_button_text == "确认替换")
  confirmation.hide()
  confirmation.canceled.emit()
  assert(Game.state == original)
+ Game.save_path = "user://missing-ui-%s/save.json" % Game.model.new_id()
+ target_button.pressed.emit()
+ confirmation.hide()
+ confirmation.confirmed.emit()
+ assert(Game.state == original and collection.visible and replacing)
+ assert(collection_notice.visible and not collection_notice.text.is_empty())
+ assert(notice.visible and not notice.text.is_empty())
+ Game.save_path = test_path
  target_button.pressed.emit()
  confirmation.hide()
  confirmation.confirmed.emit()
@@ -675,7 +789,7 @@ func ui_smoke() -> void:
   await RenderingServer.frame_post_draw
   get_viewport().get_texture().get_image().save_png("user://stage1-ui.png")
  await get_tree().create_timer(0.2).timeout
- print("Godot UI smoke: cast, reel, keep, book, full-tank cancel and replacement passed")
+ print("Godot UI smoke: empty/full tank, small layout, visible errors, blocked controls, failed-save preservation, cancel and replacement passed")
  get_tree().quit()
 
 func scene_capture() -> void:
@@ -722,6 +836,8 @@ func collection_capture() -> void:
   Game.state.encyclopedia[fish.id] = {"count":2,"record_cm":17.0}
  if "--undiscovered" in OS.get_cmdline_user_args():
   Game.state.encyclopedia = {}
+ if "--empty" in OS.get_cmdline_user_args():
+  Game.state = Game.model.fresh_state()
  refresh()
  var mode := "book" if "--book" in OS.get_cmdline_user_args() else "tank"
  if "--samples" in OS.get_cmdline_user_args():
@@ -751,13 +867,21 @@ func collection_capture() -> void:
      sample.custom_minimum_size = Vector2.ONE*pixels
      samples.add_child(sample)
  elif not "--catch" in OS.get_cmdline_user_args():
-  open_collection(mode)
+  open_collection(mode,"--replace" in OS.get_cmdline_user_args())
+  if "--small" in OS.get_cmdline_user_args():
+   collection.size = Vector2i(560,420)
+   update_collection_layout()
+  if "--error" in OS.get_cmdline_user_args():
+   handle({"ok":false,"reason":"save_failed"})
  await get_tree().process_frame
  await get_tree().process_frame
  await get_tree().create_timer(.3).timeout
  RenderingServer.force_draw()
- if mode == "tank" and not "--catch" in OS.get_cmdline_user_args() and not "--samples" in OS.get_cmdline_user_args():
+ if mode == "tank" and aquarium_view.visible and not Game.state.aquarium.is_empty() and not "--catch" in OS.get_cmdline_user_args() and not "--samples" in OS.get_cmdline_user_args():
   assert(aquarium_view.hit_regions.size() == 6)
+  for i in aquarium_view.hit_regions.size():
+   for j in range(i+1,aquarium_view.hit_regions.size()):
+    assert(not aquarium_view.hit_regions[i].rect.intersects(aquarium_view.hit_regions[j].rect))
   var click := InputEventMouseButton.new()
   click.button_index = MOUSE_BUTTON_LEFT
   click.pressed = true
@@ -766,6 +890,20 @@ func collection_capture() -> void:
   assert(aquarium_view.selected_id == "qa-0")
   assert(collection_description.text.contains("小丑鱼"))
   await RenderingServer.frame_post_draw
- var viewport: Viewport = get_viewport() if "--catch" in OS.get_cmdline_user_args() or "--samples" in OS.get_cmdline_user_args() else collection
+ if "--confirm" in OS.get_cmdline_user_args():
+  collection_grid.get_child(0).get_child(0).get_children().back().pressed.emit()
+  await get_tree().process_frame
+  await get_tree().process_frame
+  RenderingServer.force_draw()
+ var viewport: Viewport = confirmation if "--confirm" in OS.get_cmdline_user_args() else (get_viewport() if "--catch" in OS.get_cmdline_user_args() or "--samples" in OS.get_cmdline_user_args() else collection)
+ if "--ui-review" in OS.get_cmdline_user_args():
+  DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://docs/qa/ui"))
+  var review_name := "catch" if "--catch" in OS.get_cmdline_user_args() else mode
+  for flag in ["small","replace","empty","error","undiscovered","confirm"]:
+   if "--"+flag in OS.get_cmdline_user_args():
+    review_name += "-"+flag
+  assert(viewport.get_texture().get_image().save_png("res://docs/qa/ui/" + review_name + ".png") == OK)
+  get_tree().quit()
+  return
  viewport.get_texture().get_image().save_png("res://docs/qa/stage3/" + ("samples" if "--samples" in OS.get_cmdline_user_args() else ("catch" if "--catch" in OS.get_cmdline_user_args() else mode)) + ("-small" if "--small" in OS.get_cmdline_user_args() else "") + ("-hidden" if "--undiscovered" in OS.get_cmdline_user_args() else "") + ("-2" if "--page2" in OS.get_cmdline_user_args() else "") + ("-blue" if "--blue" in OS.get_cmdline_user_args() else "") + ".png")
  get_tree().quit()
