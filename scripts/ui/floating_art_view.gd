@@ -9,6 +9,8 @@ var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string('res:
 var textures := {}
 var profile := 'scene'
 var action := 'idle'
+var action_progress := 0.0
+var caught_texture: Texture2D
 var age := 0.0
 var night := false
 var brightness_lift := .10
@@ -109,3 +111,14 @@ func _draw() -> void:
   sprite(frames.gear('hook'),hook-Vector2.ONE*10*scale_value,Vector2.ONE*20*scale_value,false,tint)
  var bobber_width: float = 20*scale_value if profile == 'scene' else 16*size.x/240.0
  sprite(frames.gear('bobber'),rig.bobber-Vector2.ONE*bobber_width*.5,Vector2.ONE*bobber_width,false,tint)
+
+ # Reveal the saved catch during reeling; no new random draw happens here.
+ if action == 'reel' and caught_texture != null:
+  var progress: float = smoothstep(.15,.85,action_progress)
+  var at: Vector2 = rig.bobber.lerp(rig.tip+Vector2(0,18),progress)
+  var width: float = 68.0 if profile == 'scene' else 44.0
+  var opacity: float = smoothstep(.05,.25,action_progress)
+  sprite(caught_texture,at-Vector2.ONE*width*.5,Vector2.ONE*width,false,Color(1,1,1,opacity))
+  for i in 3:
+   var bubble: Vector2 = at+Vector2(-16+i*14,24+sin(age*8+i)*5)
+   draw_circle(bubble,2.0,Color(.80,.93,.96,opacity*.7))

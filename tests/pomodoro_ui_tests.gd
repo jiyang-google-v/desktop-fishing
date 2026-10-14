@@ -53,7 +53,7 @@ func run() -> void:
  main.close_collection()
  main.layouts.apply('mini',false)
  main.layouts.sync_tools()
- assert(main.layouts.timer_label.text.contains('00:00') and main.layouts.action_buttons.reel.text == '安置鱼获')
+ assert(main.layouts.timer_card.time_label.text.contains('00:00') and main.layouts.action_buttons.reel.text == '鱼获')
  for suffix in ['', '.bak','.tmp']:
   DirAccess.remove_absolute(ProjectSettings.globalize_path(path+suffix))
  print('Pomodoro UI: duration, pause/resume, early failure cancel/confirm, successful C catch, grouped book and floating timer passed')

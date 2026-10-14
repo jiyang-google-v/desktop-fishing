@@ -9,7 +9,7 @@ func run() -> void:
  layouts.apply('scene',false)
  await process_frame
  assert(layouts.mode_grid.columns == 1 and layouts.action_grid.columns == 1)
- assert(layouts.tools.size.x == 104 and layouts.tools.size.y >= 330)
+ assert(layouts.tools.size.x == 132 and layouts.tools.size.y >= 330)
  assert(layouts.view.rig_geometry().tip.x > layouts.view.rig_geometry().hand.x)
  var image := Image.load_from_file(ProjectSettings.globalize_path('res://assets/production/scene/reference-floating-environment.png'))
  assert(not image.is_empty() and image.detect_alpha() != Image.ALPHA_NONE)
