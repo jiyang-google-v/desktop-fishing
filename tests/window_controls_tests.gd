@@ -27,7 +27,7 @@ func run() -> void:
  for mode in ['scene','mini']:
   layouts.apply(mode,false)
   var rig: Dictionary = layouts.view.rig_geometry()
-  assert(layouts.should_show_tools(root.position+Vector2i(rig.tip)))
+  assert(layouts.should_show_tools(root.position+Vector2i(layouts.view.position+rig.tip)))
   layouts.show_tools()
   assert(layouts.tools.visible)
   assert(layouts.mode_buttons.size() == 3)
