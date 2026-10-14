@@ -1,0 +1,242 @@
+{
+  "assets": [
+    {
+      "id": "creature_013_jellyfish",
+      "path": "assets/production/fish/creature_013_jellyfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "upright",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "creature_014_cuttlefish",
+      "path": "assets/production/fish/creature_014_cuttlefish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_001_clownfish",
+      "path": "assets/production/fish/fish_001_clownfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": true
+    },
+    {
+      "id": "fish_002_blue_tang",
+      "path": "assets/production/fish/fish_002_blue_tang.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_003_butterflyfish",
+      "path": "assets/production/fish/fish_003_butterflyfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_004_seahorse",
+      "path": "assets/production/fish/fish_004_seahorse.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": true
+    },
+    {
+      "id": "fish_005_pufferfish",
+      "path": "assets/production/fish/fish_005_pufferfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_006_lionfish",
+      "path": "assets/production/fish/fish_006_lionfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_007_red_seabream",
+      "path": "assets/production/fish/fish_007_red_seabream.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_008_yellowfin_tuna",
+      "path": "assets/production/fish/fish_008_yellowfin_tuna.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_009_grouper",
+      "path": "assets/production/fish/fish_009_grouper.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_010_bigeye_tuna",
+      "path": "assets/production/fish/fish_010_bigeye_tuna.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "fish_011_lanternfish",
+      "path": "assets/production/fish/fish_011_lanternfish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": true
+    },
+    {
+      "id": "fish_012_star_wish_fish",
+      "path": "assets/production/fish/fish_012_star_wish_fish.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "right",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    }
+  ]
+}

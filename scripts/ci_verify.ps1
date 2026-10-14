@@ -23,10 +23,16 @@ if ($ExportOnly) {
  Copy-Item README.md build/windows/README.md
  Copy-Item docs/WINDOWS_STAGE1_ACCEPTANCE.md build/windows/WINDOWS_STAGE1_ACCEPTANCE.md
  Copy-Item docs/STAGE2_ART_QA.md build/windows/STAGE2_ART_QA.md
+ Copy-Item docs/STAGE3_ART_QA.md build/windows/STAGE3_ART_QA.md
+ Copy-Item docs/qa/stage3 build/windows/stage3-preview -Recurse
 } else {
  Invoke-GodotCheck -GodotArgs @('--headless','--editor','--import','--quit')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage2_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage3_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_windows_focus.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','180','--','--tests','--ui-smoke')
+ foreach ($mode in @('--catch','--book','--tank','--samples')) {
+  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','180','--','--tests','--collection-capture',$mode)
+ }
 }

@@ -7,7 +7,7 @@
     "maxDepth": 40,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_002_blue_tang",
@@ -17,7 +17,7 @@
     "maxDepth": 60,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_003_butterflyfish",
@@ -27,7 +27,7 @@
     "maxDepth": 100,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_004_seahorse",
@@ -37,7 +37,7 @@
     "maxDepth": 80,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_005_pufferfish",
@@ -47,7 +47,7 @@
     "maxDepth": 120,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_006_lionfish",
@@ -57,7 +57,7 @@
     "maxDepth": 180,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_007_red_seabream",
@@ -67,7 +67,7 @@
     "maxDepth": 200,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_008_yellowfin_tuna",
@@ -77,7 +77,7 @@
     "maxDepth": 200,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_009_grouper",
@@ -87,7 +87,7 @@
     "maxDepth": 200,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_010_bigeye_tuna",
@@ -97,7 +97,7 @@
     "maxDepth": 200,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_011_lanternfish",
@@ -107,7 +107,7 @@
     "maxDepth": 200,
     "time": "both",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "fish_012_star_wish_fish",
@@ -117,7 +117,7 @@
     "maxDepth": 200,
     "time": "night",
     "type": "fish",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "creature_013_jellyfish",
@@ -127,7 +127,7 @@
     "maxDepth": 120,
     "time": "both",
     "type": "creature",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   },
   {
     "id": "creature_014_cuttlefish",
@@ -137,6 +137,6 @@
     "maxDepth": 160,
     "time": "both",
     "type": "creature",
-    "artStatus": "missing"
+    "artStatus": "integration_candidate"
   }
 ]

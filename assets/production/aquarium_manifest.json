@@ -1,0 +1,55 @@
+{
+  "assets": [
+    {
+      "id": "aquarium-background",
+      "path": "assets/production/aquarium/aquarium-background.png",
+      "size": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "scene",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "aquarium-foreground",
+      "path": "assets/production/aquarium/aquarium-foreground.png",
+      "size": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "scene",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    },
+    {
+      "id": "aquarium-water",
+      "path": "assets/production/aquarium/aquarium-water.png",
+      "size": [
+        2172,
+        724
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "scene",
+      "style_version": "2.6",
+      "status": "integration_candidate",
+      "animation": "assets/production/collection.animation.json",
+      "user_style_approved": false
+    }
+  ]
+}

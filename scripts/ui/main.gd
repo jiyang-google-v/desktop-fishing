@@ -1,6 +1,8 @@
 extends Control
 
 const SceneAudio = preload("res://scripts/services/scene_audio.gd")
+const Portrait = preload("res://scripts/ui/fish_portrait.gd")
+const Aquarium = preload("res://scripts/ui/aquarium_view.gd")
 const Ocean = preload("res://scripts/ui/ocean_view.gd")
 const RARITY := {"common":"常见","uncommon":"少见","rare":"稀有","legendary":"传说"}
 const STATUS := {
@@ -23,6 +25,7 @@ var status_text: Label
 var depth_text: Label
 var time_text: Label
 var scene_text: Label
+var focus_card: PanelContainer
 var progress: ProgressBar
 var cast_button: Button
 var reel_button: Button
@@ -36,6 +39,7 @@ var diagnostic_dialog: AcceptDialog
 var collection: Window
 var collection_title: Label
 var collection_description: Label
+var aquarium_view
 var collection_grid: GridContainer
 var confirmation: ConfirmationDialog
 var confirm_action := Callable()
@@ -59,7 +63,12 @@ func _ready() -> void:
  refresh()
  if "--export-smoke" in OS.get_cmdline_user_args():
   var valid: bool = Game.model.roster.size() == 14 and FileAccess.file_exists("res://platform/windows/focus-worker.ps1") and not ocean.motion.config.is_empty() and Ocean.BACKGROUND != null and SceneAudio.WATER != null
+  for fish in Game.model.roster:
+   valid = valid and Portrait.texture_for(fish.id) != null
+  valid = valid and FileAccess.file_exists("res://assets/production/aquarium_manifest.json")
   get_tree().quit(0 if valid else 1)
+ if "--collection-capture" in OS.get_cmdline_user_args():
+  call_deferred("collection_capture")
  if "--scene-capture" in OS.get_cmdline_user_args():
   call_deferred("scene_capture")
  if "--ui-smoke" in OS.get_cmdline_user_args():
@@ -74,6 +83,8 @@ func make_theme() -> Theme:
  t.set_color("font_color","Label",Color("486575"))
  for type in ["Button","Window","ConfirmationDialog"]:
   t.set_color("font_color",type,Color("486575"))
+ t.set_color("font_focus_color","Button",Color("486575"))
+ t.set_stylebox("focus","Button",style(Color("dfedf3"),12))
  t.set_stylebox("normal","Button",style(Color("f6f7ed"),12))
  t.set_stylebox("hover","Button",style(Color("dfedf3"),12))
  t.set_stylebox("pressed","Button",style(Color("c8e0ed"),12))
@@ -184,6 +195,7 @@ func build_ui() -> void:
  status_text = paragraph("",side)
  status_text.custom_minimum_size.y = 58
  var card := PanelContainer.new()
+ focus_card = card
  card.add_theme_stylebox_override("panel",style(Color("edf4ef"),14))
  side.add_child(card)
  var time_box := VBoxContainer.new()
@@ -232,7 +244,7 @@ func build_ui() -> void:
  paragraph("游戏前台暂停。后台且键鼠空闲未超时才下潜。锁屏、休眠与退出期间不累计。F8 保存退出（游戏窗口内）。",side,11)
  var footer := HBoxContainer.new()
  root.add_child(footer)
- var version := label("桌面钓鱼 · 0.4.0 · 海边日常",11,true)
+ var version := label("桌面钓鱼 · 0.5.0-preview · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
  footer.add_child(label("不记录按键内容或窗口标题",11,true))
@@ -264,7 +276,7 @@ func build_dialogs() -> void:
  collection.visible = false
  collection.title = "收藏"
  collection.theme = theme
- collection.size = Vector2i(750,520)
+ collection.size = Vector2i(750,620)
  collection.min_size = Vector2i(720,420)
  collection.transient = true
  collection.exclusive = true
@@ -288,6 +300,11 @@ func build_dialogs() -> void:
  header.add_child(collection_title)
  button("关闭",header,func(): collection.hide())
  collection_description = paragraph("",box)
+ aquarium_view = Aquarium.new()
+ aquarium_view.custom_minimum_size = Vector2(0,190)
+ aquarium_view.visible = false
+ aquarium_view.fish_selected.connect(select_tank_fish)
+ box.add_child(aquarium_view)
  var scroll := ScrollContainer.new()
  scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
  box.add_child(scroll)
@@ -355,6 +372,7 @@ func refresh() -> void:
  depth_text.text = "%.1f 米" % depth
  time_text.text = "%02d:%02d" % [int(s.focus_seconds)/60,int(s.focus_seconds)%60]
  progress.value = depth
+ focus_card.visible = s.pending_catch.is_empty()
  var hour: int = Time.get_datetime_dict_from_system().hour
  ocean.depth = depth
  ocean.cast = s.cast
@@ -386,6 +404,23 @@ func clear_children(parent: Node) -> void:
   parent.remove_child(child)
   child.queue_free()
 
+func portrait(id: String, hidden: bool = false, height: float = 96) -> Control:
+ var view = Portrait.new()
+ view.species_id = id
+ view.silhouette = hidden
+ view.custom_minimum_size = Vector2(96,height)
+ return view
+
+func select_tank_fish(catch_id: String) -> void:
+ var index: int = Game.model.find_catch(Game.state.aquarium,catch_id)
+ if index < 0:
+  return
+ var c: Dictionary = Game.state.aquarium[index]
+ var f: Dictionary = Game.model.species(c.species_id)
+ collection_description.text = "%s · %.1f cm · 在下方管理这条鱼" % [f.name,c.length_cm]
+ var card_panel: Control = collection_grid.get_child(index)
+ card_panel.get_child(0).get_children().back().grab_focus()
+
 func render_catch() -> void:
  clear_children(catch_box)
  var c: Dictionary = Game.state.pending_catch
@@ -395,7 +430,12 @@ func render_catch() -> void:
   return
  var f: Dictionary = Game.model.species(c.species_id)
  catch_box.add_child(label("本次鱼获 · " + RARITY.get(f.rarity,f.rarity),11,true))
+ catch_box.add_child(portrait(f.id))
  catch_box.add_child(label(f.name,22))
+ if c.get("first_discovery",false):
+  catch_box.add_child(label("第一次遇见 · 图鉴已点亮",12,true))
+ elif c.get("new_record",false):
+  catch_box.add_child(label("新的体长纪录",12,true))
  catch_box.add_child(label("%.1f cm · %.1f m" % [c.length_cm,c.depth],13,true))
  var row := HBoxContainer.new()
  row.add_theme_constant_override("separation",8)
@@ -434,12 +474,18 @@ func render_collection() -> void:
   return
  panel_signature = signature
  clear_children(collection_grid)
+ aquarium_view.visible = panel_mode == "tank"
+ aquarium_view.catches = s.aquarium.duplicate(true)
+ aquarium_view.queue_redraw()
  collection_title.text = "鱼类图鉴" if panel_mode == "book" else "精选鱼缸"
  collection_description.text = "每次相遇都留下纪录。" if panel_mode == "book" else ("选择要替换的鱼。取消会保留原鱼和本次鱼获。" if replacing else "最多展示 6 条精选鱼。放生不删除图鉴纪录。")
  if panel_mode == "book":
   for f in Game.model.roster:
    var box: VBoxContainer = card()
    var record: Dictionary = s.encyclopedia.get(f.id,{})
+   box.add_child(portrait(f.id,record.is_empty()))
+   if Portrait.texture_for(f.id) == null:
+    box.add_child(label("插画待制作",11,true))
    box.add_child(label(f.name if not record.is_empty() else "尚未发现",16))
    if record.is_empty():
     paragraph("等待一次惊喜相遇\n???",box,12)
@@ -450,11 +496,10 @@ func render_collection() -> void:
   paragraph("鱼缸还很安静。收杆后选择收进鱼缸，邀请第一位朋友。",card())
  for c in s.aquarium:
   var box: VBoxContainer = card()
-  var mini = Ocean.new()
-  mini.aquarium_mode = true
-  mini.custom_minimum_size = Vector2(160,76)
-  box.add_child(mini)
   var f: Dictionary = Game.model.species(c.species_id)
+  box.add_child(portrait(f.id,false,64))
+  if Portrait.texture_for(f.id) == null:
+   box.add_child(label("插画待制作",11,true))
   box.add_child(label(f.name,16))
   box.add_child(label("%.1f cm" % c.length_cm,12,true))
   var catch_id: String = c.catch_id
@@ -573,4 +618,67 @@ func scene_capture() -> void:
  if "--small" in OS.get_cmdline_user_args():
   name += "-small"
  get_viewport().get_texture().get_image().save_png("user://" + name + ".png")
+ get_tree().quit()
+
+func collection_capture() -> void:
+ OS.low_processor_usage_mode = false
+ Game.state = Game.model.fresh_state()
+ var ids: Array = Game.model.roster.map(func(f): return f.id)
+ if "--showcase" in OS.get_cmdline_user_args():
+  ids = ["fish_001_clownfish","creature_013_jellyfish","fish_008_yellowfin_tuna","fish_004_seahorse","creature_014_cuttlefish","fish_012_star_wish_fish"]
+ for i in range(6):
+  var id: String = ids[i%ids.size()]
+  Game.state.aquarium.append({"catch_id":"qa-%d"%i,"species_id":id,"length_cm":12.0+i,"depth":80.0,"caught_at":"QA"})
+  Game.state.encyclopedia[id] = {"count":2,"record_cm":17.0}
+ Game.state.pending_catch = {"catch_id":"qa-pending","species_id":ids[0],"length_cm":18.0,"depth":20.0,"caught_at":"QA","first_discovery":true,"new_record":true}
+ for fish in Game.model.roster:
+  Game.state.encyclopedia[fish.id] = {"count":2,"record_cm":17.0}
+ if "--undiscovered" in OS.get_cmdline_user_args():
+  Game.state.encyclopedia = {}
+ refresh()
+ var mode := "book" if "--book" in OS.get_cmdline_user_args() else "tank"
+ if "--samples" in OS.get_cmdline_user_args():
+  get_node("LayoutMargin").hide()
+  var board := VBoxContainer.new()
+  board.position = Vector2(24,24)
+  add_child(board)
+  board.add_child(label("V2.6 全生物 · 32 / 48 / 64 / 96 px",22))
+  var sample_ids: Array = ids.slice(7,14) if "--page2" in OS.get_cmdline_user_args() else ids.slice(0,7)
+  for color in [Color("91c8d1") if "--blue" in OS.get_cmdline_user_args() else Color("fffbee")]:
+   var row := GridContainer.new()
+   row.columns = 3
+   row.add_theme_constant_override("h_separation",12)
+   row.add_theme_constant_override("v_separation",8)
+   board.add_child(row)
+   for id in sample_ids:
+    var panel := PanelContainer.new()
+    panel.add_theme_stylebox_override("panel",style(color,12))
+    row.add_child(panel)
+    var sample_box := VBoxContainer.new()
+    panel.add_child(sample_box)
+    sample_box.add_child(label(Game.model.species(id).name,16))
+    var samples := HBoxContainer.new()
+    sample_box.add_child(samples)
+    for pixels in [32,48,64,96]:
+     var sample = portrait(id,false,pixels)
+     sample.custom_minimum_size = Vector2.ONE*pixels
+     samples.add_child(sample)
+ elif not "--catch" in OS.get_cmdline_user_args():
+  open_collection(mode)
+ await get_tree().process_frame
+ await get_tree().process_frame
+ await get_tree().create_timer(.3).timeout
+ RenderingServer.force_draw()
+ if mode == "tank" and not "--catch" in OS.get_cmdline_user_args() and not "--samples" in OS.get_cmdline_user_args():
+  assert(aquarium_view.hit_regions.size() == 6)
+  var click := InputEventMouseButton.new()
+  click.button_index = MOUSE_BUTTON_LEFT
+  click.pressed = true
+  click.position = aquarium_view.hit_regions[0].rect.get_center()
+  aquarium_view._gui_input(click)
+  assert(aquarium_view.selected_id == "qa-0")
+  assert(collection_description.text.contains("小丑鱼"))
+  await RenderingServer.frame_post_draw
+ var viewport: Viewport = get_viewport() if "--catch" in OS.get_cmdline_user_args() or "--samples" in OS.get_cmdline_user_args() else collection
+ viewport.get_texture().get_image().save_png("res://docs/qa/stage3/" + ("samples" if "--samples" in OS.get_cmdline_user_args() else ("catch" if "--catch" in OS.get_cmdline_user_args() else mode)) + ("-small" if "--small" in OS.get_cmdline_user_args() else "") + ("-hidden" if "--undiscovered" in OS.get_cmdline_user_args() else "") + ("-2" if "--page2" in OS.get_cmdline_user_args() else "") + ("-blue" if "--blue" in OS.get_cmdline_user_args() else "") + ".png")
  get_tree().quit()

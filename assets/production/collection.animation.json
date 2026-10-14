@@ -1,0 +1,29 @@
+{
+  "style_version": "2.6",
+  "method": "layer_tween",
+  "swim": {
+    "duration": 18.0,
+    "horizontal": 20.0,
+    "vertical": 5.0
+  },
+  "drift": {
+    "duration": 12.0,
+    "horizontal": 4.0,
+    "vertical": 9.0
+  },
+  "float": {
+    "duration": 10.0,
+    "horizontal": 5.0,
+    "vertical": 10.0
+  },
+  "pulse": {
+    "duration": 14.0,
+    "horizontal": 17.0,
+    "vertical": 4.0
+  },
+  "species": {
+    "fish_004_seahorse": "drift",
+    "creature_013_jellyfish": "float",
+    "creature_014_cuttlefish": "pulse"
+  }
+}
