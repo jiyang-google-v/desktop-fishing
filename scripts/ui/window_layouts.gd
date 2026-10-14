@@ -42,7 +42,8 @@ func _ready() -> void:
  tools.unresizable = true
  tools.transparent_bg = true
  tools.transparent = true
- tools.unfocusable = true
+ # Interactive native windows must accept focus for Windows to deliver button clicks.
+ tools.unfocusable = false
  tools.transient = true
  tools.size = Vector2i(320,160)
  tools.content_scale_size = tools.size
@@ -89,7 +90,7 @@ func _ready() -> void:
   var b := Button.new()
   b.text = entry[0]
   b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-  b.pressed.connect(tool_action.bind(entry[1]))
+  b.pressed.connect(request_action.bind(entry[1]))
   actions.add_child(b)
   action_buttons[entry[1]] = b
  menu = PopupMenu.new()
@@ -208,7 +209,7 @@ func _input(event: InputEvent) -> void:
 func _process(_delta: float) -> void:
  if mode == 'full':
   return
- if main.collection.visible:
+ if main.collection.visible or main.confirmation.visible:
   tools.hide()
   return
  if should_show_tools(DisplayServer.mouse_get_position()) and not drag:
@@ -274,3 +275,7 @@ func tool_action(kind: String) -> void:
 func request_mode(next: String) -> void:
  # Finish the native button event before changing its owner window.
  apply.call_deferred(next)
+
+func request_action(kind: String) -> void:
+ # Hide/open native windows only after the mouse release has finished.
+ tool_action.call_deferred(kind)

@@ -1,7 +1,6 @@
 extends Node
 
 signal changed
-const Policy = preload("res://scripts/core/focus_policy.gd")
 const Model = preload("res://scripts/core/fishing_model.gd")
 const Store = preload("res://scripts/core/save_store.gd")
 const Focus = preload("res://scripts/services/windows_focus.gd")

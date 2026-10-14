@@ -13,6 +13,11 @@ func run() -> void:
  assert(game.set_duration(30).ok)
  main.refresh()
  assert(main.pool_preview.text.contains('B 类') and main.time_text.text == '30:00')
+ await process_frame
+ await process_frame
+ var scroll: Control = main.timer_setup.get_parent().get_parent()
+ assert(scroll.get_global_rect().encloses(main.duration_input.get_global_rect()))
+ assert(scroll.get_global_rect().encloses(main.cast_button.get_global_rect()))
  main.perform_fishing('cast')
  main.ocean.skip()
  assert(game.state.cast and not main.duration_input.editable)

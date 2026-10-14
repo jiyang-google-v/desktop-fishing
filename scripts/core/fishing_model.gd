@@ -1,9 +1,8 @@
 extends RefCounted
 
 const Policy = preload("res://scripts/core/focus_policy.gd")
-const MAX_SECONDS := 3000.0
+const MAX_SECONDS := 7200.0
 const MAX_DEPTH := 200.0
-const IDLE_SECONDS := 600.0
 const WEIGHTS := {"common":6.0,"uncommon":3.0,"rare":1.0,"legendary":1.0}
 var roster: Array = []
 
@@ -17,9 +16,6 @@ func new_id() -> String:
 
 func fresh_state() -> Dictionary:
  return {"version":4,"duration_minutes":25,"paused":false,"pause_cause":"","last_outcome":"","idle_minutes":10,"sound_enabled":false,"cast":false,"session_id":"","focus_seconds":0.0,"encyclopedia":{},"aquarium":[],"pending_catch":{}}
-
-func depth_for(seconds: float) -> float:
- return clampf(seconds * 4.0 / 60.0,0.0,MAX_DEPTH)
 
 func group_for(minutes: int) -> String:
  return 'A' if minutes < 30 else ('B' if minutes < 60 else 'C')
@@ -187,7 +183,7 @@ func restore(data) -> Dictionary:
  var s: Dictionary = fresh_state()
  s.idle_minutes = Policy.idle_minutes(data.get("idle_minutes",10))
  s.sound_enabled = data.get("sound_enabled",false) == true
- s.focus_seconds = finite_number(data.get("focusSeconds" if camel else "focus_seconds",0),7200.0)
+ s.focus_seconds = finite_number(data.get("focusSeconds" if camel else "focus_seconds",0),MAX_SECONDS)
  if version == 4:
   for key in ["duration_minutes","paused","pause_cause","last_outcome"]:
    if not data.has(key):

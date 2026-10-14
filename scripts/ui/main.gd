@@ -37,6 +37,7 @@ var feedback_toast: Label
 var feedback_tween: Tween
 var reveal_tween: Tween
 var tank_tween: Tween
+var timer_setup: VBoxContainer
 var duration_input: SpinBox
 var pause_button: Button
 var pool_preview: Label
@@ -216,7 +217,7 @@ func build_ui() -> void:
  side_panel.custom_minimum_size.x = 310
  body.add_child(side_panel)
  var side := VBoxContainer.new()
- side.add_theme_constant_override("separation",14)
+ side.add_theme_constant_override("separation",10)
  var side_scroll := ScrollContainer.new()
  side_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
  side_panel.add_child(side_scroll)
@@ -236,14 +237,14 @@ func build_ui() -> void:
  time_box.add_theme_constant_override("separation",8)
  card.add_child(time_box)
  time_box.add_child(label("番茄钟 · 剩余时间",12,true))
- time_text = label("00:00",32)
+ time_text = label("00:00",26)
  time_box.add_child(time_text)
  progress = ProgressBar.new()
  progress.max_value = 100
  progress.show_percentage = false
  progress.custom_minimum_size.y = 8
  time_box.add_child(progress)
- time_box.add_child(label("锁屏、休眠自动暂停；恢复后手动继续",11,true))
+ time_box.add_child(label("完成后手动起竿 · 暂停不计时",11,true))
  var actions := HBoxContainer.new()
  fishing_actions = actions
  actions.add_theme_constant_override("separation",8)
@@ -269,23 +270,27 @@ func build_ui() -> void:
  side_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
  side.add_child(side_spacer)
  sound_button = button("声音：关闭",side,func(): handle(Game.set_sound_enabled(not Game.state.sound_enabled)))
- paragraph("设定专注时长 · 15–120 分钟",side,11)
+ timer_setup = VBoxContainer.new()
+ timer_setup.add_theme_constant_override("separation",6)
+ side.add_child(timer_setup)
+ paragraph("设定专注时长 · 15–120 分钟",timer_setup,11)
  duration_input = SpinBox.new()
  duration_input.min_value = 15
  duration_input.max_value = 120
  duration_input.step = 1
  duration_input.suffix = "分钟"
  duration_input.value = 25
- side.add_child(duration_input)
+ timer_setup.add_child(duration_input)
  duration_input.value_changed.connect(func(value): handle(Game.set_duration(int(value))))
  var presets := HBoxContainer.new()
- side.add_child(presets)
+ timer_setup.add_child(presets)
  for minutes in [25,45,60]:
   var preset := button(str(minutes)+" 分",presets,func():
    handle(Game.set_duration(minutes))
    refresh())
   preset.set_meta('duration_preset',true)
- pool_preview = paragraph("",side,11)
+ pool_preview = paragraph("",timer_setup,11)
+ side.move_child(timer_setup,side.get_children().find(focus_card))
  saved_label = paragraph("",side,11)
  var maintenance := HBoxContainer.new()
  side.add_child(maintenance)
@@ -477,7 +482,9 @@ func refresh() -> void:
  progress.value = ratio*100
  focus_card.visible = s.pending_catch.is_empty()
  fishing_actions.visible = s.pending_catch.is_empty()
- status_text.custom_minimum_size.y = 58 if s.pending_catch.is_empty() else 0
+ status_text.custom_minimum_size.y = 38 if s.pending_catch.is_empty() else 0
+ timer_setup.visible = s.pending_catch.is_empty()
+ pause_button.visible = s.cast
  var hour: int = Time.get_datetime_dict_from_system().hour
  ocean.depth = depth
  ocean.cast = s.cast

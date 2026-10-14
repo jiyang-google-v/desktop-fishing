@@ -26,6 +26,7 @@ func run() -> void:
  main.refresh()
  await save_view(root,'catch')
  main.open_collection('book')
+ main.book_filter.select(3)
  main.book_group = 'C'
  main.panel_signature = ''
  main.render_collection()
