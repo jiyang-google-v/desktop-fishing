@@ -1,0 +1,54 @@
+{
+  "reference": "assets/references/SCENE_REFERENCE_V2.7.png",
+  "assets": [
+    {
+      "id": "reference-floating-environment",
+      "path": "assets/production/scene/reference-floating-environment.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "sha256": "c93cb5a28976814bc6ae34d92674b4f191aa7161485b9fe61231e3eb95e8b818",
+      "status": "integrated_pending_windows_visual_qa"
+    },
+    {
+      "id": "reference-ocean-day",
+      "path": "assets/production/scene/reference-ocean-day.png",
+      "size": [
+        1672,
+        941
+      ],
+      "mode": "RGB",
+      "alpha_extrema": null,
+      "sha256": "8e8a6ddaca2fd14c5975b17984de730c973ae066683e38ba4d8dd5165401717f",
+      "status": "integrated_pending_windows_visual_qa"
+    },
+    {
+      "id": "reference-pier",
+      "path": "assets/production/scene/reference-pier.png",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "sha256": "32aa491bbe0171c48e230db3cdabf1eef54b4797e990605b4c6274a852d8d471",
+      "status": "integrated_pending_windows_visual_qa"
+    }
+  ],
+  "reused": "Existing independent animated fisher/cat, gear and effects; mini environment unchanged.",
+  "generation": "Built-in imagegen, three separate image assets.",
+  "prompt_set": [
+    "Reference ocean background 16:9: tree, clouds, lighthouse, surface at43%, fish/coral/ship; remove all UI and independent foreground actors.",
+    "Transparent floating environment 3:2: tree, clouds, lighthouse, shallow water at55%; no sky rectangle, UI or foreground actors.",
+    "Transparent pier 2:1: orange planks and three posts, blue outline, no other objects."
+  ]
+}

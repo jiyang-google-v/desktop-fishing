@@ -38,8 +38,12 @@ func run() -> void:
  game.state.paused = true
  game.state.pause_cause = 'manual'
  main.refresh()
- main.layouts.apply('mini',false)
+ main.layouts.apply('scene',false)
  main.layouts.set_process(false)
+ main.layouts.show_tools()
+ await save_view(main.layouts.tools,'scene-timer-toolbar')
+ main.layouts.tools.hide()
+ main.layouts.apply('mini',false)
  main.layouts.show_tools()
  await save_view(main.layouts.tools,'mini-timer-toolbar')
  main.layouts.tools.hide()
