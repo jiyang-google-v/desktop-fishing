@@ -47,9 +47,9 @@ func _draw() -> void:
   var t: float = phase*TAU/float(settings.duration)+i*1.31
   if movement == "pulse":
    t += sin(t)*.8
-  var width: float = minf(96,size.x*.16)
-  var center := Vector2(size.x*(.19+.30*(i%3)),size.y*(.30+.34*(i/3)))
-  center += Vector2(sin(t)*float(settings.horizontal),sin(t*.8)*float(settings.vertical))
+  var width: float = minf(96,minf(size.x*.16,size.y*.36))
+  var center := Vector2(size.x*(.19+.30*(i%3)),size.y*(.28+.44*(i/3)))
+  center += Vector2(sin(t)*float(settings.horizontal),sin(t*.8)*minf(float(settings.vertical),size.y*.025))
   var rect := Rect2(center-Vector2.ONE*width*.5,Vector2.ONE*width)
   hit_regions.append({"id":c.catch_id,"rect":rect})
   if c.catch_id == selected_id:

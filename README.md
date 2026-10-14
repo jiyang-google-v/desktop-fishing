@@ -80,6 +80,7 @@ godot --headless --script res://tests/stage3_tests.gd -- --tests
 godot --headless --script res://tests/stage4_tests.gd -- --tests
 godot --headless --script res://tests/stage4_ui_tests.gd -- --tests
 godot --headless --quit-after 180 -- --tests --ui-smoke
+godot --headless --quit-after 180 -- --tests --ui-smoke --small
 godot --headless --script res://tests/run_windows_focus.gd -- --tests
 powershell -NoProfile -File tests/windows_focus_smoke.ps1
 ```
