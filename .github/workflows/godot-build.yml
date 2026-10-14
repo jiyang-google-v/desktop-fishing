@@ -34,10 +34,21 @@ jobs:
       - name: Verify exported native desktop transparency
         shell: pwsh
         run: |
-          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--quit-after','600','--','--tests','--transparency-smoke' -Wait -PassThru
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file','build/windows/transparency.log','--quit-after','600','--','--tests','--transparency-smoke' -Wait -PassThru
+          Get-Content build/windows/transparency.log -ErrorAction SilentlyContinue
           if ($process.ExitCode -ne 0) { throw 'Native desktop transparency check failed' }
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-fishing-godot-windows
           path: build/windows/**
           if-no-files-found: error
+
+      - name: Upload transparency failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transparency-diagnostics
+          path: |
+            build/windows/transparency.log
+            build/windows/transparency-qa/**
+          if-no-files-found: ignore
