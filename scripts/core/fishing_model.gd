@@ -4,7 +4,7 @@ const Policy = preload("res://scripts/core/focus_policy.gd")
 const MAX_SECONDS := 3000.0
 const MAX_DEPTH := 200.0
 const IDLE_SECONDS := 600.0
-const WEIGHTS := {"common":60.0,"uncommon":25.0,"rare":9.0,"legendary":1.0}
+const WEIGHTS := {"common":6.0,"uncommon":3.0,"rare":1.0,"legendary":1.0}
 var roster: Array = []
 
 func _init() -> void:
@@ -16,24 +16,59 @@ func new_id() -> String:
  return Crypto.new().generate_random_bytes(16).hex_encode()
 
 func fresh_state() -> Dictionary:
- return {"version":3,"idle_minutes":10,"sound_enabled":false,"cast":false,"session_id":"","focus_seconds":0.0,"encyclopedia":{},"aquarium":[],"pending_catch":{}}
+ return {"version":4,"duration_minutes":25,"paused":false,"pause_cause":"","last_outcome":"","idle_minutes":10,"sound_enabled":false,"cast":false,"session_id":"","focus_seconds":0.0,"encyclopedia":{},"aquarium":[],"pending_catch":{}}
 
 func depth_for(seconds: float) -> float:
  return clampf(seconds * 4.0 / 60.0,0.0,MAX_DEPTH)
 
-func can_accrue(status: Dictionary, idle_minutes: int = 10) -> bool:
- var idle = status.get("idle_seconds",-1.0)
- if not (idle is float or idle is int):
-  return false
- return status.get("supported",false) and not status.get("foreground",true) and not status.get("locked",true) and is_finite(float(idle)) and idle >= 0 and idle <= Policy.idle_minutes(idle_minutes) * 60
+func group_for(minutes: int) -> String:
+ return 'A' if minutes < 30 else ('B' if minutes < 60 else 'C')
 
-func eligible_fish(depth: float, night: bool) -> Array:
- return roster.filter(func(f): return depth >= f.minDepth and depth <= f.maxDepth and (f.time != "night" or night))
+func group_label(minutes: int) -> String:
+ return {'A':'A 类 · 15–29 分钟','B':'B 类 · 30–59 分钟','C':'C 类 · 60–120 分钟'}[group_for(minutes)]
+
+func fish_pool(minutes: int) -> Array:
+ return roster.filter(func(f): return f.focus_group == group_for(minutes))
+
+func fish_probability(id: String, minutes: int) -> float:
+ var total := 0.0
+ var weight := 0.0
+ for f in fish_pool(minutes):
+  var w: float = WEIGHTS.get(f.rarity,1.0)
+  total += w
+  if f.id == id:
+   weight = w
+ return weight/total if total > 0 else 0.0
+
+func set_duration(s: Dictionary, minutes: int) -> Dictionary:
+ if s.cast or not s.pending_catch.is_empty():
+  return {'ok':false,'reason':'active_challenge'}
+ if minutes < 15 or minutes > 120:
+  return {'ok':false,'reason':'invalid_setting'}
+ s.duration_minutes = minutes
+ return {'ok':true}
+
+func completed(s: Dictionary) -> bool:
+ return s.cast and s.focus_seconds >= int(s.duration_minutes)*60
+
+func fail_challenge(s: Dictionary) -> Dictionary:
+ if not s.cast or completed(s):
+  return {'ok':false,'reason':'not_active'}
+ s.cast = false
+ s.paused = false
+ s.pause_cause = ''
+ s.session_id = ''
+ s.focus_seconds = 0.0
+ s.last_outcome = 'failed'
+ return {'ok':true,'failed':true}
 
 func cast_line(s: Dictionary) -> Dictionary:
  if s.cast or not s.pending_catch.is_empty():
   return {"ok":false,"reason":"pending" if not s.pending_catch.is_empty() else "already_cast"}
  s.cast = true
+ s.paused = false
+ s.pause_cause = ""
+ s.last_outcome = ""
  s.session_id = new_id()
  s.focus_seconds = 0.0
  return {"ok":true}
@@ -41,9 +76,14 @@ func cast_line(s: Dictionary) -> Dictionary:
 func reel_line(s: Dictionary, hour: int, rng: RandomNumberGenerator) -> Dictionary:
  if not s.cast:
   return {"ok":false,"reason":"not_cast"}
- var depth: float = depth_for(s.focus_seconds)
- var candidates: Array = eligible_fish(depth,hour < 6 or hour >= 18)
+ if not completed(s):
+  return {"ok":false,"reason":"too_early"}
+ var depth := 200.0 # Decorative progress only; no depth-based eligibility.
+ var candidates: Array = fish_pool(int(s.duration_minutes))
  s.cast = false
+ s.paused = false
+ s.pause_cause = ""
+ s.last_outcome = "success"
  if candidates.is_empty():
   s.session_id = ""
   return {"ok":true,"empty":true}
@@ -60,7 +100,7 @@ func reel_line(s: Dictionary, hour: int, rng: RandomNumberGenerator) -> Dictiona
  var length: float = snappedf(10.0 + rng.randf() * 70.0,0.1)
  var record: Dictionary = s.encyclopedia.get(selected.id,{"count":0,"record_cm":0.0})
  s.encyclopedia[selected.id] = {"count":record.count + 1,"record_cm":maxf(record.record_cm,length)}
- s.pending_catch = {"catch_id":new_id(),"species_id":selected.id,"length_cm":length,"depth":depth,"caught_at":Time.get_datetime_string_from_system(true),"first_discovery":record.count == 0,"new_record":length > float(record.record_cm),"previous_record_cm":finite_number(record.record_cm,100000.0)}
+ s.pending_catch = {"catch_id":new_id(),"species_id":selected.id,"length_cm":length,"depth":depth,"duration_minutes":s.duration_minutes,"focus_group":group_for(int(s.duration_minutes)),"caught_at":Time.get_datetime_string_from_system(true),"first_discovery":record.count == 0,"new_record":length > float(record.record_cm),"previous_record_cm":finite_number(record.record_cm,100000.0)}
  return {"ok":true}
 
 func settle(s: Dictionary, action: String, target_id: String = "") -> Dictionary:
@@ -116,6 +156,9 @@ func clean_catch(value, camel_case: bool = false) -> Dictionary:
  if not (length is float or length is int) or not is_finite(float(length)) or length < 0:
   return {}
  var cleaned := {"catch_id":cid,"species_id":sid,"length_cm":float(length),"depth":finite_number(value.get("depth",0),MAX_DEPTH),"caught_at":str(value.get("caughtAt" if camel_case else "caught_at",""))}
+ if value.has("duration_minutes"):
+  cleaned.duration_minutes = int(finite_number(value.duration_minutes,120))
+  cleaned.focus_group = str(value.get("focus_group",group_for(cleaned.duration_minutes)))
  for flag in ["first_discovery","new_record"]:
   if value.has(flag):
    cleaned[flag] = value[flag] == true
@@ -129,10 +172,10 @@ func restore(data) -> Dictionary:
  if not data.has("version"):
   return {"ok":false,"reason":"corrupt"}
  var raw_version = data.get("version",0)
- if not (raw_version is float or raw_version is int) or float(raw_version) not in [1.0,2.0,3.0]:
+ if not (raw_version is float or raw_version is int) or float(raw_version) not in [1.0,2.0,3.0,4.0]:
   return {"ok":false,"reason":"version"}
  var version: int = int(raw_version)
- if version == 3:
+ if version >= 3:
   for key in ["cast","session_id","focus_seconds","encyclopedia","aquarium","pending_catch"]:
    if not data.has(key):
     return {"ok":false,"reason":"corrupt"}
@@ -144,7 +187,19 @@ func restore(data) -> Dictionary:
  var s: Dictionary = fresh_state()
  s.idle_minutes = Policy.idle_minutes(data.get("idle_minutes",10))
  s.sound_enabled = data.get("sound_enabled",false) == true
- s.focus_seconds = finite_number(data.get("focusSeconds" if camel else "focus_seconds",0),MAX_SECONDS)
+ s.focus_seconds = finite_number(data.get("focusSeconds" if camel else "focus_seconds",0),7200.0)
+ if version == 4:
+  for key in ["duration_minutes","paused","pause_cause","last_outcome"]:
+   if not data.has(key):
+    return {"ok":false,"reason":"corrupt"}
+  var duration = data.duration_minutes
+  if not (duration is int or duration is float) or not is_finite(float(duration)) or int(duration) != duration or duration < 15 or duration > 120 or not data.paused is bool or not data.pause_cause is String or not data.last_outcome is String:
+   return {"ok":false,"reason":"corrupt"}
+  s.duration_minutes = int(duration)
+  s.paused = data.paused
+  s.pause_cause = data.pause_cause
+  s.last_outcome = data.last_outcome
+  s.focus_seconds = minf(s.focus_seconds,s.duration_minutes*60.0)
  var book = data.get("encyclopedia",{})
  if book is Dictionary:
   for id in book:
@@ -170,4 +225,8 @@ func restore(data) -> Dictionary:
   s.session_id = session if session is String else ""
   if s.cast and s.session_id.is_empty():
    s.session_id = new_id()
- return {"ok":true,"state":s}
+ if version < 4:
+  s.cast = false
+  s.focus_seconds = 0.0
+  s.session_id = ""
+ return {"ok":true,"state":s,"migrated":version < 4}

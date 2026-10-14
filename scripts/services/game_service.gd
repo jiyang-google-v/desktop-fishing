@@ -4,7 +4,6 @@ signal changed
 const Policy = preload("res://scripts/core/focus_policy.gd")
 const Model = preload("res://scripts/core/fishing_model.gd")
 const Store = preload("res://scripts/core/save_store.gd")
-const Clock = preload("res://scripts/core/focus_clock.gd")
 const Focus = preload("res://scripts/services/windows_focus.gd")
 var model = Model.new()
 var store = Store.new()
@@ -17,10 +16,10 @@ var probe
 var rng := RandomNumberGenerator.new()
 var last_tick := 0
 var last_wall := 0.0
-var clock = Clock.new()
 var save_elapsed := 0.0
 var last_saved := "尚未保存"
 var save_failed := false
+var safety_generation := ""
 
 func _ready() -> void:
  rng.randomize()
@@ -30,6 +29,9 @@ func _ready() -> void:
  var loaded: Dictionary = store.read(save_path,model)
  if loaded.ok:
   state = loaded.state
+  if loaded.get("migrated",false):
+   warning = "已升级为番茄钟玩法，收藏保留；请重新设定并放竿。"
+  prepare_restored_challenge()
   if loaded.get("recovered",false):
    warning = "主存档损坏，已恢复上一份备份。"
  else:
@@ -47,11 +49,8 @@ func _ready() -> void:
 func reset_clock() -> void:
  last_tick = Time.get_ticks_msec()
  last_wall = Time.get_unix_time_from_system()
- clock.reset()
 
 func _notification(what: int) -> void:
- if what == NOTIFICATION_APPLICATION_FOCUS_IN or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-  reset_clock()
  if what == NOTIFICATION_WM_CLOSE_REQUEST:
   request_exit()
 
@@ -63,11 +62,11 @@ func tick() -> void:
  last_tick = now
  last_wall = wall
  focus_status = probe.sample()
- # Pause conservatively for stale readings, foreground and clock/sleep gaps.
- var sequence: int = int(focus_status.get("sequence",-1))
- var eligible: bool = pause_reason() == "working"
- var accrued: float = clock.advance(elapsed,wall_elapsed,eligible,sequence,str(focus_status.get("token","")) + ":" + str(focus_status.get("epoch",-1)))
- state.focus_seconds = minf(Model.MAX_SECONDS,state.focus_seconds + accrued)
+ var was_complete: bool = model.completed(state)
+ var was_paused: bool = state.paused
+ advance_timer(elapsed,wall_elapsed,focus_status)
+ if (not was_complete and model.completed(state)) or (not was_paused and state.paused):
+  persist()
  save_elapsed += maxf(elapsed,0.0)
  if save_elapsed >= 30.0:
   persist()
@@ -109,6 +108,7 @@ func commit(action: Callable) -> Dictionary:
  return result
 
 func cast_line() -> Dictionary:
+ safety_generation = ""
  return commit(func(s): return model.cast_line(s))
 
 func reel_line() -> Dictionary:
@@ -120,8 +120,60 @@ func settle(action: String, target_id: String = "") -> Dictionary:
 func remove_from_tank(catch_id: String) -> Dictionary:
  return commit(func(s): return model.remove_from_tank(s,catch_id))
 
+func remaining_seconds() -> float:
+ return maxf(0,state.duration_minutes*60.0-state.focus_seconds)
+
+func advance_timer(elapsed: float, wall_elapsed: float, status: Dictionary) -> void:
+ if not state.cast or state.paused or model.completed(state) or blocked:
+  return
+ var cause := ''
+ if not is_finite(elapsed) or not is_finite(wall_elapsed) or elapsed <= 0 or wall_elapsed <= 0 or elapsed > 5 or wall_elapsed > 5 or absf(elapsed-wall_elapsed) > 1:
+  cause = 'sleep'
+ elif status.get('locked',false):
+  cause = 'locked'
+ elif OS.get_name() == 'Windows' and not status.get('supported',false):
+  cause = 'detection'
+ var generation: String = str(status.get('token',''))+':'+str(status.get('epoch',0))
+ if cause.is_empty() and not safety_generation.is_empty() and generation != safety_generation:
+  cause = 'system'
+ safety_generation = generation
+ if not cause.is_empty():
+  state.paused = true
+  state.pause_cause = cause
+  return
+ state.focus_seconds = minf(state.duration_minutes*60.0,state.focus_seconds+minf(elapsed,wall_elapsed))
+
 func pause_reason() -> String:
- return Policy.reason(state,focus_status,blocked,get_window().has_focus())
+ if blocked:
+  return 'blocked'
+ if not state.pending_catch.is_empty():
+  return 'pending'
+ if not state.cast:
+  return 'failed' if state.last_outcome == 'failed' else 'ready'
+ if model.completed(state):
+  return 'completed'
+ if state.paused:
+  return 'paused'
+ return 'working'
+
+func set_duration(minutes: int) -> Dictionary:
+ return commit(func(s): return model.set_duration(s,minutes))
+
+func toggle_pause() -> Dictionary:
+ if not state.cast or model.completed(state):
+  return {'ok':false,'reason':'not_active'}
+ if state.paused and OS.get_name() == 'Windows':
+  var safety: Dictionary = probe.sample() if probe != null else focus_status
+  if not safety.get('supported',false) or safety.get('locked',true):
+   return {'ok':false,'reason':'system_paused'}
+  safety_generation = str(safety.get('token',''))+':'+str(safety.get('epoch',0))
+ return commit(func(s):
+  s.paused = not s.paused
+  s.pause_cause = 'manual' if s.paused else ''
+  return {'ok':true})
+
+func fail_challenge() -> Dictionary:
+ return commit(func(s): return model.fail_challenge(s))
 
 func set_sound_enabled(enabled: bool) -> Dictionary:
  return commit(func(s):
@@ -161,4 +213,9 @@ func retry_detection() -> void:
 
 func diagnostic_text() -> String:
  var detail: String = probe.detail if probe != null else "not_started"
- return "版本：0.6.0-preview\n系统：%s\n状态：%s\n检测：%s\n空闲宽限：%d 分钟\n有效专注：%.1f 秒\n深度：%.1f 米\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.idle_minutes,state.focus_seconds,model.depth_for(state.focus_seconds),last_saved,str(save_failed)]
+ return "版本：0.7.0-preview\n系统：%s\n状态：%s\n锁屏检测：%s\n设定时长：%d 分钟\n已完成：%.1f 秒\n剩余：%.1f 秒\n暂停原因：%s\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.duration_minutes,state.focus_seconds,remaining_seconds(),state.pause_cause,last_saved,str(save_failed)]
+
+func prepare_restored_challenge() -> void:
+ if state.cast and not model.completed(state):
+  state.paused = true
+  state.pause_cause = "restart"

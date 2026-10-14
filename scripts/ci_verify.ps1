@@ -21,6 +21,9 @@ if ($ExportOnly) {
  New-Item -ItemType Directory -Force build/windows | Out-Null
  Invoke-GodotCheck -GodotArgs @('--headless','--export-release','Windows Desktop','build/windows/DesktopFishing.exe')
  Copy-Item README.md build/windows/README.md
+ Copy-Item docs/POMODORO_SPEC.md build/windows/POMODORO_SPEC.md
+ Copy-Item docs/POMODORO_QA.md build/windows/POMODORO_QA.md
+ Copy-Item docs/qa/pomodoro build/windows/pomodoro-preview -Recurse
  Copy-Item docs/WINDOWS_STAGE1_ACCEPTANCE.md build/windows/WINDOWS_STAGE1_ACCEPTANCE.md
  Copy-Item docs/STAGE2_ART_QA.md build/windows/STAGE2_ART_QA.md
  Copy-Item docs/STAGE3_ART_QA.md build/windows/STAGE3_ART_QA.md
@@ -36,6 +39,9 @@ if ($ExportOnly) {
 } else {
  Invoke-GodotCheck -GodotArgs @('--headless','--editor','--import','--quit')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/run_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/pomodoro_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/pomodoro_ui_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--script','res://tests/pomodoro_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage2_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage3_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_tests.gd','--','--tests')
