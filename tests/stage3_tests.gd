@@ -14,6 +14,7 @@ func _initialize() -> void:
  m.reel_line(s,12,rng)
  check(s.pending_catch.get("first_discovery",false),"First catch discovery flag")
  check(s.pending_catch.get("new_record",false),"First catch record flag")
+ check(s.pending_catch.get("previous_record_cm",-1.0) == 0.0,"First catch has empty previous record baseline")
  check(m.restore(s).state == s,"Pending celebration survives restore")
  var c: Dictionary = s.pending_catch
  var id: String = c.species_id
@@ -24,11 +25,14 @@ func _initialize() -> void:
  m.cast_line(s)
  m.reel_line(s,12,rng)
  check(not s.pending_catch.first_discovery and not s.pending_catch.new_record,"Existing species below record is not celebrated")
+ check(s.pending_catch.previous_record_cm == 1000.0,"Pending catch preserves previous record for reveal")
+ check(m.restore(s).state.pending_catch.previous_record_cm == 1000.0,"Previous record survives restore")
  s.pending_catch.first_discovery = true
  s.pending_catch.new_record = true
  var old: Dictionary = s.duplicate(true)
  old.pending_catch.erase("first_discovery")
  old.pending_catch.erase("new_record")
+ old.pending_catch.erase("previous_record_cm")
  check(not m.restore(old).state.pending_catch.get("first_discovery",false),"Legacy catch does not invent discovery")
  var manifest = JSON.parse_string(FileAccess.get_file_as_string("res://assets/production/collection_manifest.json"))
  check(manifest.assets.size() == 14,"Complete stable fourteen species")
