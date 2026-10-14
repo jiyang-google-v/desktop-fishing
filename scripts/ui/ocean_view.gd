@@ -105,6 +105,25 @@ func sprite(texture: Texture2D, center: Vector2, canvas: float, tint: Color = Co
  if texture != null:
   draw_texture_rect(texture,Rect2(center-Vector2.ONE*canvas*.5,Vector2.ONE*canvas),false,tint)
 
+func fishing_line_points(rod_end: Vector2, bobber_anchor: Vector2, hook: Vector2, split_at_bobber: bool, sway_clock: float, scale_value: float, segments: int = 30) -> PackedVector2Array:
+ var points := PackedVector2Array()
+ var divisions: int = maxi(2,segments)
+ for i in range(divisions+1):
+  var t: float = float(i)/divisions
+  var point: Vector2
+  if split_at_bobber and t <= .5:
+   var upper_t: float = t*2.0
+   point = rod_end.lerp(bobber_anchor,upper_t)
+   point.x += sin(sway_clock*1.5+upper_t*3.0)*2.0*scale_value*sin(upper_t*PI)
+  elif split_at_bobber:
+   var lower_t: float = (t-.5)*2.0
+   point = bobber_anchor.lerp(hook,lower_t)
+  else:
+   point = rod_end.lerp(hook,t)
+   point.x += sin(sway_clock*1.5+t*3.0)*2.0*scale_value*sin(t*PI)
+  points.append(point)
+ return points
+
 func effect(clip: String, center: Vector2, canvas: float, clock: float, opacity: float = 1.0) -> void:
  var anchor := center-Vector2(0,canvas*.32) if clip == "splash" else center
  sprite(frames.texture("fx",clip,clock),anchor,canvas,Color(1,1,1,opacity))
@@ -173,29 +192,28 @@ func _draw() -> void:
  draw_texture_rect(frames.gear("rod"),Rect2(-pivot*rod_size,Vector2.ONE*rod_size),false,actor_tint)
  draw_set_transform(Vector2.ZERO)
  draw_texture_rect(frames.texture("fisher",clip,clock),Rect2(actor_pos,Vector2.ONE*actor_size),false,actor_tint)
+ var bobber_anchor := Vector2(w*.59,surface+12*scale_value+sin(progress_phase*2)*2*scale_value)
  var target := Vector2(w*.59,surface+30*scale_value+(h-surface-90*scale_value)*depth/200.0)
  if cast or motion.busy():
   if motion.active == "cast":
-   var t: float = smoothstep(0.0,1.0,motion.progress)
-   target = rod_end.lerp(target,t)+Vector2(0,-sin(t*PI)*h*.12)
+   var splash_at: float = float(motion.config.animations.cast.splash_at)
+   if motion.progress < splash_at:
+    var cast_t: float = smoothstep(0.0,1.0,motion.progress/maxf(splash_at,.001))
+    target = rod_end.lerp(bobber_anchor,cast_t)+Vector2(0,-sin(cast_t*PI)*h*.08)
+   else:
+    var drop_t: float = smoothstep(0.0,1.0,(motion.progress-splash_at)/maxf(1.0-splash_at,.001))
+    target = bobber_anchor.lerp(target,drop_t)
   elif motion.active == "reel":
    var start := Vector2(w*.59,surface+30*scale_value+(h-surface-90*scale_value)*reel_depth/200.0)
    target = start.lerp(rod_end,smoothstep(0.0,1.0,motion.progress))
-  var bobber := Vector2(w*.59,surface+12*scale_value+sin(progress_phase*2)*2*scale_value)
-  var line := PackedVector2Array()
-  for i in range(30):
-   var t: float = i/29.0
-   var sway: float = sin(progress_phase*1.5+t*3)*3*scale_value*sin(t*PI)
-   var point: Vector2 = rod_end.lerp(target,t)
-   if not motion.busy():
-    point = rod_end.lerp(bobber,t*2) if t < .5 else bobber.lerp(target,(t-.5)*2)
-   line.append(point+Vector2(sway,0))
+  var bobber_visible: bool = motion.active != "reel" and (motion.active != "cast" or motion.progress >= float(motion.config.animations.cast.splash_at))
+  var line := fishing_line_points(rod_end,bobber_anchor,target,bobber_visible,progress_phase,scale_value)
   draw_polyline(line,Color("fbf6db"),maxf(1,1.6*scale_value),true)
   sprite(frames.gear("hook"),target,26*scale_value,actor_tint)
   effect("glimmer",target,46*scale_value,progress_phase,.60 if working else .22)
-  if motion.active != "reel" and (motion.active != "cast" or motion.progress > .65):
-   effect("ripple",bobber+Vector2(0,3*scale_value),115*scale_value,phase,.72)
-   sprite(frames.gear("bobber"),bobber-Vector2(0,3*scale_value),32*scale_value,actor_tint)
+  if bobber_visible:
+   effect("ripple",bobber_anchor+Vector2(0,3*scale_value),115*scale_value,phase,.72)
+   sprite(frames.gear("bobber"),bobber_anchor-Vector2(0,3*scale_value),32*scale_value,actor_tint)
  if cast and motion.active != "cast":
   # Exploration clocks freeze with focus; quiet surface ambience continues.
   for i in range(3):

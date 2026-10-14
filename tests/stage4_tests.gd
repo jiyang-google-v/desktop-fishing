@@ -1,5 +1,6 @@
 extends SceneTree
 const Frames = preload("res://scripts/core/motion_frames.gd")
+const Ocean = preload("res://scripts/ui/ocean_view.gd")
 var failures := 0
 func check(ok: bool, message: String) -> void:
  if not ok:
@@ -39,5 +40,16 @@ func _initialize() -> void:
     var angle: float = frames.fitted_rod_rotation(clip,seconds,hand_y,unit*.38,14*unit/1000)
     var tip_y: float = hand_y+Vector2(.71,-.64).rotated(angle).y*unit*.38
     check(tip_y >= 14*unit/1000-.01,"Rod tip stays inside responsive scene: "+clip)
+ var ocean = Ocean.new()
+ for depth in [0.0,50.0,200.0]:
+  var bobber := Vector2(300,200)
+  var hook := Vector2(300,200+depth)
+  var line: PackedVector2Array = ocean.fishing_line_points(Vector2(120,80),bobber,hook,true,.7,1.0)
+  check(line.size() == 31,"Split fishing line includes a stable float attachment point")
+  check(line[15].distance_to(bobber) < .01,"Fishing line meets the bobber")
+  check(line.back().distance_to(hook) < .01,"Fishing line reaches the hook")
+  for i in range(15,line.size()):
+   check(absf(line[i].x-bobber.x) < .01,"Line below the bobber hangs vertically at depth %dm" % int(depth))
+ ocean.free()
  print("Stage 4 visual motion checks: failures=%d" % failures)
  quit(1 if failures else 0)
