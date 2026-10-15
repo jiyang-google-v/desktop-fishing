@@ -31,7 +31,13 @@ static func run(main: Control) -> void:
  var window := main.get_window()
  layouts.pinned = true
  layouts.apply('full',false)
- window.position = DisplayServer.screen_get_usable_rect().position+Vector2i(40,40)
+ var work_area := DisplayServer.screen_get_usable_rect(window.current_screen)
+ # Hosted Windows desktops can be 1024x720. Keep both the resize handle
+ # and its target on-screen while exercising real native mouse input.
+ var test_size := Vector2i(mini(1100,work_area.size.x-160),mini(796,work_area.size.y-160))
+ window.min_size = Vector2i(mini(940,test_size.x),mini(736,test_size.y))
+ window.size = test_size
+ window.position = work_area.position+Vector2i(40,40)
  for i in 6:
   await tree.process_frame
  var old_position := window.position

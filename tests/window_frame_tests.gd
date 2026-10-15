@@ -33,8 +33,7 @@ func run() -> void:
   var screen := root.current_screen
   var work_area := DisplayServer.screen_get_usable_rect(screen)
   print('Native maximize mode=%s, size=%s, work_area=%s' % [root.mode,root.size,work_area])
-  # Godot removes its two-pixel off-screen compensation from client size.
-  assert(root.size.x == work_area.size.x and root.size.y in [work_area.size.y,work_area.size.y-2])
+  assert(root.size == frame.maximized_rect().size and root.position == frame.maximized_rect().position)
   layouts.apply('mini')
   await process_frame
   assert(root.mode == Window.MODE_WINDOWED and root.size == layouts.SIZES.mini)

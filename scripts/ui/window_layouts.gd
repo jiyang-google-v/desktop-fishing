@@ -258,6 +258,7 @@ func apply(next: String, persist: bool = true) -> void:
  opacity_open = false
  var window := get_window()
  var compact: bool = mode != 'full'
+ frame.manual_maximized = false
  window.mode = Window.MODE_WINDOWED
  frame.visible = not compact
  frame.last_mode = -1

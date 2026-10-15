@@ -7,6 +7,8 @@ var drag_area: HBoxContainer
 var buttons := {}
 var handles: Array[Control] = []
 var last_mode := -1
+var manual_maximized := false
+var restore_min_size := Vector2i.ZERO
 func _ready() -> void:
  mouse_filter = Control.MOUSE_FILTER_IGNORE
  set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -93,7 +95,7 @@ func _process(_delta: float) -> void:
  buttons.maximize.icon = load('res://assets/production/ui/window-restore.svg' if maximized else 'res://assets/production/ui/window-maximize.svg')
  buttons.maximize.tooltip_text = '还原窗口' if maximized else '最大化'
  for handle in handles:
-  handle.visible = mode == Window.MODE_WINDOWED
+  handle.visible = mode == Window.MODE_WINDOWED and not maximized
 func on_drag_input(event: InputEvent) -> void:
  if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
   if event.double_click:
@@ -102,25 +104,48 @@ func on_drag_input(event: InputEvent) -> void:
    get_window().start_drag()
   drag_area.accept_event()
 func on_resize_input(event: InputEvent, edge: int) -> void:
- if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and get_window().mode == Window.MODE_WINDOWED:
+ if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and get_window().mode == Window.MODE_WINDOWED and not is_maximized():
   get_window().start_resize(edge)
+func maximized_rect() -> Rect2i:
+ var area := DisplayServer.screen_get_usable_rect(get_window().current_screen)
+ # Avoid Godot 4.6.1's Win32 auto-detection of borderless fullscreen/maximize:
+ # its two-pixel compensation can immediately reset the native mode.
+ if OS.get_name() == 'Windows':
+  area.size.y -= 2
+ return area
 func is_maximized() -> bool:
- return get_window().mode == Window.MODE_MAXIMIZED
+ var window := get_window()
+ if window.mode == Window.MODE_MAXIMIZED:
+  return true
+ if not manual_maximized or window.mode != Window.MODE_WINDOWED:
+  return false
+ var area := maximized_rect()
+ return window.position == area.position and window.size == area.size
 func maximize() -> void:
  var window := get_window()
- if OS.get_name() == 'Windows' and window.borderless:
-  # Establish Win32's native zoomed state before removing decorations.
-  # Godot's direct borderless maximize path uses MoveWindow and can lose
-  # its maximized flag during the two-pixel screen-edge compensation.
-  window.borderless = false
-  window.mode = Window.MODE_MAXIMIZED
-  window.borderless = true
+ if OS.get_name() == 'Windows' and DisplayServer.get_name() != 'headless':
+  var area := maximized_rect()
+  restore_min_size = window.min_size
+  window.mode = Window.MODE_WINDOWED
+  manual_maximized = true
+  window.min_size = Vector2i(mini(restore_min_size.x,area.size.x),mini(restore_min_size.y,area.size.y))
+  window.size = area.size
+  window.position = area.position
  else:
   window.mode = Window.MODE_MAXIMIZED
+ main.layouts.settings.set_value('full','maximized',true)
+ last_mode = -1
 func toggle_maximize() -> void:
  if is_maximized():
-  get_window().mode = Window.MODE_WINDOWED
+  var window := get_window()
+  window.mode = Window.MODE_WINDOWED
+  if manual_maximized:
+   manual_maximized = false
+   window.min_size = restore_min_size
+   window.size = main.layouts.settings.get_value('full','size',main.layouts.SIZES.full)
+   window.position = main.layouts.settings.get_value('full','position',window.position)
   main.layouts.settings.set_value('full','maximized',false)
+  last_mode = -1
  else:
   main.layouts.remember()
   maximize()
