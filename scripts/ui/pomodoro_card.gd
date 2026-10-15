@@ -10,6 +10,7 @@ var time_label: Label
 var status_label: Label
 var pause_button: TextureButton
 var progress: ProgressBar
+var busy := false
 func _ready() -> void:
  name = 'PomodoroCardA'
  mouse_filter = Control.MOUSE_FILTER_STOP
@@ -85,13 +86,19 @@ func sync(game: Node, night: bool) -> void:
   status_label.text = '检测中'
  day_icon.texture = MOON if night else SUN
  progress.value = clampf(state.focus_seconds/maxf(state.duration_minutes*60.0,1.0),0.0,1.0)
- var symbol := 'play' if state.paused else 'pause'
+ var symbol := 'play' if state.paused or not state.cast else 'pause'
  pause_button.texture_normal = load(DIR+symbol+'-normal.png')
  pause_button.texture_hover = load(DIR+symbol+'-hover.png')
  pause_button.texture_pressed = load(DIR+symbol+'-pressed.png')
  pause_button.texture_disabled = load(DIR+symbol+'-disabled.png')
- pause_button.disabled = game.blocked or not state.cast or completed
- pause_button.tooltip_text = '继续专注' if state.paused else '暂停专注'
+ pause_button.disabled = game.blocked or completed or not state.pending_catch.is_empty() or busy
+ pause_button.tooltip_text = '放竿并开始专注' if not state.cast else ('继续专注' if state.paused else '暂停专注')
+ if not state.pending_catch.is_empty():
+  pause_button.tooltip_text = '请先安置本次鱼获，再开始下一次专注'
+ elif completed:
+  pause_button.tooltip_text = '专注已完成，请起竿揭晓鱼获'
+ elif busy:
+  pause_button.tooltip_text = '钓鱼动画播放中'
  tooltip_text = '点击时钟打开专注设置\n番茄钟 · %d 分钟 · %s 类鱼池 · %s' % [state.duration_minutes,game.model.group_for(state.duration_minutes),status_label.text]
 
  if state.paused:

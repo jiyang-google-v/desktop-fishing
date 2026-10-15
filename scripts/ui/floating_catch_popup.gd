@@ -5,6 +5,8 @@ var panel: PanelContainer
 var title_label: Label
 var detail: Label
 var badges: Label
+var knowledge: Label
+var encounter: Label
 var fish
 var keep_button: Button
 var release_button: Button
@@ -27,7 +29,7 @@ func _ready() -> void:
  transparent_bg = true
  transient = true
  unfocusable = false
- size = Vector2i(280,410)
+ size = Vector2i(340,600)
  content_scale_size = size
  panel = PanelContainer.new()
  panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -41,18 +43,38 @@ func _ready() -> void:
  var body := VBoxContainer.new()
  body.add_theme_constant_override('separation',6)
  panel.add_child(body)
- title_label = main.label('鱼获揭晓',16)
+ title_label = main.label('鱼获揭晓',22)
  body.add_child(title_label)
  fish = main.Portrait.new()
- fish.custom_minimum_size = Vector2(110,110)
+ fish.fit_visible = true
+ fish.custom_minimum_size = Vector2(200,210)
  fish.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- body.add_child(fish)
+ var hero := PanelContainer.new()
+ var hero_skin: StyleBoxFlat = main.style(Color('e6f4f4'),18)
+ hero_skin.set_content_margin_all(0)
+ hero.add_theme_stylebox_override('panel',hero_skin)
+ hero.add_child(fish)
+ body.add_child(hero)
  detail = main.label('',12,true)
  detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
  detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  body.add_child(detail)
- badges = main.label('',11,true)
+ badges = main.label('',12,true)
  body.add_child(badges)
+ body.move_child(title_label,0)
+ body.move_child(badges,1)
+ encounter = main.label('',12,true)
+ body.add_child(encounter)
+ body.add_child(main.label('海洋小百科',14))
+ var scroll := ScrollContainer.new()
+ scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+ scroll.custom_minimum_size.y = 74
+ scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+ body.add_child(scroll)
+ knowledge = main.label('',13,true)
+ knowledge.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+ knowledge.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+ scroll.add_child(knowledge)
  var actions := HBoxContainer.new()
  body.add_child(actions)
  keep_button = main.button('收进鱼缸',actions,func(): settle.call_deferred('keep'))
@@ -81,6 +103,12 @@ func _ready() -> void:
   hide()
   dismissed.emit())
 func present(game) -> void:
+ var area: Rect2i = main.layouts.work_area()
+ var desired_size := Vector2i(mini(340,area.size.x-24),mini(600,area.size.y-24))
+ if size != desired_size:
+  size = desired_size
+  content_scale_size = size
+ fish.custom_minimum_size.y = 210 if size.y>=560 else 160
  var caught: Dictionary = game.state.pending_catch
  var id: String = str(caught.get('catch_id',''))
  if id.is_empty():
@@ -90,19 +118,20 @@ func present(game) -> void:
  title_label.text = species.name+' · '+str(main.RARITY.get(species.rarity,species.rarity))
  fish.species_id = caught.species_id
  fish.queue_redraw()
- detail.text = '%.1f cm' % caught.length_cm
- var habitat: Dictionary = introductions
- if habitat.has(str(caught.species_id)):
-  var intro: Dictionary = habitat[str(caught.species_id)]
-  detail.text += '\n'+str(intro.habitat)+'\n'+str(intro.description)
+ detail.text = '体长 %.1f cm' % caught.length_cm
  if caught.has('duration_minutes'):
-  detail.text += ' · 专注%d分钟' % int(caught.duration_minutes)
+  detail.text += ' · 专注 %d 分钟' % int(caught.duration_minutes)
+ var intro: Dictionary = introductions.get(str(caught.species_id),{})
+ knowledge.text = str(intro.get('habitat',''))+'\n'+str(intro.get('description',''))+'\n\n你知道吗？'+str(intro.get('fact',''))
+ var record: Dictionary = game.state.encyclopedia.get(caught.species_id,{})
+ encounter.text = '第 %d 次相遇 · 图鉴 %d / %d' % [int(record.get('count',1)),game.state.encyclopedia.size(),game.model.roster.size()]
  var flags: Array[String] = []
  if caught.get('first_discovery',false):
   flags.append('首次发现')
  if caught.get('new_record',false):
   flags.append('新纪录')
- badges.text = ' · '.join(flags) if not flags.is_empty() else '图鉴已记录'
+ badges.text = ' · '.join(flags) if not flags.is_empty() else '又遇见一位海里的朋友'
+ badges.add_theme_color_override('font_color',Color('b17c59') if not flags.is_empty() else Color('6d9698'))
  keep_button.text = '选择替换' if game.state.aquarium.size() >= 6 else '收进鱼缸'
  keep_button.disabled = game.blocked or not is_revealed
  release_button.disabled = game.blocked or not is_revealed

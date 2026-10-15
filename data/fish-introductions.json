@@ -1,58 +1,126 @@
 {
   "fish_001_clownfish": {
-    "habitat": "浅海 · 珊瑚礁",
-    "description": "橙白条纹的小邻居，常在海葵之间穿梭。"
+    "habitat": "浅海 · 珊瑚礁与海葵",
+    "description": "小丑鱼类常与海葵相伴，在触手间寻找庇护。",
+    "fact": "它们不是随便住进海葵的过客：小丑鱼与宿主海葵之间存在紧密的共生关系。",
+    "fictional": false,
+    "sources": [
+      "https://ocean.si.edu/ocean-life/fish/clownfish-their-host-anemone"
+    ]
   },
   "fish_002_blue_tang": {
-    "habitat": "浅海 · 珊瑚礁",
-    "description": "蓝色身体配着黄色尾鳍，在礁区寻找藻类。"
+    "habitat": "热带海洋 · 珊瑚礁",
+    "description": "蓝色身体、黄色尾鳍，是这种刺尾鱼醒目的配色。",
+    "fact": "它的嘴小而灵巧，可以从不平整的表面啄取藻类；本条按蓝倒吊鱼这一物种介绍。",
+    "fictional": false,
+    "sources": [
+      "https://animaldiversity.org/accounts/Paracanthurus_hepatus/"
+    ]
   },
   "fish_003_butterflyfish": {
-    "habitat": "浅海 · 珊瑚礁",
-    "description": "侧扁的身体，像一片轻盈的海中花瓣。"
+    "habitat": "热带海洋 · 礁区",
+    "description": "蝴蝶鱼类身体侧扁，方便在礁石周围穿行。",
+    "fact": "“蝴蝶鱼”是一群鱼的统称，并非单一物种；不同种的花纹、栖息范围和食物会有差别。",
+    "fictional": false,
+    "sources": [
+      "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/reef-butterflyfish/"
+    ]
   },
   "fish_004_seahorse": {
-    "habitat": "A组 · 15–29分钟",
-    "description": "卷曲的小尾巴，给这次相遇添了一点俏皮。"
+    "habitat": "沿岸浅海 · 海草床等环境",
+    "description": "海马用细长的吻部摄食，卷曲的尾巴让它很有辨识度。",
+    "fact": "海马的育儿分工很特别：雄性有育儿袋，负责携带发育中的后代。不同海马种类的细节有所差别。",
+    "fictional": false,
+    "sources": [
+      "https://seahorse.org/library/articles/anatomy.shtml"
+    ]
   },
   "fish_005_pufferfish": {
-    "habitat": "B组 · 30–59分钟",
-    "description": "圆滚滚的小身影，为海边添一份可爱。"
+    "habitat": "水域因种类而异 · 海洋、半咸水或淡水",
+    "description": "河豚类的圆身体背后，藏着独特的防御本领。",
+    "fact": "受到威胁时，许多河豚能把身体膨大。这不是长胖了，而是短时间内改变外形的防御方式。",
+    "fictional": false,
+    "sources": [
+      "https://ocean.si.edu/ocean-life/fish/pufferfishes-and-their-relatives"
+    ]
   },
   "fish_006_lionfish": {
-    "habitat": "B组 · 30–59分钟",
-    "description": "舒展的鱼鳍，像水中的轻柔羽扇。"
+    "habitat": "海洋 · 岩礁与珊瑚礁",
+    "description": "条纹和舒展的鳍条，让狮子鱼像披着羽扇。",
+    "fact": "漂亮的外表也是一种提醒：狮子鱼的部分鳍棘带有毒性。这里的插画是简化造型，现实中应保持距离。",
+    "fictional": false,
+    "sources": [
+      "https://www.fisheries.noaa.gov/southeast/ecosystems/impacts-invasive-lionfish"
+    ]
   },
   "fish_007_red_seabream": {
-    "habitat": "B组 · 30–59分钟",
-    "description": "银红色的身影，从水中轻轻跃出。"
+    "habitat": "西北太平洋 · 近海底层",
+    "description": "真鲷学名 Pagrus major，是一种海洋鱼类。",
+    "fact": "它不只吃小鱼，还摄食甲壳类、软体动物等底栖无脊椎动物，在海底附近寻找食物。",
+    "fictional": false,
+    "sources": [
+      "https://fishbase.se/summary/Pagrus-major.html"
+    ]
   },
   "fish_008_yellowfin_tuna": {
-    "habitat": "C组 · 60–120分钟",
-    "description": "一抹黄色掠过，留下新的收藏回忆。"
+    "habitat": "热带与亚热带 · 外洋",
+    "description": "黄鳍金枪鱼的身体流线修长，适合在开阔海域游动。",
+    "fact": "背鳍、臀鳍与小离鳍的鲜黄色是重要识别特征；它与大眼金枪鱼外形相近，需要仔细辨认。",
+    "fictional": false,
+    "sources": [
+      "https://www.fisheries.noaa.gov/species/atlantic-yellowfin-tuna"
+    ]
   },
   "fish_009_grouper": {
-    "habitat": "B组 · 30–59分钟",
-    "description": "安静的身影，也藏着相遇的惊喜。"
+    "habitat": "海洋 · 多种礁区与近底环境",
+    "description": "石斑鱼是一群鱼的统称，许多种类靠近礁石生活。",
+    "fact": "不少石斑鱼擅长伏击：突然张口产生吸力，把接近的小动物吸入口中。不同种类的食性并不完全相同。",
+    "fictional": false,
+    "sources": [
+      "https://www.fisheries.noaa.gov/species/gulf-grouper"
+    ]
   },
   "fish_010_bigeye_tuna": {
-    "habitat": "C组 · 60–120分钟",
-    "description": "大大的眼睛，记录这次特别的相遇。"
+    "habitat": "热带与温带海洋 · 外洋",
+    "description": "大眼金枪鱼与黄鳍金枪鱼很相似，但眼睛通常更大。",
+    "fact": "辨认时还可以观察小离鳍：大眼金枪鱼的小离鳍呈黄色，并有黑色边缘。",
+    "fictional": false,
+    "sources": [
+      "https://www.fisheries.noaa.gov/species/pacific-bigeye-tuna"
+    ]
   },
   "fish_011_lanternfish": {
-    "habitat": "C组 · 60–120分钟",
-    "description": "带着一点微光，来到你的海边。"
+    "habitat": "海洋 · 中层与深层水域",
+    "description": "灯笼鱼类是深海世界中的小型发光鱼。",
+    "fact": "许多灯笼鱼的身体带有发光器。腹面的光点像一排小灯，这些光来自生物发光。",
+    "fictional": false,
+    "sources": [
+      "https://ocean.si.edu/ocean-life/fish/bioluminescence"
+    ]
   },
   "fish_012_star_wish_fish": {
-    "habitat": "特殊事件收藏",
-    "description": "把星星的愿望，留给下一场相遇。"
+    "habitat": "虚构彩蛋 · 特殊事件",
+    "description": "星愿鱼是本游戏设计的幻想生物，不对应真实物种。",
+    "fact": "它的微光与星形元素属于游戏设定。把这份来自海里的小愿望，留在你的收藏中。",
+    "fictional": true,
+    "sources": []
   },
   "creature_013_jellyfish": {
-    "habitat": "A组 · 15–29分钟",
-    "description": "透明的小伞，随着水流轻轻飘动。"
+    "habitat": "海洋 · 分布因种类而异",
+    "description": "水母不是鱼。许多水母以伞体收缩配合水流移动。",
+    "fact": "它们没有像人类那样集中的大脑，却能依靠神经网络感知环境；“水母”也包含许多不同种类。",
+    "fictional": false,
+    "sources": [
+      "https://www.montereybayaquarium.org/animals-the-ocean/animals-a-to-z/jellies"
+    ]
   },
   "creature_014_cuttlefish": {
-    "habitat": "B组 · 30–59分钟",
-    "description": "柔软的身影，慢慢游进新的故事。"
+    "habitat": "海洋 · 多种沿岸与底层环境",
+    "description": "墨鱼又称乌贼，属于头足类软体动物，并不是鱼。",
+    "fact": "和章鱼的八条腕不同，墨鱼有八条腕和两条专门捕食的长触手；插画中的简化外形不代表真实比例。",
+    "fictional": false,
+    "sources": [
+      "https://www.montereybayaquarium.org/animals-the-ocean/animals-a-to-z/common-cuttlefish"
+    ]
   }
 }
