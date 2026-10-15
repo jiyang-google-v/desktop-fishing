@@ -1,0 +1,136 @@
+{
+  "style_version": "V2.6",
+  "fps": 30,
+  "profiles": {
+    "scene": {
+      "design_size": [
+        600,
+        400
+      ],
+      "layers": {
+        "corner-water": [
+          -0.04,
+          0.24,
+          1.04,
+          0.76
+        ],
+        "distant-island": [
+          0.49,
+          0.04,
+          0.56,
+          0.56
+        ],
+        "cloud-large": [
+          0.65,
+          -0.02,
+          0.35,
+          0.2625
+        ],
+        "cloud-small": [
+          0.22,
+          0.12,
+          0.22,
+          0.165
+        ],
+        "shore-rocks": [
+          0.4,
+          0.6,
+          0.6,
+          0.4
+        ]
+      },
+      "surface": 0.55,
+      "pier": [
+        0,
+        0.55,
+        0.46
+      ],
+      "fisher": {
+        "anchor": [
+          0.36,
+          0.55
+        ],
+        "canvas_width": 0.29,
+        "flip_h": false
+      },
+      "cat": {
+        "anchor": [
+          0.22,
+          0.55
+        ],
+        "canvas_width": 0.13,
+        "flip_h": false
+      },
+      "bucket": {
+        "anchor": [
+          0.105,
+          0.55
+        ],
+        "canvas_width": 0.1
+      },
+      "rod": {
+        "canvas_width": 0.27,
+        "rotation_degrees": 0,
+        "flip_h": false
+      },
+      "bobber_y": 0.59
+    },
+    "mini": {
+      "design_size": [
+        240,
+        140
+      ],
+      "allowed_art": [
+        "rod",
+        "bobber",
+        "mini-water"
+      ],
+      "rod": {
+        "hand_anchor": [
+          1.08,
+          0.46
+        ],
+        "canvas_width": 0.82,
+        "rotation_degrees": -25,
+        "flip_h": true
+      },
+      "bobber_y": 0.78,
+      "water_canvas_width": 0.28
+    }
+  },
+  "ambient": {
+    "cloud_drift": {
+      "duration": 24.0,
+      "amplitude_px": 3.0
+    },
+    "water_breathe": {
+      "duration": 6.0,
+      "alpha_range": [
+        0.94,
+        1.0
+      ]
+    },
+    "mini_ripple": {
+      "duration": 4.0,
+      "scale_range": [
+        0.97,
+        1.03
+      ]
+    }
+  },
+  "action_clips": {
+    "idle": "idle",
+    "cast": "cast",
+    "reel": "reel",
+    "reveal": "happy"
+  },
+  "night_tint": "#b6c2dd",
+  "render_rules": {
+    "transparent_clear": true,
+    "draw_fishing_line_in_code": true,
+    "vertical_line_below_rod_tip": true,
+    "floating_sky_background": false,
+    "ambient_only_while_visible": true,
+    "mini_no_permanent_ui": true
+  }
+}

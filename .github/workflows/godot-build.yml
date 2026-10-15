@@ -31,8 +31,56 @@ jobs:
         run: |
           $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--headless','--quit-after','10','--','--tests','--export-smoke' -Wait -PassThru
           if ($process.ExitCode -ne 0) { throw 'Exported game failed to launch' }
+      - name: Verify exported native desktop transparency
+        shell: pwsh
+        run: |
+          $logPath = Join-Path $PWD 'build/windows/transparency.log'
+          $stdoutPath = Join-Path $PWD 'build/windows/transparency-stdout.log'
+          $stderrPath = Join-Path $PWD 'build/windows/transparency-stderr.log'
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file',$logPath,'--quit-after','600','--','--tests','--transparency-smoke' -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+          Get-Content $logPath,$stdoutPath,$stderrPath -ErrorAction SilentlyContinue
+          Write-Host "Native transparency process exit code: $($process.ExitCode)"
+          if ($process.ExitCode -ne 0) { throw 'Native desktop transparency check failed' }
+      - name: Verify physical exported toolbar mode buttons
+        shell: pwsh
+        run: |
+          $logPath = Join-Path $PWD 'build/windows/toolbar-click.log'
+          $stdoutPath = Join-Path $PWD 'build/windows/toolbar-click-stdout.log'
+          $stderrPath = Join-Path $PWD 'build/windows/toolbar-click-stderr.log'
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file',$logPath,'--quit-after','1800','--','--tests','--toolbar-click-smoke' -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+          Get-Content $logPath,$stdoutPath,$stderrPath -ErrorAction SilentlyContinue
+          $nativeOutput = (Get-Content $logPath,$stdoutPath,$stderrPath -Raw -ErrorAction SilentlyContinue) -join [Environment]::NewLine
+          if ($process.ExitCode -ne 0 -or $nativeOutput -match '(SCRIPT ERROR:|(?m)^ERROR:)') { throw 'Physical toolbar mode switch failed or native engine errors were logged' }
+      - name: Verify native custom titlebar controls and save-close
+        shell: pwsh
+        run: |
+          $savePath = Join-Path $env:APPDATA 'DesktopFishingGodot/window-frame-native.json'
+          Remove-Item $savePath -Force -ErrorAction SilentlyContinue
+          $logPath = Join-Path $PWD 'build/windows/titlebar.log'
+          $stdoutPath = Join-Path $PWD 'build/windows/titlebar-stdout.log'
+          $stderrPath = Join-Path $PWD 'build/windows/titlebar-stderr.log'
+          $process = Start-Process -FilePath build/windows/DesktopFishing.exe -ArgumentList '--audio-driver','Dummy','--log-file',$logPath,'--quit-after','1800','--','--tests','--titlebar-click-smoke' -Wait -PassThru -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+          $nativeOutput = (Get-Content $logPath,$stdoutPath,$stderrPath -Raw -ErrorAction SilentlyContinue) -join [Environment]::NewLine
+          Write-Host $nativeOutput
+          if ($process.ExitCode -ne 0 -or $nativeOutput -match '(SCRIPT ERROR:|(?m)^ERROR:)') { throw 'Native titlebar controls failed' }
+          if (-not (Test-Path $savePath)) { throw 'Titlebar close did not save' }
+          $saved = Get-Content $savePath -Raw | ConvertFrom-Json
+          if (-not $saved.cast -or $saved.focus_seconds -ne 123) { throw 'Titlebar close saved the wrong challenge state' }
+          Write-Host 'Native titlebar save-close persisted active challenge with 123 seconds'
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-fishing-godot-windows
-          path: build/windows/*
+          path: build/windows/**
           if-no-files-found: error
+
+      - name: Upload transparency failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: transparency-diagnostics
+          path: |
+            build/windows/*transparency*.log
+            build/windows/*toolbar-click*.log
+            build/windows/*titlebar*.log
+            build/windows/transparency-qa/**
+          if-no-files-found: ignore

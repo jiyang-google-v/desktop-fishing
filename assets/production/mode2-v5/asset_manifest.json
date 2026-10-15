@@ -1,0 +1,287 @@
+{
+  "version": "mode2-v5",
+  "reference": "User-approved animation v5, 2026-10-15",
+  "status": "integration_candidate",
+  "assets": [
+    {
+      "id": "environment",
+      "path": "assets/production/mode2-v5/environment.png",
+      "size": [
+        697,
+        465
+      ],
+      "anchor": [
+        0,
+        0
+      ],
+      "sha256": "7fde5d2b31bc969b0cf60d13f80daf3d215cf7d53a4c32e98ee26536b62fde8b",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "pier",
+      "path": "assets/production/mode2-v5/pier.png",
+      "size": [
+        355,
+        128
+      ],
+      "anchor": [
+        0,
+        0
+      ],
+      "sha256": "0f48674327eb28e8ed3d24e2954de5585a0e80f77813424a1575b0be42cbbc47",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "rod",
+      "path": "assets/production/mode2-v5/rod.png",
+      "size": [
+        260,
+        241
+      ],
+      "anchor": [
+        244,
+        224
+      ],
+      "sha256": "b92778d9f9dc10d236abe8cafb7fd11a6a0a946602f0824b6b007c7fa533d8ca",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "bobber",
+      "path": "assets/production/mode2-v5/bobber.png",
+      "size": [
+        30,
+        33
+      ],
+      "anchor": [
+        15,
+        17.5
+      ],
+      "sha256": "9b1f5ef6751b86dda1d144f5494bcfc84d9cff3dd5c5b646f784dc2e6d9918d1",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "splash",
+      "path": "assets/production/mode2-v5/splash.png",
+      "size": [
+        155,
+        88
+      ],
+      "anchor": [
+        77.5,
+        45
+      ],
+      "sha256": "65e8217c73126a38678be4c4caa40830047245cc8091924d19b3845b13238e98",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "girl-0",
+      "path": "assets/production/mode2-v5/girl-0.png",
+      "size": [
+        256,
+        256
+      ],
+      "anchor": [
+        128,
+        224
+      ],
+      "sha256": "ccb57097a2e5f77b7c2499ad2c5d9b4c1b5acb4a754ef5c199eb14ee59762dd4",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "girl-1",
+      "path": "assets/production/mode2-v5/girl-1.png",
+      "size": [
+        256,
+        256
+      ],
+      "anchor": [
+        128,
+        224
+      ],
+      "sha256": "1ffcd6e66d00ffbe441318608837fa65acc55649256b7b13996e745214d3f9d5",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "girl-2",
+      "path": "assets/production/mode2-v5/girl-2.png",
+      "size": [
+        256,
+        256
+      ],
+      "anchor": [
+        128,
+        224
+      ],
+      "sha256": "433bb215d030f096c49c21367fb788aae2b87b6c1a2c3d7c8e0af20a0989758c",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "cat-0",
+      "path": "assets/production/mode2-v5/cat-0.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "sha256": "d9af39d3f1430593da94d71e0f011e2a7fda969063ad8265aa21e62d7aa95695",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "cat-1",
+      "path": "assets/production/mode2-v5/cat-1.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "sha256": "90073643904c004dff43dc856ab7509c40d71f78712955370965a3cadb13e46c",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "cat-2",
+      "path": "assets/production/mode2-v5/cat-2.png",
+      "size": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "sha256": "5beb0e64fba3e5bee70dc6fda948d500473535f6b95d7b0902d1424437d37079",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "swimmer-0",
+      "path": "assets/production/mode2-v5/swimmer-0.png",
+      "size": [
+        69,
+        46
+      ],
+      "anchor": [
+        34.5,
+        23.0
+      ],
+      "sha256": "7ac864387155d6abc23eaed41827ebbdad5211013fb2f5a0b15e273024e99ef2",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "swimmer-1",
+      "path": "assets/production/mode2-v5/swimmer-1.png",
+      "size": [
+        78,
+        46
+      ],
+      "anchor": [
+        39.0,
+        23.0
+      ],
+      "sha256": "6f662c4bd0bcc1e0699dc489e6375ad7c9ab39c1a75d5071e569235483a69978",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "swimmer-2",
+      "path": "assets/production/mode2-v5/swimmer-2.png",
+      "size": [
+        70,
+        46
+      ],
+      "anchor": [
+        35.0,
+        23.0
+      ],
+      "sha256": "2df9a14d7798e2070f7863544e97d703246cf3bb59e4c2cb9769fbacc8d4dd85",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "swimmer-3",
+      "path": "assets/production/mode2-v5/swimmer-3.png",
+      "size": [
+        57,
+        46
+      ],
+      "anchor": [
+        28.5,
+        23.0
+      ],
+      "sha256": "73fc3388cfd96256158400cfdd78a0f7ec711049f574585d070afe8ce8eff3cd",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "swimmer-4",
+      "path": "assets/production/mode2-v5/swimmer-4.png",
+      "size": [
+        82,
+        46
+      ],
+      "anchor": [
+        41.0,
+        23.0
+      ],
+      "sha256": "406593a1d2b5d0184f4f4654a8b964030b86189fdea0172fb96c9248e76fc963",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "swimmer-5",
+      "path": "assets/production/mode2-v5/swimmer-5.png",
+      "size": [
+        69,
+        46
+      ],
+      "anchor": [
+        34.5,
+        23.0
+      ],
+      "sha256": "2d887edd8547a47d23766dd0090e60ba281b98b552bca2109bea4095579cd26d",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "plant-0",
+      "path": "assets/production/mode2-v5/plant-0.png",
+      "size": [
+        82,
+        119
+      ],
+      "anchor": [
+        41.0,
+        119
+      ],
+      "sha256": "c2669908f0a65ee9024965bbaf6729fcb4828c6eca296b55bd2efe479a79bf34",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "plant-1",
+      "path": "assets/production/mode2-v5/plant-1.png",
+      "size": [
+        79,
+        122
+      ],
+      "anchor": [
+        39.5,
+        122
+      ],
+      "sha256": "f14a79b367f7a355115fcbede34897c1ec503200aa4a7142e76d854f5ba22d4b",
+      "status": "integration_candidate"
+    },
+    {
+      "id": "foreground",
+      "path": "assets/production/mode2-v5/foreground.png",
+      "size": [
+        697,
+        465
+      ],
+      "anchor": [
+        0,
+        0
+      ],
+      "sha256": "21d56de8894b3f1da0d7f26d4ec6fa8a8893e19f8633849e3757460c4b1635aa",
+      "status": "integration_candidate"
+    }
+  ]
+}

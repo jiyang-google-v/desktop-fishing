@@ -1,0 +1,425 @@
+{
+  "style_version": "V2.6",
+  "scope": "Approved floating-mode art only; runtime window integration is separate.",
+  "assets": [
+    {
+      "id": "corner-water",
+      "path": "assets/production/floating/corner-water.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        1,
+        1
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "screen_edge_layer",
+      "intentional_canvas_contacts": [
+        "right",
+        "bottom"
+      ],
+      "sha256": "f323bc40007234c0ece70865f8c88c1773df745bdee16b37c60e757f381f1dc0",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-e99990bc-1b71-4d3e-b88e-b54adf207959.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "shore-rocks",
+      "path": "assets/production/floating/shore-rocks.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        1,
+        1
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "screen_edge_layer",
+      "intentional_canvas_contacts": [
+        "right",
+        "bottom"
+      ],
+      "sha256": "42a2c5cc98328ce539ffc7b0f7270873859ec9ef4bd736eb10bd52a0e2be761a",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-d5e6be7b-99d1-4eb6-9802-83e46abbaa87.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "distant-island",
+      "path": "assets/production/floating/distant-island.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "pivot": [
+        1,
+        1
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "839cff1e1fff6d922a590d3714e96b1e956363e6d3f08f5ce6c9d53c609e786f",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-e400f119-784b-4c4b-a95f-8e7852e8b007.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "cloud-large",
+      "path": "assets/production/floating/cloud-large.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "f80081dfb72e5582e6fa29c741a3e1902c464b959e8c0713cd4031a51550a386",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-30dc9783-3e33-458b-bae4-4d8686e08af0.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "cloud-small",
+      "path": "assets/production/floating/cloud-small.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "fc3cd1444993076c84d4952b94ba053c311989eafb4bf1f7d5e902e362331d1e",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-fe481e72-ed91-4391-8f31-cde00ca016c5.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    },
+    {
+      "id": "mini-water",
+      "path": "assets/production/floating/mini-water.png",
+      "size": [
+        1774,
+        887
+      ],
+      "pivot": [
+        0.5,
+        0.58
+      ],
+      "facing": "none",
+      "style_version": "V2.6",
+      "status": "production_ready",
+      "role": "transparent_overlay",
+      "intentional_canvas_contacts": [],
+      "sha256": "ce6b4c220baa474faa3fa9bb8ae1636589b56f53dd6b2d68c6ff5033e91b6c50",
+      "source": {
+        "tool": "built-in imagegen",
+        "file": "exec-a026278f-fe7b-4a67-a418-3dfe6df014ad.png"
+      },
+      "qa": "docs/FLOATING_ART_QA.md"
+    }
+  ],
+  "reused": [
+    {
+      "group": "fisher",
+      "clip": "idle",
+      "frames": [
+        "assets/production/motion/fisher/idle-01.png",
+        "assets/production/motion/fisher/idle-02.png",
+        "assets/production/motion/fisher/idle-03.png",
+        "assets/production/motion/fisher/idle-04.png"
+      ],
+      "duration": 3.2,
+      "loop": true,
+      "flip_h": true,
+      "frame_sha256": [
+        "f4ac9216c943ba627b4e7c3cf65e41145c356ab22c3000fe4e53b4c007610294",
+        "1af33061ba758ff5e3c8189e88c1433ff9ceffe7c56e6018b011ec7fe1b39dd5",
+        "c5b24b18402c0a74a5a25fba69eeda97ab9caca772ea23d833832b0e617fc2e0",
+        "204dd0024aef961ae789bfa28196ff7eece6fb6e4c248dad7a978e687a2ab60d"
+      ]
+    },
+    {
+      "group": "fisher",
+      "clip": "cast",
+      "frames": [
+        "assets/production/motion/fisher/cast-01.png",
+        "assets/production/motion/fisher/cast-02.png",
+        "assets/production/motion/fisher/cast-03.png",
+        "assets/production/motion/fisher/cast-04.png",
+        "assets/production/motion/fisher/cast-05.png",
+        "assets/production/motion/fisher/cast-06.png"
+      ],
+      "duration": 1.25,
+      "loop": false,
+      "flip_h": true,
+      "frame_sha256": [
+        "e20f3b7ad57445bc40fb85290ff282cf938c9a91a25202d291b2fa04edd2ae33",
+        "069190637ea656baab2d32c66a0bc063fa7c7086b41d6db56928f49602626319",
+        "d82e030ba590095320de489476db14e008e1a2b928a3cd373760b6870d56bf93",
+        "22d09d814a47efb1961c084505be5a5a2ce7dd9d618fd914db3e8aef8d4f1275",
+        "ecee812333f6c2ce9741577377742e9bfeae667a464f1011b86246eb8e1c1aff",
+        "5dc59afa5160e2fc9fa51a9085e981b6e87f599cf29c5c5784f2173d98dc3d45"
+      ]
+    },
+    {
+      "group": "fisher",
+      "clip": "reel",
+      "frames": [
+        "assets/production/motion/fisher/reel-01.png",
+        "assets/production/motion/fisher/reel-02.png",
+        "assets/production/motion/fisher/reel-03.png",
+        "assets/production/motion/fisher/reel-04.png",
+        "assets/production/motion/fisher/reel-05.png",
+        "assets/production/motion/fisher/reel-06.png"
+      ],
+      "duration": 1.1,
+      "loop": false,
+      "flip_h": true,
+      "frame_sha256": [
+        "0710b561fae02bc0936cf323c4af4bf2b6def2a75be2c274b3709e0c03a62387",
+        "ee0d5693bd0635d4e871d3c632f36ad732765dbb47a404f1c1adc31bfa70dc4c",
+        "c990fc917313965fd30b62ce89fb9e728e45c0c8b46e71af698abc52969822f8",
+        "bcedb09897c0656b363532312a8052cc1217b3595f8cca81104b11c2f632fa7d",
+        "e7a8aa73563687bd4f5c337d88911c6d0017995a34dbbc38a2d1823becf536a9",
+        "f9bea9a9a52141239d04c9b158dce1d56aa12cdde71383ecf6fade306139b281"
+      ]
+    },
+    {
+      "group": "fisher",
+      "clip": "happy",
+      "frames": [
+        "assets/production/motion/fisher/happy-01.png",
+        "assets/production/motion/fisher/happy-02.png",
+        "assets/production/motion/fisher/happy-03.png",
+        "assets/production/motion/fisher/happy-04.png",
+        "assets/production/motion/fisher/happy-05.png",
+        "assets/production/motion/fisher/happy-06.png"
+      ],
+      "duration": 1.8,
+      "loop": false,
+      "flip_h": true,
+      "frame_sha256": [
+        "cf49887876ddaea029ac296ad2c8fa7195f2039f917216c1aa9d387282dcb15a",
+        "78bd859e133d6a408b59245e01cc2320cba8e594b8446105726c60e977797462",
+        "f6920b8d25345c3a714e183cd74f98a4585bda225d17025842e6907ff27cc0ba",
+        "bcbf2c037b3dca2485571de6f9ea5956905d93b2e4407545ee870c976fdf92cd",
+        "5737ff608442ac7f5c88c2d75cfdb76ec0f6b3c159c64fa17e262d6ac2a7b988",
+        "0c9e828fc2d02c2615301f63127d1e314bf02a4733c6f974d53717d40d0e488b"
+      ]
+    },
+    {
+      "group": "cat",
+      "clip": "idle",
+      "frames": [
+        "assets/production/motion/cat/idle-01.png",
+        "assets/production/motion/cat/idle-02.png",
+        "assets/production/motion/cat/idle-03.png",
+        "assets/production/motion/cat/idle-04.png"
+      ],
+      "duration": 3.2,
+      "loop": true,
+      "flip_h": true,
+      "frame_sha256": [
+        "c0d72e4dbad3726ef9777f454bc79c40a149670b24d3b7bf7ab418121374b8cf",
+        "6b1c8da0c83022cdcb7015ea36ff22f3533a46e62bda04211950e05d75699531",
+        "7854f53adc14877fce26882393114f4e698268625cd94387a931ef3ecba29ab8",
+        "96cd1435ae832b76b8690dab6e987311894d796737df5bfa78ebb4c5130db6dd"
+      ]
+    },
+    {
+      "group": "cat",
+      "clip": "blink",
+      "frames": [
+        "assets/production/motion/cat/blink-01.png",
+        "assets/production/motion/cat/blink-02.png",
+        "assets/production/motion/cat/blink-03.png",
+        "assets/production/motion/cat/blink-04.png"
+      ],
+      "duration": 0.8,
+      "loop": false,
+      "flip_h": true,
+      "frame_sha256": [
+        "221030b3003bab580c9d1f3432d84ad2405e36d70803f453687dba661283cfe2",
+        "b53a5ab547f2b14f3f10d6fd6850f8d9d5ca67345a704ad98f0a90723e1adef2",
+        "d929ccb1bf322333878c6ccd9a749f50684debe2b4c83c74657b926fcc37ecc0",
+        "da99670117999c43126aff85aff2dacbcedc22719ac6b3ff75bb74438c645238"
+      ]
+    },
+    {
+      "group": "cat",
+      "clip": "alert",
+      "frames": [
+        "assets/production/motion/cat/alert-01.png",
+        "assets/production/motion/cat/alert-02.png",
+        "assets/production/motion/cat/alert-03.png",
+        "assets/production/motion/cat/alert-04.png"
+      ],
+      "duration": 1.25,
+      "loop": false,
+      "flip_h": true,
+      "frame_sha256": [
+        "b901d3caeaf96daa44c1983119f0a7d814c070ffcc25ccbcd4d82ebcd081ee33",
+        "571fdde069266e5c1aa1e82cab3c8e74dc4008558dc4f493e4fc424137c8fdf8",
+        "094345e6d5bb691479023aaa7512439bec93ea3ab25b00bcdd8e7c4acdb9e788",
+        "e25d917c85d91accdb8b3c2f7bc48305a8798dcad46bef8f0013f08371d58029"
+      ]
+    },
+    {
+      "group": "cat",
+      "clip": "happy",
+      "frames": [
+        "assets/production/motion/cat/happy-01.png",
+        "assets/production/motion/cat/happy-02.png",
+        "assets/production/motion/cat/happy-03.png",
+        "assets/production/motion/cat/happy-04.png"
+      ],
+      "duration": 1.8,
+      "loop": false,
+      "flip_h": true,
+      "frame_sha256": [
+        "09b4aab4bc9500be94a4f1c3a6afcbe65e935bc281bad906482892c408a8def2",
+        "ada5926d7bcbe64bcde961c7435560ab33d89832beca4a017c6da4f54fc3e8a6",
+        "e061056ae97ecdb4b42923cc7ecf55f4b4938d6599414b09415ce268090c667c",
+        "729d8f1e54bf90c9c7b62cd6f27c80a18775d9694c6525df3dbb3bb1455d49c6"
+      ]
+    },
+    {
+      "group": "fx",
+      "clip": "splash",
+      "frames": [
+        "assets/production/motion/fx/splash-01.png",
+        "assets/production/motion/fx/splash-02.png",
+        "assets/production/motion/fx/splash-03.png",
+        "assets/production/motion/fx/splash-04.png",
+        "assets/production/motion/fx/splash-05.png",
+        "assets/production/motion/fx/splash-06.png",
+        "assets/production/motion/fx/splash-07.png",
+        "assets/production/motion/fx/splash-08.png"
+      ],
+      "duration": 1.0,
+      "loop": false,
+      "flip_h": false,
+      "frame_sha256": [
+        "8a3a7b5007ae5cb9efdf3503911a84c48fb586d165755ed5320c445ef1ea341c",
+        "78aa5f7d8df32b578ceea68dd8701663c1e37859a429ea7b7fe5d3c5d66048e4",
+        "ddbe267273e777eb6924290d8c262295f12d51da4ece819e0ebc0223cf2e1122",
+        "00ce93d32d132e96348633c947dc914ea19a191c1d5af13d52f8a851fc948148",
+        "fa62c4ee37c77a1796de9af3eb179bb5bea636b583af21ca534aec66b99e7755",
+        "b9ef1a37697e4e1e5b56c6a9069e1b97079a2a0143e54bb01a3d93a1372f32ac",
+        "f5279bacd30328e090206dbb143c614a72bd85f20b56b6946a565fdd8427c439",
+        "d9f8abc73167ee3f6e33b0e94028ba82e7c332f47229e6839edb806a019fe538"
+      ]
+    },
+    {
+      "group": "fx",
+      "clip": "ripple",
+      "frames": [
+        "assets/production/motion/fx/ripple-01.png",
+        "assets/production/motion/fx/ripple-02.png",
+        "assets/production/motion/fx/ripple-03.png",
+        "assets/production/motion/fx/ripple-04.png",
+        "assets/production/motion/fx/ripple-05.png",
+        "assets/production/motion/fx/ripple-06.png",
+        "assets/production/motion/fx/ripple-07.png",
+        "assets/production/motion/fx/ripple-08.png"
+      ],
+      "duration": 2.4,
+      "loop": true,
+      "flip_h": false,
+      "frame_sha256": [
+        "7fea2400a21f81b6f6d2a08cd20706d6adf422c045ed5ff5a0a85fd11062bb29",
+        "5d2f208578c8081a30a3c2dd525bf38d0875403bb2e38634b43b9d656bf9bfe3",
+        "bf7c248dd5fd70268cd2eef0ec50a65f458cc7af392a2b8ac760365e6e6f1f5b",
+        "2b85583a97054793a3ab6f6d5c5473c9b64d2a807c5405ad7f0c0f88204a4649",
+        "bee74c2e46e5dad6830dd497ea7b03d867511e462b7ebe90daf5f06d420c9ec7",
+        "338de3025193828a16051e244e3a8f43cfcbeef4ddef8c881b3c54f106ec3922",
+        "de40f6514b7674fa4c9e73ad39bcf81c49e52300ab055ea9688cf98a59cdf2cb",
+        "c352589ddefcf6334d39e70b9969075d5978041e168060aa5ebdab281aea84cc"
+      ]
+    },
+    {
+      "group": "fx",
+      "clip": "glimmer",
+      "frames": [
+        "assets/production/motion/fx/glimmer-01.png",
+        "assets/production/motion/fx/glimmer-02.png",
+        "assets/production/motion/fx/glimmer-03.png",
+        "assets/production/motion/fx/glimmer-04.png",
+        "assets/production/motion/fx/glimmer-05.png",
+        "assets/production/motion/fx/glimmer-06.png"
+      ],
+      "duration": 2.4,
+      "loop": true,
+      "flip_h": false,
+      "frame_sha256": [
+        "9f7ec6955d8de275dc43858415544fc8b49e6e32efded80e123a54f317c04225",
+        "fd9c820353274d0d9224f501bef65c96da2dfc28ffe3896ecfa28b7515be065c",
+        "319ebd3c43799cbce94bc42a708b3ed9362f370a309f28c85fa00a9a1014b860",
+        "1c44ea357af6489dde4eed4d4ae72b473eae47716f5678483aa9c2833e90ee95",
+        "b824d9c860f743b66ba858a930b24075a5466cce5a3a57e6453fa786aba0ab55",
+        "33fe04d6d5c7dafeab6fb3daec07945af28482b794cd2d237bbfc0c5fd2b9426"
+      ]
+    },
+    {
+      "id": "pier",
+      "path": "assets/production/scene/pier-clear.png",
+      "flip_h": true,
+      "sha256": "9e361a9ababa8ed4062472fcde243f3eff7ee37275e635c659978cab6119abf8"
+    },
+    {
+      "id": "rod",
+      "path": "assets/production/gear/rod.png",
+      "flip_h": true,
+      "sha256": "cb8ec2c3632edcc893e5683945b56d03f7f73d037a904002c9a615706e853da7"
+    },
+    {
+      "id": "bobber",
+      "path": "assets/production/gear/bobber.png",
+      "flip_h": false,
+      "sha256": "c281082df6edebad3745740a184ed31bbe976d8bfe76213c6d2b1f0e556ff8da"
+    },
+    {
+      "id": "hook",
+      "path": "assets/production/gear/hook.png",
+      "flip_h": false,
+      "sha256": "1f063612f975d78fbbb73bda238d22d91ce49f6f3ceb2d2d9c477b225dd67238"
+    },
+    {
+      "id": "bucket",
+      "path": "assets/production/gear/bucket.png",
+      "flip_h": false,
+      "sha256": "a538882331883f899e8fab2a1d1b7833c743b06c28fd5835071f2e838f18c2a6"
+    }
+  ],
+  "motion_source": "assets/production/motion.animation.json",
+  "layout": "assets/production/floating.animation.json"
+}
