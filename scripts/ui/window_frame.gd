@@ -105,23 +105,25 @@ func on_resize_input(event: InputEvent, edge: int) -> void:
  if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and get_window().mode == Window.MODE_WINDOWED:
   get_window().start_resize(edge)
 func is_maximized() -> bool:
+ return get_window().mode == Window.MODE_MAXIMIZED
+func maximize() -> void:
  var window := get_window()
- if window.mode == Window.MODE_MAXIMIZED:
-  return true
- # Godot 4.6.1 Windows converts borderless maximize to fullscreen when
- # there is no reserved work area (e.g. a taskbar-free CI desktop).
- if OS.get_name() != 'Windows' or not window.borderless or window.mode != Window.MODE_FULLSCREEN:
-  return false
- var screen := window.current_screen
- var bounds := Rect2i(DisplayServer.screen_get_position(screen),DisplayServer.screen_get_size(screen))
- return DisplayServer.screen_get_usable_rect(screen) == bounds
+ if OS.get_name() == 'Windows' and window.borderless:
+  # Establish Win32's native zoomed state before removing decorations.
+  # Godot's direct borderless maximize path uses MoveWindow and can lose
+  # its maximized flag during the two-pixel screen-edge compensation.
+  window.borderless = false
+  window.mode = Window.MODE_MAXIMIZED
+  window.borderless = true
+ else:
+  window.mode = Window.MODE_MAXIMIZED
 func toggle_maximize() -> void:
  if is_maximized():
   get_window().mode = Window.MODE_WINDOWED
   main.layouts.settings.set_value('full','maximized',false)
  else:
   main.layouts.remember()
-  get_window().mode = Window.MODE_MAXIMIZED
+  maximize()
  main.layouts.save_settings()
 func minimize() -> void:
  main.layouts.remember()

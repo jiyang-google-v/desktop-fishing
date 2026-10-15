@@ -296,7 +296,7 @@ func apply(next: String, persist: bool = true) -> void:
   tools.show()
  view.queue_redraw()
  if not compact and bool(settings.get_value('full','maximized',false)):
-  window.mode = Window.MODE_MAXIMIZED
+  frame.maximize()
  if persist:
   save_settings()
 func menu_action(id: int) -> void:
