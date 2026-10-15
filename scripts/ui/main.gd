@@ -332,7 +332,7 @@ func build_ui() -> void:
  paragraph("前台、图鉴与无键鼠操作都继续计时。暂停、锁屏、休眠与退出期间不累计。F8 保存退出。",side,11)
  var footer := HBoxContainer.new()
  root.add_child(footer)
- var version := label("桌面钓鱼 · 0.8.0-preview · 海边日常",11,true)
+ var version := label("桌面钓鱼 · 0.8.1-preview · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
  button("场景悬浮",footer,func(): layouts.apply("scene"))
@@ -726,7 +726,7 @@ func open_collection(mode: String, replace: bool = false) -> void:
  render_collection()
  update_notices()
  update_collection_layout()
- var area := DisplayServer.screen_get_usable_rect()
+ var area: Rect2i = layouts.work_area()
  collection.size = Vector2i(mini(collection.size.x,area.size.x-24),mini(collection.size.y,area.size.y-24))
  collection.popup_centered()
 
@@ -814,6 +814,8 @@ func render_collection() -> void:
     paragraph("尚未解锁\n等待一次惊喜相遇",box,12)
    else:
     paragraph("相遇 %d 次\n最大体长 %.1f cm" % [record.count,record.record_cm],box,12)
+    var entry: Dictionary = layouts.catch_popup.introductions.get(f.id,{})
+    paragraph('海洋小百科 · '+str(entry.get('fact','')),box,11)
   return
  if s.aquarium.is_empty():
   paragraph("鱼缸还很安静。收杆后选择收进鱼缸，邀请第一位朋友。",card())

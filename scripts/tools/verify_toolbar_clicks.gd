@@ -62,8 +62,28 @@ static func run(main: Control) -> void:
    tree.quit(1)
    return
   controls.hide()
+  layouts.tools.hide()
+  main.get_window().grab_focus()
+  var point := main.get_window().position+Vector2i(layouts.timer_card.get_global_rect().get_center())
+  var wheel_output := []
+  var wheel_result := OS.execute('powershell.exe',PackedStringArray(['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',ProjectSettings.globalize_path(helper),'-X',str(point.x),'-Y',str(point.y),'-Wheel','120']),wheel_output)
+  await tree.create_timer(.35).timeout
+  if wheel_result!=0 or layouts.zoom_factor()<1.09 or main.get_window().size!=layouts.scaled_size():
+   push_error('Physical floating wheel zoom failed: %s zoom=%s size=%s' % [origin,layouts.zoom_factor(),main.get_window().size])
+   tree.quit(1)
+   return
+  layouts.set_zoom(1)
   game.state = game.model.fresh_state()
-  game.model.cast_line(game.state)
+  main.refresh()
+  layouts.sync_tools()
+  for i in 4:
+   await tree.process_frame
+  if not await click_control(main,layouts.timer_card.pause_button,main.get_window(),helper) or not game.state.cast:
+   push_error('Physical timer-start cast failed: '+origin)
+   tree.quit(1)
+   return
+  main.ocean.skip()
+  print('Physical wheel zoom and timer-start cast passed: '+origin)
   game.state.focus_seconds = 24.0
   game.focus_status = {'supported':true,'locked':false}
   main.refresh()

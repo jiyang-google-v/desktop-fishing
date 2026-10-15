@@ -87,7 +87,7 @@ func rig_geometry() -> Dictionary:
   elif action == 'reel':
    rotation += deg_to_rad(29*sin(action_progress*PI*.65))
  var tip: Vector2 = hand+(delta*canvas_width).rotated(rotation)
- var water := Vector2(size.x*.40,size.y*float(config.profiles[profile].bobber_y))
+ var water := Vector2(tip.x,size.y*float(config.profiles[profile].bobber_y))
  var short := tip+Vector2(0,12)
  var bobber: Vector2 = water if line_cast else short
  if action == 'cast':

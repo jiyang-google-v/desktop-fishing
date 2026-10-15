@@ -15,7 +15,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        266,
+        277,
+        727,
+        740
+      ]
     },
     {
       "id": "creature_014_cuttlefish",
@@ -32,7 +38,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        145,
+        409,
+        1036,
+        492
+      ]
     },
     {
       "id": "fish_001_clownfish",
@@ -49,7 +61,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": true
+      "user_style_approved": true,
+      "display_rect": [
+        81,
+        260,
+        1124,
+        767
+      ]
     },
     {
       "id": "fish_002_blue_tang",
@@ -66,7 +84,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        193,
+        358,
+        902,
+        563
+      ]
     },
     {
       "id": "fish_003_butterflyfish",
@@ -83,7 +107,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        188,
+        267,
+        895,
+        719
+      ]
     },
     {
       "id": "fish_004_seahorse",
@@ -100,7 +130,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": true
+      "user_style_approved": true,
+      "display_rect": [
+        411,
+        213,
+        560,
+        887
+      ]
     },
     {
       "id": "fish_005_pufferfish",
@@ -117,7 +153,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        211,
+        305,
+        869,
+        650
+      ]
     },
     {
       "id": "fish_006_lionfish",
@@ -134,7 +176,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        173,
+        283,
+        917,
+        696
+      ]
     },
     {
       "id": "fish_007_red_seabream",
@@ -151,7 +199,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        183,
+        357,
+        903,
+        551
+      ]
     },
     {
       "id": "fish_008_yellowfin_tuna",
@@ -168,7 +222,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        68,
+        319,
+        1133,
+        650
+      ]
     },
     {
       "id": "fish_009_grouper",
@@ -185,7 +245,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        112,
+        350,
+        1066,
+        574
+      ]
     },
     {
       "id": "fish_010_bigeye_tuna",
@@ -202,7 +268,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        155,
+        373,
+        955,
+        516
+      ]
     },
     {
       "id": "fish_011_lanternfish",
@@ -219,7 +291,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": true
+      "user_style_approved": true,
+      "display_rect": [
+        182,
+        358,
+        900,
+        539
+      ]
     },
     {
       "id": "fish_012_star_wish_fish",
@@ -236,7 +314,13 @@
       "style_version": "2.6",
       "status": "integration_candidate",
       "animation": "assets/production/collection.animation.json",
-      "user_style_approved": false
+      "user_style_approved": false,
+      "display_rect": [
+        166,
+        345,
+        940,
+        583
+      ]
     }
   ]
 }

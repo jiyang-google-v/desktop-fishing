@@ -214,7 +214,7 @@ func retry_detection() -> void:
 
 func diagnostic_text() -> String:
  var detail: String = probe.detail if probe != null else "not_started"
- return "版本：0.8.0-preview\n系统：%s\n状态：%s\n锁屏检测：%s\n设定时长：%d 分钟\n已完成：%.1f 秒\n剩余：%.1f 秒\n暂停原因：%s\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.duration_minutes,state.focus_seconds,remaining_seconds(),state.pause_cause,last_saved,str(save_failed)]
+ return "版本：0.8.1-preview\n系统：%s\n状态：%s\n锁屏检测：%s\n设定时长：%d 分钟\n已完成：%.1f 秒\n剩余：%.1f 秒\n暂停原因：%s\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.duration_minutes,state.focus_seconds,remaining_seconds(),state.pause_cause,last_saved,str(save_failed)]
 
 func prepare_restored_challenge() -> void:
  if state.cast and not model.completed(state):

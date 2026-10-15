@@ -102,10 +102,11 @@ func _ready() -> void:
   if e is InputEventKey and e.pressed and e.keycode==KEY_ESCAPE:
    hide())
 func open() -> void:
- var area := DisplayServer.screen_get_usable_rect()
+ var area: Rect2i = layouts.work_area()
  size = Vector2i(mini(380,area.size.x-24),mini(570,area.size.y-24))
  sync()
- popup_centered()
+ position = layouts.clamp_position(area.position+(area.size-size)/2,size)
+ show()
 func _process(_delta: float) -> void:
  if visible:
   sync()

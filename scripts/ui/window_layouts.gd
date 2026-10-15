@@ -53,7 +53,7 @@ func _ready() -> void:
  timer_card.gui_input.connect(func(e):
   if e is InputEventMouseButton and e.pressed and e.button_index==MOUSE_BUTTON_LEFT:
    open_settings())
- timer_card.pause_requested.connect(func(): main.handle(main.get_node('/root/Game').toggle_pause()))
+ timer_card.pause_requested.connect(timer_action)
  control_panel = load('res://scripts/ui/floating_control_panel.gd').new()
  control_panel.main = main
  control_panel.layouts = self
@@ -77,6 +77,7 @@ func _ready() -> void:
  menu.add_item('查看图鉴',7)
  menu.add_item('查看鱼缸',8)
  menu.add_item('专注设置',9)
+ menu.add_item('恢复100%大小',10)
  menu.id_pressed.connect(menu_action)
  if not test_mode:
   settings.load('user://window-layouts.cfg')
@@ -226,9 +227,42 @@ func sync_catch(force: bool = false) -> void:
  if not catch_popup.visible:
   tools.hide()
   catch_popup.show()
+func work_area() -> Rect2i:
+ if DisplayServer.get_name() == 'headless':
+  return Rect2i(0,0,1920,1080)
+ return DisplayServer.screen_get_usable_rect(get_window().current_screen)
 func clamp_position(value: Vector2i, dimensions: Vector2i) -> Vector2i:
- var area := DisplayServer.screen_get_usable_rect()
+ var area := work_area()
  return Vector2i(clampi(value.x,area.position.x,maxi(area.position.x,area.end.x-dimensions.x)),clampi(value.y,area.position.y,maxi(area.position.y,area.end.y-dimensions.y)))
+func zoom_factor() -> float:
+ if mode == 'full':
+  return 1.0
+ var area := work_area()
+ var base: Vector2i = SIZES[mode]
+ var maximum := minf(2.0,minf(float(area.size.x-16)/base.x,float(area.size.y-16)/base.y))
+ return clampf(float(settings.get_value(mode,'zoom',1.0)),minf(.75,maximum),maximum)
+func scaled_size() -> Vector2i:
+ return Vector2i((Vector2(SIZES[mode])*zoom_factor()).round())
+func set_zoom(value: float, anchor: Vector2 = Vector2.ONE) -> void:
+ if mode == 'full':
+  return
+ var window := get_window()
+ drag = false
+ var old_size := window.size
+ var old_position := window.position
+ settings.set_value(mode,'zoom',value)
+ settings.set_value(mode,'zoom',zoom_factor())
+ var dimensions := scaled_size()
+ window.max_size = Vector2i.ZERO
+ window.min_size = Vector2i.ZERO
+ window.size = dimensions
+ window.min_size = dimensions
+ window.max_size = dimensions
+ window.content_scale_size = SIZES[mode]
+ window.position = clamp_position(old_position+Vector2i(Vector2(old_size-dimensions)*anchor),dimensions)
+ save_settings()
+ view.queue_redraw()
+
 func on_window_resized() -> void:
  if mode == 'full':
   get_window().content_scale_size = get_window().size
@@ -285,17 +319,17 @@ func apply(next: String, persist: bool = true) -> void:
  # Clear old size limits before applying new ones, including mini -> full.
  window.max_size = Vector2i.ZERO
  window.min_size = Vector2i.ZERO
- window.min_size = Vector2i(940,736) if not compact else SIZES[mode]
- window.max_size = Vector2i.ZERO if not compact else SIZES[mode]
+ window.min_size = Vector2i(940,736) if not compact else scaled_size()
+ window.max_size = Vector2i.ZERO if not compact else scaled_size()
  window.borderless = true
  window.unresizable = compact
  background.visible = not compact
  window.transparent_bg = true
  window.transparent = true
  window.always_on_top = pinned
- window.size = settings.get_value('full','size',SIZES.full) if not compact else SIZES[mode]
- window.content_scale_size = window.size
- var area := DisplayServer.screen_get_usable_rect()
+ window.size = settings.get_value('full','size',SIZES.full) if not compact else scaled_size()
+ window.content_scale_size = window.size if not compact else SIZES[mode]
+ var area := work_area()
  var fallback := area.end-window.size-Vector2i(16,16) if compact else area.position+(area.size-window.size)/2
  window.position = clamp_position(settings.get_value(mode,'position',fallback),window.size)
  build_tools()
@@ -328,6 +362,8 @@ func menu_action(id: int) -> void:
   open_collection('book')
  elif id == 8:
   open_collection('tank')
+ elif id == 10:
+  set_zoom(1.0)
  elif id == 9:
   open_settings()
  elif id == 6:
@@ -337,6 +373,11 @@ func _input(event: InputEvent) -> void:
   if event.keycode == KEY_ESCAPE and mode != 'full':
    apply('full')
  if mode == 'full':
+  return
+ if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+  var direction := 1.0 if event.button_index==MOUSE_BUTTON_WHEEL_UP else -1.0
+  set_zoom(zoom_factor()+direction*.1,event.position/Vector2(SIZES[mode]))
+  get_viewport().set_input_as_handled()
   return
  if tools.visible and Rect2i(tools.position,tools.size).has_point(DisplayServer.mouse_get_position()):
   drag = false
@@ -385,10 +426,21 @@ func _process(_delta: float) -> void:
   if hover_grace <= 0:
    tools.hide()
 
+func timer_action() -> void:
+ var game = main.get_node('/root/Game')
+ if main.ocean.is_busy() or game.blocked or not game.state.pending_catch.is_empty():
+  return
+ if not game.state.cast:
+  main.perform_fishing('cast')
+ elif not game.model.completed(game.state):
+  main.handle(game.toggle_pause())
+ sync_tools()
+
 func sync_tools() -> void:
  for key in mode_buttons:
   mode_buttons[key].disabled = key == mode
  var game = main.get_node('/root/Game')
+ timer_card.busy = main.ocean.is_busy()
  timer_card.sync(game,main.ocean.night)
  action_buttons.cast.disabled = switching or main.ocean.is_busy() or game.blocked or game.state.cast or not game.state.pending_catch.is_empty()
  action_buttons.cast.tooltip_text = '按当前设定的%d分钟开始番茄钟' % game.state.duration_minutes
@@ -401,7 +453,7 @@ func should_show_tools(screen_point: Vector2i) -> bool:
   return false
  if tools.visible and Rect2i(tools.position,tools.size).has_point(screen_point):
   return true
- var local := Vector2(screen_point-get_window().position)
+ var local := Vector2(screen_point-get_window().position)/(Vector2(get_window().size)/Vector2(SIZES[mode]))
  if timer_card.visible and timer_card.get_rect().has_point(local):
   return false
  if mode == 'scene':

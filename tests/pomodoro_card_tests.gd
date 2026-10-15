@@ -15,7 +15,7 @@ func run() -> void:
   await process_frame
   layouts.sync_tools()
   var card = layouts.timer_card
-  assert(card.visible and card.pause_button.disabled)
+  assert(card.visible and not card.pause_button.disabled)
   assert(card.status_label.text == '待放竿')
   assert(Rect2(Vector2.ZERO,Vector2(layouts.SIZES[mode])).encloses(card.get_rect()))
   game.model.cast_line(game.state)
