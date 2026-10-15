@@ -39,6 +39,8 @@ func _draw() -> void:
   draw_texture_rect(layers["aquarium-water"],Rect2(Vector2.ZERO,size),false)
  else:
   draw_rect(Rect2(Vector2.ZERO,size),Color("dceeea"))
+ if catches.is_empty():
+  draw_string(ThemeDB.fallback_font,Vector2(20,size.y*.5),'等待第一位海里的朋友入住',HORIZONTAL_ALIGNMENT_CENTER,size.x-40,18,Color('527a96'))
  for i in range(catches.size()):
   var c: Dictionary = catches[i]
   var movement: String = config.species.get(c.species_id,"swim")
@@ -47,7 +49,7 @@ func _draw() -> void:
   var t: float = phase*TAU/float(settings.duration)+i*1.31
   if movement == "pulse":
    t += sin(t)*.8
-  var width: float = minf(96,minf(size.x*.16,size.y*.36))
+  var width: float = minf(150,minf(size.x*.20,size.y*.36))
   var center := Vector2(size.x*(.19+.30*(i%3)),size.y*(.28+.44*(i/3)))
   center += Vector2(sin(t)*float(settings.horizontal),sin(t*.8)*minf(float(settings.vertical),size.y*.025))
   var rect := Rect2(center-Vector2.ONE*width*.5,Vector2.ONE*width)

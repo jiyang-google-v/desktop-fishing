@@ -7,6 +7,10 @@ func run() -> void:
  await process_frame
  var game = root.get_node('Game')
  var layouts = main.layouts
+ layouts.test_mode=false
+ layouts.settings.set_value('window','mode','mini')
+ assert(layouts.startup_mode()=='scene')
+ layouts.test_mode=true
  game.save_path='user://catch-zoom-tests.json'
  for mode in ['scene','mini']:
   game.state=game.model.fresh_state()
@@ -44,6 +48,11 @@ func run() -> void:
   var popup=layouts.catch_popup
   assert(popup.fish.fit_visible and popup.fish.custom_minimum_size.y>=200)
   assert(not popup.knowledge.text.is_empty())
+  assert(popup.keep_button.get_parent()==popup.later_button.get_parent())
+  main.open_collection('tank')
+  await process_frame
+  assert(main.aquarium_view.visible and main.aquarium_view.size_flags_vertical==Control.SIZE_EXPAND_FILL)
+  main.close_collection()
   for f in game.model.roster:
    var intro: Dictionary=popup.introductions[f.id]
    assert(not intro.habitat.contains('分钟') and not intro.fact.is_empty())

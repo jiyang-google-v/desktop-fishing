@@ -332,7 +332,7 @@ func build_ui() -> void:
  paragraph("前台、图鉴与无键鼠操作都继续计时。暂停、锁屏、休眠与退出期间不累计。F8 保存退出。",side,11)
  var footer := HBoxContainer.new()
  root.add_child(footer)
- var version := label("桌面钓鱼 · 0.8.1-preview · 海边日常",11,true)
+ var version := label("桌面钓鱼 · 0.8.2-preview · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
  button("场景悬浮",footer,func(): layouts.apply("scene"))
@@ -447,7 +447,8 @@ func build_dialogs() -> void:
  collection_feedback.add_theme_color_override("font_color",Color("477c66"))
  collection_feedback.visible = false
  aquarium_view = Aquarium.new()
- aquarium_view.custom_minimum_size = Vector2(0,190)
+ aquarium_view.custom_minimum_size = Vector2(0,100)
+ aquarium_view.size_flags_vertical = Control.SIZE_EXPAND_FILL
  aquarium_view.visible = false
  aquarium_view.fish_selected.connect(select_tank_fish)
  box.add_child(aquarium_view)
@@ -618,6 +619,10 @@ func select_tank_fish(catch_id: String) -> void:
  var c: Dictionary = Game.state.aquarium[index]
  var f: Dictionary = Game.model.species(c.species_id)
  collection_description.text = tank_description() + "\n已选 %s · %.1f cm · 在下方管理这条鱼" % [f.name,c.length_cm]
+ collection_grid.get_parent().show()
+ collection_grid.get_parent().custom_minimum_size.y = minf(220,maxf(100,collection.size.y-370))
+ for i in collection_grid.get_child_count():
+  collection_grid.get_child(i).visible = i == index
  var card_panel: Control = collection_grid.get_child(index)
  card_panel.get_child(0).get_children().back().grab_focus()
 
@@ -738,8 +743,12 @@ func close_collection() -> void:
 
 func update_collection_layout() -> void:
  collection_grid.columns = 2 if collection.size.x < 720 else 3
- aquarium_view.visible = panel_mode == "tank" and collection.size.y >= 520
- aquarium_view.custom_minimum_size.y = clampf(float(collection.size.y - 420) * 0.4 + 110.0,110.0,190.0)
+ aquarium_view.visible = panel_mode == "tank"
+ aquarium_view.custom_minimum_size.y = 100
+ var listing: Control = collection_grid.get_parent()
+ listing.visible = panel_mode == "book" or replacing
+ listing.size_flags_vertical = Control.SIZE_EXPAND_FILL if panel_mode == "book" else Control.SIZE_FILL
+ listing.custom_minimum_size.y = 170 if replacing else 100
 
 func tank_description() -> String:
  var summary := "鱼缸 %d / 6 · 放生会保留图鉴纪录。" % Game.state.aquarium.size()
@@ -861,7 +870,7 @@ func ui_smoke() -> void:
  handle({"ok":true})
  collection.size = Vector2i(560,420)
  update_collection_layout()
- assert(collection_grid.columns == 2 and not aquarium_view.visible)
+ assert(collection_grid.columns == 2 and aquarium_view.visible)
  collection.size = Vector2i(750,620)
  update_collection_layout()
  assert(collection_grid.columns == 3)

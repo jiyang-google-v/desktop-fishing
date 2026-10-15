@@ -87,7 +87,9 @@ func _ready() -> void:
  frame.main = main
  add_child(frame)
  get_window().size_changed.connect(on_window_resized)
- apply(str(settings.get_value('window','mode','full')),false)
+ apply(startup_mode(),false)
+func startup_mode() -> String:
+ return 'full' if test_mode else 'scene'
 func migrate_frame_settings() -> void:
  if int(settings.get_value('window','frame_version',0)) >= 1:
   return

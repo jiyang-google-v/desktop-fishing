@@ -1,5 +1,5 @@
 extends SceneTree
-var folder := 'res://docs/qa/catch-zoom/'
+var folder := 'res://docs/qa/card-polish/'
 func _initialize() -> void:
  call_deferred('run')
 func capture(window: Window, file: String) -> void:
@@ -40,6 +40,21 @@ func run() -> void:
   if f.id in ['fish_001_clownfish','fish_010_bigeye_tuna','fish_012_star_wish_fish']:
    await capture(popup,f.id)
  popup.hide()
+ game.state=game.model.fresh_state()
+ for i in 6:
+  game.state.aquarium.append({'catch_id':'tank-'+str(i),'species_id':game.model.roster[i].id,'length_cm':12.3})
+ main.open_collection('tank')
+ await capture(main.collection,'tank-filled')
+ assert(main.aquarium_view.size.y>main.collection.size.y*.5)
+ main.select_tank_fish('tank-0')
+ await capture(main.collection,'tank-selected')
+ main.close_collection()
+ game.model.cast_line(game.state)
+ game.state.focus_seconds=game.state.duration_minutes*60.0
+ for mode in ['scene','mini']:
+  layouts.apply(mode,false)
+  layouts.sync_tools()
+  await capture(root,mode+'-completed')
  main.open_collection('book')
  await capture(main.collection,'book-encyclopedia')
  print('Captured native zoom extremes, large fish cards and encyclopedia; all 14 card footers fit')

@@ -21,6 +21,8 @@ if ($ExportOnly) {
  New-Item -ItemType Directory -Force build/windows | Out-Null
  Invoke-GodotCheck -GodotArgs @('--headless','--export-release','Windows Desktop','build/windows/DesktopFishing.exe')
  Copy-Item README.md build/windows/README.md
+ Copy-Item docs/CARD_POLISH_QA.md build/windows/CARD_POLISH_QA.md
+ Copy-Item docs/qa/card-polish build/windows/card-polish-preview -Recurse
  Copy-Item docs/CATCH_ZOOM_QA.md build/windows/CATCH_ZOOM_QA.md
  Copy-Item docs/qa/catch-zoom build/windows/catch-zoom-preview -Recurse
  Copy-Item docs/FLOATING_COMPLETE_QA.md build/windows/FLOATING_COMPLETE_QA.md
