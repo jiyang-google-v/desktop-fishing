@@ -60,5 +60,10 @@ func run() -> void:
   game.state = game.model.fresh_state()
  for suffix in ['', '.bak','.tmp']:
   DirAccess.remove_absolute(ProjectSettings.globalize_path(game.save_path+suffix))
+ main.scene_audio.set_enabled(false)
+ await create_timer(.2).timeout
+ main.queue_free()
+ await process_frame
+ await create_timer(.1).timeout
  print('Floating complete: fresh sample reuse, transient hold, settings parity, mini catch and shared card passed')
  quit()
