@@ -79,11 +79,13 @@ func sync(game: Node, night: bool) -> void:
  elif not state.cast:
   status_label.text = '待放竿'
  elif completed:
-  status_label.text = '专注完成'
+  status_label.text = '可以收竿了'
  elif state.paused or game.blocked:
   status_label.text = '已暂停'
  elif game.focus_status.get('transient',false):
   status_label.text = '检测中'
+ status_label.add_theme_color_override('font_color',Color('267b83') if completed else Color('527a96'))
+ status_label.add_theme_font_size_override('font_size',12 if completed else 11)
  day_icon.texture = MOON if night else SUN
  progress.value = clampf(state.focus_seconds/maxf(state.duration_minutes*60.0,1.0),0.0,1.0)
  var symbol := 'play' if state.paused or not state.cast else 'pause'

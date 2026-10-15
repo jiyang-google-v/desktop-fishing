@@ -41,7 +41,7 @@ func run() -> void:
   assert(not game.state.paused)
   game.state.focus_seconds = 1500.0
   layouts.sync_tools()
-  assert(card.time_label.text == '00:00' and card.status_label.text == '专注完成')
+  assert(card.time_label.text == '00:00' and card.status_label.text == '可以收竿了')
   assert(card.pause_button.disabled and is_equal_approx(card.progress.value,1.0))
   card.sync(game,true)
   assert(card.day_icon.texture == card.MOON)
