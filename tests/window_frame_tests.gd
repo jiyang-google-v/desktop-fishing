@@ -28,13 +28,18 @@ func run() -> void:
  if OS.get_name() == 'Windows' and DisplayServer.get_name() != 'headless':
   frame.toggle_maximize()
   await process_frame
-  assert(root.mode == Window.MODE_MAXIMIZED)
+  assert(frame.is_maximized(), "Maximize state mismatch: mode=%s, size=%s, work_area=%s" % [root.mode,root.size,DisplayServer.screen_get_usable_rect(root.current_screen)])
+  assert(bool(layouts.settings.get_value('full','maximized',false)))
+  var screen := root.current_screen
+  var work_area := DisplayServer.screen_get_usable_rect(screen)
+  print('Native maximize mode=%s, size=%s, work_area=%s' % [root.mode,root.size,work_area])
+  assert(root.size == work_area.size)
   layouts.apply('mini')
   await process_frame
   assert(root.mode == Window.MODE_WINDOWED and root.size == layouts.SIZES.mini)
   layouts.apply('full')
   await process_frame
-  assert(root.mode == Window.MODE_MAXIMIZED)
+  assert(frame.is_maximized(), "Maximize state mismatch: mode=%s, size=%s, work_area=%s" % [root.mode,root.size,DisplayServer.screen_get_usable_rect(root.current_screen)])
   frame.toggle_maximize()
   await process_frame
   assert(root.mode == Window.MODE_WINDOWED)

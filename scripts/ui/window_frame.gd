@@ -89,7 +89,7 @@ func _process(_delta: float) -> void:
  if mode == last_mode:
   return
  last_mode = mode
- var maximized: bool = mode == Window.MODE_MAXIMIZED
+ var maximized: bool = is_maximized()
  buttons.maximize.icon = load('res://assets/production/ui/window-restore.svg' if maximized else 'res://assets/production/ui/window-maximize.svg')
  buttons.maximize.tooltip_text = '还原窗口' if maximized else '最大化'
  for handle in handles:
@@ -104,8 +104,19 @@ func on_drag_input(event: InputEvent) -> void:
 func on_resize_input(event: InputEvent, edge: int) -> void:
  if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and get_window().mode == Window.MODE_WINDOWED:
   get_window().start_resize(edge)
+func is_maximized() -> bool:
+ var window := get_window()
+ if window.mode == Window.MODE_MAXIMIZED:
+  return true
+ # Godot 4.6.1 Windows converts borderless maximize to fullscreen when
+ # there is no reserved work area (e.g. a taskbar-free CI desktop).
+ if OS.get_name() != 'Windows' or not window.borderless or window.mode != Window.MODE_FULLSCREEN:
+  return false
+ var screen := window.current_screen
+ var bounds := Rect2i(DisplayServer.screen_get_position(screen),DisplayServer.screen_get_size(screen))
+ return DisplayServer.screen_get_usable_rect(screen) == bounds
 func toggle_maximize() -> void:
- if get_window().mode == Window.MODE_MAXIMIZED:
+ if is_maximized():
   get_window().mode = Window.MODE_WINDOWED
   main.layouts.settings.set_value('full','maximized',false)
  else:

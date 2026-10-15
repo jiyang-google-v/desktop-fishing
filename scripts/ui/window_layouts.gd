@@ -227,7 +227,7 @@ func remember() -> void:
  if mode == 'full':
   if get_window().mode == Window.MODE_MINIMIZED:
    return
-  var maximized: bool = get_window().mode == Window.MODE_MAXIMIZED
+  var maximized: bool = frame.is_maximized()
   settings.set_value('full','maximized',maximized)
   if maximized:
    return

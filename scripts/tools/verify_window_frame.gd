@@ -52,7 +52,7 @@ static func run(main: Control) -> void:
   tree.quit(1)
   return
  print('Native border resize passed')
- if not await mouse(main,center(main,frame.buttons.maximize)) or window.mode != Window.MODE_MAXIMIZED:
+ if not await mouse(main,center(main,frame.buttons.maximize)) or not frame.is_maximized():
   push_error('Native maximize button failed')
   tree.quit(1)
   return
@@ -64,7 +64,7 @@ static func run(main: Control) -> void:
   return
  layouts.apply('full')
  await tree.create_timer(.25).timeout
- if window.mode != Window.MODE_MAXIMIZED:
+ if not frame.is_maximized():
   push_error('Returning to maximized full failed')
   tree.quit(1)
   return
@@ -73,7 +73,7 @@ static func run(main: Control) -> void:
   tree.quit(1)
   return
  print('Native maximize/restore and compact round-trip passed')
- if not await mouse(main,window.position+Vector2i(300,18),Vector2i(-1,-1),true) or window.mode != Window.MODE_MAXIMIZED:
+ if not await mouse(main,window.position+Vector2i(300,18),Vector2i(-1,-1),true) or not frame.is_maximized():
   push_error('Native titlebar double-click failed')
   tree.quit(1)
   return
