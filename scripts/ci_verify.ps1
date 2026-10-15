@@ -21,6 +21,8 @@ if ($ExportOnly) {
  New-Item -ItemType Directory -Force build/windows | Out-Null
  Invoke-GodotCheck -GodotArgs @('--headless','--export-release','Windows Desktop','build/windows/DesktopFishing.exe')
  Copy-Item README.md build/windows/README.md
+ Copy-Item docs/FLOATING_COMPLETE_QA.md build/windows/FLOATING_COMPLETE_QA.md
+ Copy-Item docs/qa/floating-complete build/windows/floating-complete-preview -Recurse
  Copy-Item docs/POMODORO_SPEC.md build/windows/POMODORO_SPEC.md
  Copy-Item docs/POMODORO_QA.md build/windows/POMODORO_QA.md
  Copy-Item docs/REFERENCE_SCENE_QA.md build/windows/REFERENCE_SCENE_QA.md
@@ -59,6 +61,8 @@ if ($ExportOnly) {
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_ui_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/floating_art_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/mode2_v5_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','300','--script','res://tests/floating_complete_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','600','--script','res://tests/floating_complete_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','300','--script','res://tests/mode2_v5_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','300','--script','res://tests/window_frame_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','300','--script','res://tests/window_frame_tests.gd','--','--tests')

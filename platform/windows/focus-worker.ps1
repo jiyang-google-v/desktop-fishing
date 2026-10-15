@@ -52,7 +52,7 @@ try {
   $tick = [FishingFocus]::GetTickCount64()
   # Preserve observed interruptions even when Godot misses an intermediate sample.
   $signature = "$locked"
-  if ($signature -ne $previousState -or ($tick - $previousTick) -gt 2000) { $epoch++ }
+  if ($signature -ne $previousState -or ($tick - $previousTick) -gt 5000) { $epoch++ }
   $previousState = $signature
   $previousTick = $tick
   $state = @{

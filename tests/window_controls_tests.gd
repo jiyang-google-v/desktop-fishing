@@ -31,7 +31,7 @@ func run() -> void:
   layouts.show_tools()
   assert(layouts.tools.visible)
   assert(layouts.mode_buttons.size() == 3)
-  assert(layouts.action_buttons.size() == 5)
+  assert(layouts.action_buttons.size() == 6)
   assert(layouts.action_buttons.reel.disabled)
   assert(layouts.view.material != null)
   assert(layouts.view.brightness_lift > 0)

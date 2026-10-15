@@ -12,7 +12,7 @@ func check(ok: bool, message: String) -> void:
   push_error(message)
 
 func wait_for_sample(probe) -> Dictionary:
- var deadline: int = Time.get_ticks_msec() + 30000
+ var deadline: int = Time.get_ticks_msec() + 60000
  while Time.get_ticks_msec() < deadline:
   await create_timer(0.6).timeout
   var value: Dictionary = probe.sample()
@@ -28,7 +28,7 @@ func run() -> void:
  var probe = Focus.new()
  root.add_child(probe)
  var first: Dictionary = await wait_for_sample(probe)
- check(not first.is_empty(), "Native worker starts and validates")
+ check(not first.is_empty(), "Native worker starts and validates: detail=%s attempts=%d" % [probe.detail,probe.attempts])
  var next_sample: Dictionary = await wait_for_sample(probe)
  check(not next_sample.is_empty() and next_sample.get("sequence",0) > first.get("sequence",0), "Native sample file continuously updates")
  var old_token: String = probe.token

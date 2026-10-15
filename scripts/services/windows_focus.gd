@@ -2,7 +2,7 @@ extends Node
 
 const Sample = preload("res://scripts/core/focus_sample.gd")
 const RETRY_MS := 15000
-const STARTUP_MS := 20000
+const STARTUP_MS := 45000
 const STALL_MS := 10000
 var worker_pid := -1
 var token := ""
@@ -14,6 +14,7 @@ var next_retry := 0
 var last_sequence := -1
 var last_fresh_at := 0
 var detail := "starting"
+var last_sample: Dictionary = {}
 
 func _ready() -> void:
  if OS.get_name() == "Windows":
@@ -26,6 +27,7 @@ func start() -> void:
  last_fresh_at = started_at
  next_retry = started_at + RETRY_MS
  last_sequence = -1
+ last_sample.clear()
  detail = "starting"
  token = Crypto.new().generate_random_bytes(16).hex_encode()
  status_path = "user://focus-%s.json" % token
@@ -57,19 +59,32 @@ func sample() -> Dictionary:
   var parser := JSON.new()
   if parser.parse(FileAccess.get_file_as_string(status_path)) == OK:
    value = parser.data
- var valid: Dictionary = Sample.validate(value,token,Time.get_unix_time_from_system())
+ return consume(value,Time.get_unix_time_from_system(),now)
+
+func consume(value, wall_now: float, now: int) -> Dictionary:
+ var valid: Dictionary = Sample.validate(value,token,wall_now)
  if not valid.is_empty() and int(valid.sequence) > last_sequence:
   last_sequence = int(valid.sequence)
   last_fresh_at = now
-  detail = "ok"
+  last_sample = valid.duplicate(true)
+  detail = 'ok'
   return valid
- detail = "starting" if last_sequence < 0 else "stale"
+ # The helper publishes every 500ms. Multiple readers can legitimately see
+ # the same sequence; atomic replacement can also briefly yield no JSON.
+ var cached: Dictionary = Sample.validate(last_sample,token,wall_now)
+ if not cached.is_empty() and int(cached.sequence) == last_sequence:
+  detail = 'ok_cached'
+  return cached
+ detail = 'starting' if last_sequence < 0 else 'checking'
  var timeout: int = STARTUP_MS if last_sequence < 0 else STALL_MS
- if now - last_fresh_at >= timeout:
-  detail = "retry_wait"
+ if now-last_fresh_at >= timeout:
+  detail = 'retry_wait'
   stop()
-  next_retry = now + RETRY_MS
- return paused
+  next_retry = now+RETRY_MS
+  return {'supported':false,'locked':true,'transient':false}
+ # Do not award unverified time, but a sub-watchdog sampling gap must not
+ # turn into a permanent manual-resume pause.
+ return {'supported':false,'locked':false,'transient':true}
 
 func stop() -> void:
  if worker_pid > 0 and OS.is_process_running(worker_pid):
