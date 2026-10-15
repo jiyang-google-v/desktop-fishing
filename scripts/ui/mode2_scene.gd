@@ -1,5 +1,7 @@
 # User-approved v5 presentation. GameService remains the sole owner of catches/saves.
 extends Control
+const Choreography = preload('res://scripts/core/catch_choreography.gd')
+const FLAT_BOTTOM := 582.0
 const ROOT := 'res://assets/production/mode2-v5/'
 var config: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ROOT+'scene.animation.json'))
 var asset_manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ROOT+'asset_manifest.json'))
@@ -53,7 +55,11 @@ func xf(at: Vector2 = Vector2.ZERO, rotation: float = 0.0, zoom: Vector2 = Vecto
 func sprite(id: String, at: Vector2, scale_value: float = 1.0, centered: bool = false) -> void:
  var texture: Texture2D = textures[id]
  var dimensions := texture.get_size()*scale_value
- draw_texture_rect(texture,Rect2(at-(dimensions*.5 if centered else Vector2.ZERO),dimensions),false,tint)
+ if id in ['environment','foreground']:
+  var height: float = minf(dimensions.y,FLAT_BOTTOM-at.y)
+  draw_texture_rect_region(texture,Rect2(at,Vector2(dimensions.x,height)),Rect2(Vector2.ZERO,Vector2(texture.get_width(),height/scale_value)),tint)
+ else:
+  draw_texture_rect(texture,Rect2(at-(dimensions*.5 if centered else Vector2.ZERO),dimensions),false,tint)
 func rig_geometry() -> Dictionary:
  var hand := Vector2(737,395)
  var rotation := 0.0
@@ -109,6 +115,15 @@ func plant(index: int, foot: Vector2, scale_value: float, phase: float) -> void:
   var points := PackedVector2Array([start+Vector2(shift_a,a*dimensions.y),start+Vector2(shift_b,b*dimensions.y),start+Vector2(shift_b+dimensions.x,b*dimensions.y),start+Vector2(shift_a+dimensions.x,a*dimensions.y)])
   draw_polygon(points,PackedColorArray([tint]),PackedVector2Array([Vector2(0,a),Vector2(0,b),Vector2(1,b),Vector2(1,a)]),texture)
 func draw_environment() -> void:
+ # Fill the old inward contour before placing the original textures;
+ # cropping only the underside keeps the waterline and all actors intact.
+ var base := StyleBoxFlat.new()
+ base.bg_color = Color('7cd6e4')*tint
+ base.border_color = Color('64bfce')*tint
+ base.border_width_bottom = 2
+ base.corner_radius_bottom_left = 14
+ base.corner_radius_bottom_right = 14
+ draw_style_box(base,Rect2(90,428,697,FLAT_BOTTOM-428))
  sprite('environment',Vector2(90,150))
  var texture: Texture2D = textures.environment
  for y in range(260,316,4):
@@ -119,7 +134,7 @@ func draw_environment() -> void:
  plant(1,Vector2(718,560),1.05,1.8)
  draw_swimmers(1)
  plant(0,Vector2(273,581),.65,3.4)
- plant(1,Vector2(647,584),.60,4.6)
+ plant(1,Vector2(647,581),.60,4.6)
  sprite('foreground',Vector2(90,150))
  for i in 4:
   var points := PackedVector2Array()
@@ -157,7 +172,7 @@ func _draw() -> void:
   draw_arc(rig.bobber+Vector2(0,6),18,0,PI,20,Color(.83,.99,.98,.85),1.5,true)
  if action=='reel' and caught_texture!=null:
   var p: float = clampf(action_progress,0,1)
-  var at: Vector2 = pow(1-p,3)*Vector2(469,444)+3*pow(1-p,2)*p*Vector2(457,205)+3*(1-p)*p*p*Vector2(545,151)+pow(p,3)*Vector2(587,211)
+  var at: Vector2 = Choreography.fish_position(p,Vector2(469,444),Vector2(587,211),239.0)
   var side: float = 110
   var color := Color(1,1,1,smoothstep(0,.10,p))
   draw_texture_rect(caught_texture,Rect2(at-Vector2.ONE*side*.5,Vector2.ONE*side),false,color)

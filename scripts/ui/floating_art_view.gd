@@ -1,5 +1,7 @@
 # Art integration component. Native desktop window switching is intentionally separate.
 extends Control
+const Choreography = preload('res://scripts/core/catch_choreography.gd')
+const SPLASH = preload('res://assets/production/mode2-v5/splash.png')
 const Frames = preload('res://scripts/core/motion_frames.gd')
 const PIER = preload('res://assets/production/scene/reference-pier.png')
 const ENVIRONMENT = preload('res://assets/production/scene/reference-floating-environment.png')
@@ -79,8 +81,21 @@ func rig_geometry() -> Dictionary:
  if profile == 'mini':
   delta.x = -delta.x
  var rotation: float = deg_to_rad(float(spec.rotation_degrees))
+ if profile == 'mini':
+  if action == 'cast':
+   rotation += deg_to_rad(-17*sin(action_progress*PI))
+  elif action == 'reel':
+   rotation += deg_to_rad(29*sin(action_progress*PI*.65))
  var tip: Vector2 = hand+(delta*canvas_width).rotated(rotation)
- return {'hand':hand,'tip':tip,'bobber':Vector2(tip.x,size.y*float(config.profiles[profile].bobber_y)),'canvas_width':canvas_width,'rotation':rotation,'pivot':pivot}
+ var water := Vector2(size.x*.40,size.y*float(config.profiles[profile].bobber_y))
+ var short := tip+Vector2(0,12)
+ var bobber: Vector2 = water if line_cast else short
+ if action == 'cast':
+  var p: float = smoothstep(.05,.95,action_progress)
+  bobber = short.lerp(water,p)-Vector2(0,25*sin(p*PI))
+ elif action == 'reel':
+  bobber = short
+ return {'hand':hand,'tip':tip,'bobber':bobber,'water':water,'canvas_width':canvas_width,'rotation':rotation,'pivot':pivot}
 func draw_layer(id: String, tint: Color) -> void:
  var r: Array = config.profiles.scene.layers[id]
  var at := Vector2(float(r[0])*size.x,float(r[1])*size.y)
@@ -115,7 +130,7 @@ func _draw() -> void:
   var width: float = size.x*float(config.profiles.mini.water_canvas_width)
   var pulse: Array = config.ambient.mini_ripple.scale_range
   width *= lerpf(float(pulse[0]),float(pulse[1]),(sin(age*TAU/float(config.ambient.mini_ripple.duration))+1.0)*.5)
-  sprite(textures['mini-water'],rig.bobber-Vector2(.5,.58)*width*Vector2(1,.5),Vector2(width,width*.5),false,tint)
+  sprite(textures['mini-water'],rig.water-Vector2(.5,.58)*width*Vector2(1,.5),Vector2(width,width*.5),false,tint)
  # Line is geometry, never baked into art. Both profiles share the same rig anchor.
  draw_line(rig.tip,rig.bobber,Color('f9f1dc'),maxf(1,1.4*scale_value),true)
  var rod_width: float = rig.canvas_width
@@ -131,13 +146,19 @@ func _draw() -> void:
  var bobber_width: float = 20*scale_value if profile == 'scene' else 16*size.x/240.0
  sprite(frames.gear('bobber'),rig.bobber-Vector2.ONE*bobber_width*.5,Vector2.ONE*bobber_width,false,tint)
 
- # Reveal the saved catch during reeling; no new random draw happens here.
+ # The real saved catch follows the same leap/splash sequence as mode two.
  if action == 'reel' and caught_texture != null:
-  var progress: float = smoothstep(.15,.85,action_progress)
-  var at: Vector2 = rig.bobber.lerp(rig.tip+Vector2(0,18),progress)
-  var width: float = 68.0 if profile == 'scene' else 44.0
-  var opacity: float = smoothstep(.05,.25,action_progress)
-  sprite(caught_texture,at-Vector2.ONE*width*.5,Vector2.ONE*width,false,Color(1,1,1,opacity))
-  for i in 3:
-   var bubble: Vector2 = at+Vector2(-16+i*14,24+sin(age*8+i)*5)
-   draw_circle(bubble,2.0,Color(.80,.93,.96,opacity*.7))
+  var p: float = clampf(action_progress,0,1)
+  var at := Choreography.fish_position(p,rig.water+Vector2(0,6),Vector2(size.x*.42,size.y*.32),55.0)
+  var width := 44.0
+  var alpha: float = smoothstep(0,.10,p)
+  sprite(caught_texture,at-Vector2.ONE*width*.5,Vector2.ONE*width,false,Color(1,1,1,alpha))
+  var splash_alpha: float = Choreography.splash_alpha(p)
+  if splash_alpha > 0:
+   var sp_size := Vector2(44,22)
+   sprite(SPLASH,rig.water-sp_size*.5,sp_size,false,Color(1,1,1,splash_alpha))
+   for i in 7:
+    var dt: float = p*1.5
+    var drop: Vector2 = rig.water+Vector2((i-3)*9*dt,-(42+i%3*9)*dt+75*dt*dt)
+    if drop.y<rig.water.y:
+     draw_circle(drop,1.1,Color(.5,.85,.94,splash_alpha))

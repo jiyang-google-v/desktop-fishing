@@ -23,6 +23,7 @@ var opacity_label: Label
 var opacity_open := false
 var switching := false
 var catch_popup
+var control_panel
 var dismissed_catch := ""
 var menu: PopupMenu
 var settings := ConfigFile.new()
@@ -49,7 +50,14 @@ func _ready() -> void:
  add_child(view)
  timer_card = TimerCard.new()
  add_child(timer_card)
+ timer_card.gui_input.connect(func(e):
+  if e is InputEventMouseButton and e.pressed and e.button_index==MOUSE_BUTTON_LEFT:
+   open_settings())
  timer_card.pause_requested.connect(func(): main.handle(main.get_node('/root/Game').toggle_pause()))
+ control_panel = load('res://scripts/ui/floating_control_panel.gd').new()
+ control_panel.main = main
+ control_panel.layouts = self
+ add_child(control_panel)
  catch_popup = CatchPopup.new()
  catch_popup.main = main
  catch_popup.theme = main.theme
@@ -68,6 +76,7 @@ func _ready() -> void:
  menu.add_item('保存退出',6)
  menu.add_item('查看图鉴',7)
  menu.add_item('查看鱼缸',8)
+ menu.add_item('专注设置',9)
  menu.id_pressed.connect(menu_action)
  if not test_mode:
   settings.load('user://window-layouts.cfg')
@@ -124,7 +133,7 @@ func build_tools() -> void:
  action_grid = GridContainer.new()
  action_grid.columns = 1 if mode == 'scene' else 3
  toolbar.add_child(action_grid)
- for entry in [['放竿','cast'],['起竿','reel'],['图鉴','book'],['鱼缸','tank'],['透明度','opacity']]:
+ for entry in [['放竿','cast'],['起竿','reel'],['图鉴','book'],['鱼缸','tank'],['透明度','opacity'],['设置','settings']]:
   var b := tool_button(entry[0],entry[1],action_grid)
   b.pressed.connect(request_action.bind(entry[1]))
   action_buttons[entry[1]] = b
@@ -168,7 +177,7 @@ func tool_button(text: String, icon_id: String, parent: Control) -> Button:
  parent.add_child(b)
  return b
 func fit_tools() -> void:
- var dimensions := Vector2i(132,364) if mode == 'scene' else Vector2i(320,160)
+ var dimensions := Vector2i(132,408) if mode == 'scene' else Vector2i(320,160)
  if opacity_open:
   dimensions.y += 34
  tools.min_size = Vector2i.ZERO
@@ -251,6 +260,7 @@ func apply(next: String, persist: bool = true) -> void:
  if is_instance_valid(tools):
   tools.hide()
  catch_popup.hide()
+ control_panel.hide()
  switching = false
  drag = false
  hover_grace = 1.0 if keep_tools else 0.0
@@ -318,6 +328,8 @@ func menu_action(id: int) -> void:
   open_collection('book')
  elif id == 8:
   open_collection('tank')
+ elif id == 9:
+  open_settings()
  elif id == 6:
   main.get_node('/root/Game').request_exit()
 func _input(event: InputEvent) -> void:
@@ -362,7 +374,7 @@ func _process(_delta: float) -> void:
   view.action = 'happy' if not main.get_node('/root/Game').state.pending_catch.is_empty() else 'idle'
 
  view.line_cast = main.get_node('/root/Game').state.cast
- if main.collection.visible or main.confirmation.visible or catch_popup.visible:
+ if main.collection.visible or main.confirmation.visible or catch_popup.visible or control_panel.visible:
   tools.hide()
   return
  if should_show_tools(DisplayServer.mouse_get_position()) and not drag:
@@ -409,8 +421,14 @@ func show_tools() -> void:
 func open_collection(kind: String) -> void:
  tools.hide()
  main.open_collection(kind)
+func open_settings() -> void:
+ tools.hide()
+ control_panel.open()
+
 func tool_action(kind: String) -> void:
- if kind in ['book','tank']:
+ if kind == 'settings':
+  open_settings()
+ elif kind in ['book','tank']:
   open_collection(kind)
  elif kind == 'opacity':
   opacity_open = not opacity_open

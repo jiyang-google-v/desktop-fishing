@@ -43,6 +43,26 @@ static func run(main: Control) -> void:
  for origin in ['scene','mini']:
   layouts.apply(origin,false)
   game.state = game.model.fresh_state()
+  main.refresh()
+  layouts.show_tools()
+  layouts.hover_grace = 8.0
+  for i in 4:
+   await tree.process_frame
+  if not await click_control(main,layouts.action_buttons.settings,layouts.tools,helper) or not layouts.control_panel.visible:
+   push_error('Physical floating settings failed: '+origin)
+   tree.quit(1)
+   return
+  var controls = layouts.control_panel
+  if not await click_control(main,controls.presets[1],controls,helper) or game.state.duration_minutes!=45:
+   push_error('Physical duration preset failed: '+origin)
+   tree.quit(1)
+   return
+  if not await click_control(main,controls.sound,controls,helper) or not game.state.sound_enabled:
+   push_error('Physical sound setting failed: '+origin)
+   tree.quit(1)
+   return
+  controls.hide()
+  game.state = game.model.fresh_state()
   game.model.cast_line(game.state)
   game.state.focus_seconds = 24.0
   game.focus_status = {'supported':true,'locked':false}

@@ -122,16 +122,18 @@ func remove_from_tank(catch_id: String) -> Dictionary:
 func remaining_seconds() -> float:
  return maxf(0,state.duration_minutes*60.0-state.focus_seconds)
 
-func advance_timer(elapsed: float, wall_elapsed: float, status: Dictionary) -> void:
+func advance_timer(elapsed: float, _wall_elapsed: float, status: Dictionary) -> void:
  if not state.cast or state.paused or model.completed(state) or blocked:
   return
+ if status.get('transient',false):
+  return
  var cause := ''
- if not is_finite(elapsed) or not is_finite(wall_elapsed) or elapsed <= 0 or wall_elapsed <= 0 or elapsed > 5 or wall_elapsed > 5 or absf(elapsed-wall_elapsed) > 1:
+ if not is_finite(elapsed) or elapsed <= 0 or elapsed > 5:
   cause = 'sleep'
- elif status.get('locked',false):
-  cause = 'locked'
  elif OS.get_name() == 'Windows' and not status.get('supported',false):
   cause = 'detection'
+ elif status.get('locked',false):
+  cause = 'locked'
  var generation: String = str(status.get('token',''))+':'+str(status.get('epoch',0))
  if cause.is_empty() and not safety_generation.is_empty() and generation != safety_generation:
   cause = 'system'
@@ -140,7 +142,7 @@ func advance_timer(elapsed: float, wall_elapsed: float, status: Dictionary) -> v
   state.paused = true
   state.pause_cause = cause
   return
- state.focus_seconds = minf(state.duration_minutes*60.0,state.focus_seconds+minf(elapsed,wall_elapsed))
+ state.focus_seconds = minf(state.duration_minutes*60.0,state.focus_seconds+elapsed)
 
 func pause_reason() -> String:
  if blocked:
@@ -212,7 +214,7 @@ func retry_detection() -> void:
 
 func diagnostic_text() -> String:
  var detail: String = probe.detail if probe != null else "not_started"
- return "版本：0.7.0-preview\n系统：%s\n状态：%s\n锁屏检测：%s\n设定时长：%d 分钟\n已完成：%.1f 秒\n剩余：%.1f 秒\n暂停原因：%s\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.duration_minutes,state.focus_seconds,remaining_seconds(),state.pause_cause,last_saved,str(save_failed)]
+ return "版本：0.8.0-preview\n系统：%s\n状态：%s\n锁屏检测：%s\n设定时长：%d 分钟\n已完成：%.1f 秒\n剩余：%.1f 秒\n暂停原因：%s\n最近保存：%s\n保存失败：%s" % [OS.get_name(),pause_reason(),detail,state.duration_minutes,state.focus_seconds,remaining_seconds(),state.pause_cause,last_saved,str(save_failed)]
 
 func prepare_restored_challenge() -> void:
  if state.cast and not model.completed(state):

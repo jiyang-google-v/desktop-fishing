@@ -81,6 +81,8 @@ func sync(game: Node, night: bool) -> void:
   status_label.text = '专注完成'
  elif state.paused or game.blocked:
   status_label.text = '已暂停'
+ elif game.focus_status.get('transient',false):
+  status_label.text = '检测中'
  day_icon.texture = MOON if night else SUN
  progress.value = clampf(state.focus_seconds/maxf(state.duration_minutes*60.0,1.0),0.0,1.0)
  var symbol := 'play' if state.paused else 'pause'
@@ -90,4 +92,7 @@ func sync(game: Node, night: bool) -> void:
  pause_button.texture_disabled = load(DIR+symbol+'-disabled.png')
  pause_button.disabled = game.blocked or not state.cast or completed
  pause_button.tooltip_text = '继续专注' if state.paused else '暂停专注'
- tooltip_text = '番茄钟 · %d 分钟 · %s 类鱼池 · %s' % [state.duration_minutes,game.model.group_for(state.duration_minutes),status_label.text]
+ tooltip_text = '点击时钟打开专注设置\n番茄钟 · %d 分钟 · %s 类鱼池 · %s' % [state.duration_minutes,game.model.group_for(state.duration_minutes),status_label.text]
+
+ if state.paused:
+  tooltip_text += '\n暂停原因：'+str({'manual':'手动暂停','locked':'系统锁屏','sleep':'休眠或计时中断','system':'系统检测重启','restart':'重新打开游戏','detection':'检测持续失联'}.get(state.pause_cause,state.pause_cause))

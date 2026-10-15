@@ -55,6 +55,8 @@ var collection_close: Button
 var action_error := ""
 var aquarium_view
 var collection_grid: GridContainer
+var collection_progress: ProgressBar
+var collection_tabs := {}
 var confirmation: ConfirmationDialog
 var confirm_action := Callable()
 var panel_mode := "book"
@@ -115,7 +117,7 @@ func _ready() -> void:
 func make_theme() -> Theme:
  var t := Theme.new()
  var font := SystemFont.new()
- font.font_names = PackedStringArray(["Microsoft YaHei","Noto Sans CJK SC","WenQuanYi Micro Hei","sans-serif"])
+ font.font_names = PackedStringArray(["Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","WenQuanYi Micro Hei","sans-serif"])
  t.default_font = font
  t.default_font_size = 14
  t.set_color("font_color","Label",Color("486575"))
@@ -131,8 +133,19 @@ func make_theme() -> Theme:
  t.set_stylebox("panel","PanelContainer",style(Color("fffbee"),22))
  t.set_stylebox("panel","AcceptDialog",style(Color("fffbee"),18))
  t.set_stylebox("panel","ConfirmationDialog",style(Color("fffbee"),18))
- t.set_stylebox("background","ProgressBar",style(Color("d6e3db"),5))
- t.set_stylebox("fill","ProgressBar",style(Color("85bace"),5))
+ for entry in [['background','d6e3db'],['fill','85bace']]:
+  var track := style(Color(entry[1]),4)
+  track.set_content_margin_all(0)
+  t.set_stylebox(entry[0],'ProgressBar',track)
+ for state in ['normal','focus']:
+  var input_skin := style(Color('edf5f5'),10)
+  input_skin.content_margin_top = 8
+  input_skin.content_margin_bottom = 8
+  t.set_stylebox(state,'LineEdit',input_skin)
+ t.set_color('font_color','LineEdit',Color('486575'))
+ t.set_color('font_uneditable_color','LineEdit',Color('7b9297'))
+ t.set_color('font_color','OptionButton',Color('486575'))
+ t.set_color('font_color','CheckButton',Color('486575'))
  return t
 
 func style(color: Color, radius: int) -> StyleBoxFlat:
@@ -319,7 +332,7 @@ func build_ui() -> void:
  paragraph("前台、图鉴与无键鼠操作都继续计时。暂停、锁屏、休眠与退出期间不累计。F8 保存退出。",side,11)
  var footer := HBoxContainer.new()
  root.add_child(footer)
- var version := label("桌面钓鱼 · 0.7.0-preview · 海边日常",11,true)
+ var version := label("桌面钓鱼 · 0.8.0-preview · 海边日常",11,true)
  version.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  footer.add_child(version)
  button("场景悬浮",footer,func(): layouts.apply("scene"))
@@ -332,6 +345,7 @@ func _input(event: InputEvent) -> void:
   Game.request_exit()
 
 func show_diagnostics() -> void:
+ diagnostic_dialog.force_native = layouts != null and layouts.mode != 'full'
  diagnostic_dialog.dialog_text = Game.diagnostic_text() + "\n\n检测异常会自动重试；恢复后不补计中断时间。"
  diagnostic_dialog.popup_centered(Vector2i(460,360))
 
@@ -353,6 +367,9 @@ func build_dialogs() -> void:
  collection.visible = false
  collection.title = "收藏"
  collection.theme = theme
+ collection.borderless = true
+ collection.transparent = true
+ collection.transparent_bg = true
  collection.size = Vector2i(750,620)
  collection.min_size = Vector2i(560,420)
  collection.transient = true
@@ -362,21 +379,53 @@ func build_dialogs() -> void:
   if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
    close_collection())
  add_child(collection)
+ var shell := PanelContainer.new()
+ shell.name = 'CollectionShell'
+ shell.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ shell.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ var shell_skin := style(Color('fffbee'),22)
+ shell_skin.border_color = Color('99c6d8')
+ shell_skin.set_border_width_all(2)
+ shell_skin.set_content_margin_all(0)
+ shell.add_theme_stylebox_override('panel',shell_skin)
+ collection.add_child(shell)
  var margin := MarginContainer.new()
  margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
  for edge in ["left","right","top","bottom"]:
   margin.add_theme_constant_override("margin_"+edge,20)
- collection.add_child(margin)
+ shell.add_child(margin)
  var box := VBoxContainer.new()
  box.add_theme_constant_override("separation",12)
  margin.add_child(box)
  var header := HBoxContainer.new()
  box.add_child(header)
- collection_title = label("",22)
+ collection_title = label("",24)
  collection_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
  header.add_child(collection_title)
+ collection_title.mouse_filter = Control.MOUSE_FILTER_STOP
+ collection_title.mouse_default_cursor_shape = Control.CURSOR_MOVE
+ collection_title.gui_input.connect(func(e):
+  if e is InputEventMouseButton and e.pressed and e.button_index==MOUSE_BUTTON_LEFT:
+   collection.start_drag())
  collection_close = button("关闭",header,close_collection)
+ var navigation := HBoxContainer.new()
+ navigation.add_theme_constant_override('separation',8)
+ box.add_child(navigation)
+ for entry in [['book','鱼类图鉴'],['tank','精选鱼缸']]:
+  var key: String = entry[0]
+  var tab: Button = button(entry[1],navigation,func(): open_collection(key))
+  tab.icon = load('res://assets/production/ui/'+key+'.svg')
+  tab.expand_icon = true
+  tab.add_theme_constant_override('icon_max_width',20)
+  tab.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+  collection_tabs[key] = tab
  book_filter = OptionButton.new()
+ book_filter.custom_minimum_size.y = 36
+ for state in ['normal','hover','pressed']:
+  var filter_skin := style(Color('edf5f5'),10)
+  filter_skin.content_margin_top = 6
+  filter_skin.content_margin_bottom = 6
+  book_filter.add_theme_stylebox_override(state,filter_skin)
  for entry in [["全部分组","all"],["A 类 · 15–29 分钟","A"],["B 类 · 30–59 分钟","B"],["C 类 · 60–120 分钟","C"],["特殊事件","event"]]:
   book_filter.add_item(entry[0])
   book_filter.set_item_metadata(book_filter.item_count-1,entry[1])
@@ -386,6 +435,11 @@ func build_dialogs() -> void:
   render_collection())
  box.add_child(book_filter)
  collection_description = paragraph("",box)
+ collection_progress = ProgressBar.new()
+ collection_progress.show_percentage = false
+ collection_progress.custom_minimum_size.y = 7
+ collection_progress.step = .01
+ box.add_child(collection_progress)
  collection_notice = paragraph("",box,12)
  collection_notice.add_theme_color_override("font_color",Color("9b745c"))
  collection_notice.visible = false
@@ -453,6 +507,8 @@ func handle(result: Dictionary) -> void:
   var messages := {"full":"鱼缸已满（6 / 6），请选择替换。","save_failed":"保存失败，操作未完成。请检查磁盘空间和权限后重试。","blocked":"存档不可用，已暂停操作。请打开检测与诊断查看。","pending":"请先安置本次鱼获。","no_catch":"当前没有待安置的鱼获。","unknown":"这条鱼已不在鱼缸中，请重新选择。","not_cast":"请先放下鱼钩。","already_cast":"鱼钩已经放下，请稍后收杆。","too_early":"番茄钟尚未完成，提前起竿将失败。","active_challenge":"挑战已开始，时长不能修改。","system_paused":"锁屏检测尚未就绪或系统仍锁定，暂时无法继续。","invalid_setting":"时长需为15–120分钟。"}
   action_error = messages.get(result.get("reason",""),"操作未完成，请重试。")
  update_notices()
+ if layouts != null and layouts.mode != 'full' and not result.ok and not collection.visible and not confirmation.visible:
+  layouts.open_settings()
 
 func update_notices() -> void:
  var message: String = Game.warning if not Game.warning.is_empty() else action_error
@@ -547,7 +603,13 @@ func portrait(id: String, hidden: bool = false, height: float = 96) -> Control:
  view.species_id = id
  view.silhouette = hidden
  view.custom_minimum_size = Vector2(96,height)
- return view
+ var canvas := PanelContainer.new()
+ var skin := style(Color('eaf5f5'),12)
+ skin.border_color = Color('cfe3e6')
+ skin.set_content_margin_all(5)
+ canvas.add_theme_stylebox_override('panel',skin)
+ canvas.add_child(view)
+ return canvas
 
 func select_tank_fish(catch_id: String) -> void:
  var index: int = Game.model.find_catch(Game.state.aquarium,catch_id)
@@ -664,6 +726,8 @@ func open_collection(mode: String, replace: bool = false) -> void:
  render_collection()
  update_notices()
  update_collection_layout()
+ var area := DisplayServer.screen_get_usable_rect()
+ collection.size = Vector2i(mini(collection.size.x,area.size.x-24),mini(collection.size.y,area.size.y-24))
  collection.popup_centered()
 
 func close_collection() -> void:
@@ -698,7 +762,10 @@ func card() -> VBoxContainer:
  var panel := PanelContainer.new()
  panel.custom_minimum_size.x = 205
  panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
- panel.add_theme_stylebox_override("panel",style(Color("e7efea"),14))
+ var skin := style(Color('fffdf5'),16)
+ skin.border_color = Color('bdd6df')
+ skin.set_content_margin_all(12)
+ panel.add_theme_stylebox_override('panel',skin)
  collection_grid.add_child(panel)
  var box := VBoxContainer.new()
  box.add_theme_constant_override("separation",8)
@@ -715,7 +782,13 @@ func render_collection() -> void:
  update_collection_layout()
  aquarium_view.catches = s.aquarium.duplicate(true)
  aquarium_view.queue_redraw()
- book_filter.visible = panel_mode == "book"
+ book_filter.visible = panel_mode == 'book'
+ for key in collection_tabs:
+  var active: bool = key == panel_mode
+  collection_tabs[key].disabled = active
+  collection_tabs[key].add_theme_stylebox_override('disabled',style(Color('dceef3'),12))
+ collection_progress.max_value = Game.model.roster.size() if panel_mode == 'book' else 6
+ collection_progress.value = s.encyclopedia.size() if panel_mode == 'book' else s.aquarium.size()
  collection_title.text = "鱼类图鉴" if panel_mode == "book" else "精选鱼缸"
  collection_close.text = "取消替换" if replacing else "关闭"
  collection_description.text = "已发现 %d / %d · 每次相遇都留下纪录。" % [s.encyclopedia.size(),Game.model.roster.size()] if panel_mode == "book" else tank_description()
@@ -732,11 +805,15 @@ func render_collection() -> void:
    box.add_child(portrait(f.id,record.is_empty()))
    if Portrait.texture_for(f.id) == null:
     box.add_child(label("插画待制作",11,true))
-   box.add_child(label(f.name if not record.is_empty() else "尚未发现",16))
+   box.add_child(label(f.name if not record.is_empty() else '尚未发现',16))
+   if not record.is_empty():
+    var badge := label(str(RARITY.get(f.rarity,f.rarity)),11)
+    badge.add_theme_color_override('font_color',Color('5d958e'))
+    box.add_child(badge)
    if record.is_empty():
     paragraph("尚未解锁\n等待一次惊喜相遇",box,12)
    else:
-    paragraph("%s · 捕获 %d 次\n最大体长 %.1f cm" % [RARITY.get(f.rarity,f.rarity),record.count,record.record_cm],box,12)
+    paragraph("相遇 %d 次\n最大体长 %.1f cm" % [record.count,record.record_cm],box,12)
   return
  if s.aquarium.is_empty():
   paragraph("鱼缸还很安静。收杆后选择收进鱼缸，邀请第一位朋友。",card())
