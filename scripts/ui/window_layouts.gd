@@ -351,6 +351,16 @@ func _process(_delta: float) -> void:
  sync_tools()
  sync_catch()
  view.night = main.ocean.night
+ var action: String = main.ocean.motion.active
+ view.action_progress = main.ocean.motion.progress
+ view.caught_texture = main.Portrait.texture_for(str(main.get_node('/root/Game').state.pending_catch.get('species_id',''))) if not main.get_node('/root/Game').state.pending_catch.is_empty() else null
+ if action in ['cast','reel']:
+  view.action = action
+  view.age = main.ocean.motion.elapsed
+ else:
+  view.action = 'happy' if not main.get_node('/root/Game').state.pending_catch.is_empty() else 'idle'
+
+ view.line_cast = main.get_node('/root/Game').state.cast
  if main.collection.visible or main.confirmation.visible or catch_popup.visible:
   tools.hide()
   return
@@ -361,14 +371,6 @@ func _process(_delta: float) -> void:
   hover_grace -= _delta
   if hover_grace <= 0:
    tools.hide()
- var action: String = main.ocean.motion.active
- view.action_progress = main.ocean.motion.progress
- view.caught_texture = main.Portrait.texture_for(str(main.get_node('/root/Game').state.pending_catch.get('species_id',''))) if not main.get_node('/root/Game').state.pending_catch.is_empty() else null
- if action in ['cast','reel']:
-  view.action = action
-  view.age = main.ocean.motion.elapsed
- else:
-  view.action = 'happy' if not main.get_node('/root/Game').state.pending_catch.is_empty() else 'idle'
 
 func sync_tools() -> void:
  for key in mode_buttons:

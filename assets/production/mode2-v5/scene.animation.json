@@ -1,0 +1,66 @@
+{
+  "canvas": [
+    960,
+    640
+  ],
+  "environment_origin": [
+    90,
+    150
+  ],
+  "pier_origin": [
+    585,
+    380
+  ],
+  "girl_feet": [
+    774,
+    458
+  ],
+  "cat_feet": [
+    866,
+    428
+  ],
+  "hand": [
+    737,
+    395
+  ],
+  "rod_tip": [
+    13,
+    17
+  ],
+  "water_point": [
+    469,
+    429
+  ],
+  "water_clip": [
+    90,
+    438,
+    697,
+    140
+  ],
+  "spawn_interval": [
+    1.9,
+    3.4
+  ],
+  "travel_seconds": [
+    5,
+    8
+  ],
+  "max_swimmers": 12,
+  "card": {
+    "anticipation": 0.85,
+    "flip": 0.53,
+    "stationary_after": 1.6
+  },
+  "layer_order": [
+    "water",
+    "far_fish",
+    "mid_plants",
+    "near_fish",
+    "front_plants",
+    "coral",
+    "pier",
+    "actors",
+    "surface",
+    "catch"
+  ]
+}

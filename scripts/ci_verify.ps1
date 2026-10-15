@@ -58,6 +58,8 @@ if ($ExportOnly) {
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/stage4_ui_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/floating_art_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--headless','--script','res://tests/mode2_v5_tests.gd','--','--tests')
+ Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','300','--script','res://tests/mode2_v5_capture.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--headless','--quit-after','300','--script','res://tests/window_frame_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','300','--script','res://tests/window_frame_tests.gd','--','--tests')
  Invoke-GodotCheck -GodotArgs @('--audio-driver','Dummy','--rendering-method','gl_compatibility','--quit-after','300','--script','res://tests/window_frame_capture.gd','--','--tests')

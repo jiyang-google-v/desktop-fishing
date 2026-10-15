@@ -103,6 +103,7 @@ func _ready() -> void:
   var floating: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/production/floating_manifest.json"))
   for asset in floating.assets:
    valid = valid and load("res://"+asset.path) is Texture2D
+  valid = valid and FileAccess.file_exists('res://assets/production/mode2-v5/scene.animation.json') and FileAccess.file_exists('res://assets/production/mode2-v5/asset_manifest.json') and FileAccess.file_exists('res://data/fish-introductions.json')
   get_tree().quit(0 if valid else 1)
  if "--collection-capture" in OS.get_cmdline_user_args():
   call_deferred("collection_capture")

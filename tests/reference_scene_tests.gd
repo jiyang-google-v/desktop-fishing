@@ -10,7 +10,7 @@ func run() -> void:
  await process_frame
  assert(layouts.mode_grid.columns == 1 and layouts.action_grid.columns == 1)
  assert(layouts.tools.size.x == 132 and layouts.tools.size.y >= 330)
- assert(layouts.view.rig_geometry().tip.x > layouts.view.rig_geometry().hand.x)
+ assert(layouts.view.rig_geometry().tip.x < layouts.view.rig_geometry().hand.x)
  var image := Image.load_from_file(ProjectSettings.globalize_path('res://assets/production/scene/reference-floating-environment.png'))
  assert(not image.is_empty() and image.detect_alpha() != Image.ALPHA_NONE)
  # Stable lower outline: small rock details remain, but no broad bowl-shaped base.
@@ -36,5 +36,5 @@ func run() -> void:
  assert(layouts.mode_grid.columns == 3 and layouts.action_grid.columns == 3)
  assert(layouts.tools.size == Vector2i(320,160))
  assert(layouts.view.rig_geometry().tip.x < layouts.view.rig_geometry().hand.x)
- print('Reference scenes: transparent environment, right-facing scene rig and adaptive vertical toolbar passed')
+ print('Reference scenes: transparent environment, approved left-facing scene rig and adaptive vertical toolbar passed')
  quit()

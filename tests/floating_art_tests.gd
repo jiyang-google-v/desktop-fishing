@@ -30,8 +30,8 @@ func run() -> void:
     view.age = t
     view.size = Vector2(600,400) if mode == 'scene' else Vector2(240,140)
     var rig: Dictionary = view.rig_geometry()
-    check(is_equal_approx(rig.tip.x,rig.bobber.x),'Line and bobber vertically connected')
-    check(rig.tip.x > rig.hand.x if mode == 'scene' else rig.tip.x < rig.hand.x,'Rod faces toward water in each layout')
+    check(mode=='scene' or is_equal_approx(rig.tip.x,rig.bobber.x),'Mini rig stays vertically connected')
+    check(rig.tip.x < rig.hand.x,'Rod faces toward water in each layout')
  check(view.config.render_rules.transparent_clear,'No sky background rectangle')
  print('Floating production asset checks: failures=%d' % failures)
  quit(1 if failures else 0)

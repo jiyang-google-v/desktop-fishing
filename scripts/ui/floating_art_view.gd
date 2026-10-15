@@ -12,9 +12,14 @@ var action := 'idle'
 var action_progress := 0.0
 var caught_texture: Texture2D
 var age := 0.0
+var line_cast := false
+var mode2_view
 var night := false
 var brightness_lift := .10
 func _ready() -> void:
+ mode2_view = load('res://scripts/ui/mode2_scene.gd').new()
+ mode2_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ add_child(mode2_view)
  var shader := Shader.new()
  shader.code = "shader_type canvas_item; uniform float brightness_lift = 0.10; void fragment() { COLOR.rgb = mix(COLOR.rgb, vec3(1.0), brightness_lift); }"
  var art_material := ShaderMaterial.new()
@@ -27,6 +32,12 @@ func _ready() -> void:
   textures[entry.id] = load('res://'+entry.path)
  resized.connect(queue_redraw)
 func _process(delta: float) -> void:
+ mode2_view.visible = profile=='scene'
+ mode2_view.action = action
+ mode2_view.action_progress = action_progress
+ mode2_view.line_cast = line_cast
+ mode2_view.caught_texture = caught_texture
+ mode2_view.night = night
  if is_visible_in_tree():
   age += delta
   queue_redraw()
@@ -46,6 +57,12 @@ func actor_box(group: String) -> Rect2:
   pivot.x = 1.0-pivot.x
  return Rect2(position_from(spec.anchor)-pivot*width,Vector2.ONE*width)
 func rig_geometry() -> Dictionary:
+ if profile=='scene' and is_instance_valid(mode2_view):
+  var rig: Dictionary = mode2_view.rig_geometry()
+  var ratio := size/Vector2(960,640)
+  for key in ['hand','tip','bobber']:
+   rig[key] *= ratio
+  return rig
  var spec: Dictionary = config.profiles[profile].rod
  var canvas_width: float = size.x*float(spec.canvas_width)
  var hand: Vector2
@@ -75,6 +92,8 @@ func draw_layer(id: String, tint: Color) -> void:
   color.a = lerpf(float(limits[0]),float(limits[1]),(sin(age*TAU/float(config.ambient.water_breathe.duration))+1.0)*.5)
  sprite(textures[id],at,Vector2(float(r[2])*size.x,float(r[3])*size.y),false,color)
 func _draw() -> void:
+ if profile=='scene':
+  return
  if textures.is_empty() or size.x <= 0 or size.y <= 0:
   return
  # Keep night readable on the desktop without dimming the whole widget.

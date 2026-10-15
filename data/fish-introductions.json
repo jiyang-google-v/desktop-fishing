@@ -1,0 +1,58 @@
+{
+  "fish_001_clownfish": {
+    "habitat": "浅海 · 珊瑚礁",
+    "description": "橙白条纹的小邻居，常在海葵之间穿梭。"
+  },
+  "fish_002_blue_tang": {
+    "habitat": "浅海 · 珊瑚礁",
+    "description": "蓝色身体配着黄色尾鳍，在礁区寻找藻类。"
+  },
+  "fish_003_butterflyfish": {
+    "habitat": "浅海 · 珊瑚礁",
+    "description": "侧扁的身体，像一片轻盈的海中花瓣。"
+  },
+  "fish_004_seahorse": {
+    "habitat": "A组 · 15–29分钟",
+    "description": "卷曲的小尾巴，给这次相遇添了一点俏皮。"
+  },
+  "fish_005_pufferfish": {
+    "habitat": "B组 · 30–59分钟",
+    "description": "圆滚滚的小身影，为海边添一份可爱。"
+  },
+  "fish_006_lionfish": {
+    "habitat": "B组 · 30–59分钟",
+    "description": "舒展的鱼鳍，像水中的轻柔羽扇。"
+  },
+  "fish_007_red_seabream": {
+    "habitat": "B组 · 30–59分钟",
+    "description": "银红色的身影，从水中轻轻跃出。"
+  },
+  "fish_008_yellowfin_tuna": {
+    "habitat": "C组 · 60–120分钟",
+    "description": "一抹黄色掠过，留下新的收藏回忆。"
+  },
+  "fish_009_grouper": {
+    "habitat": "B组 · 30–59分钟",
+    "description": "安静的身影，也藏着相遇的惊喜。"
+  },
+  "fish_010_bigeye_tuna": {
+    "habitat": "C组 · 60–120分钟",
+    "description": "大大的眼睛，记录这次特别的相遇。"
+  },
+  "fish_011_lanternfish": {
+    "habitat": "C组 · 60–120分钟",
+    "description": "带着一点微光，来到你的海边。"
+  },
+  "fish_012_star_wish_fish": {
+    "habitat": "特殊事件收藏",
+    "description": "把星星的愿望，留给下一场相遇。"
+  },
+  "creature_013_jellyfish": {
+    "habitat": "A组 · 15–29分钟",
+    "description": "透明的小伞，随着水流轻轻飘动。"
+  },
+  "creature_014_cuttlefish": {
+    "habitat": "B组 · 30–59分钟",
+    "description": "柔软的身影，慢慢游进新的故事。"
+  }
+}
