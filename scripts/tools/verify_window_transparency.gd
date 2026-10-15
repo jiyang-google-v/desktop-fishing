@@ -44,8 +44,9 @@ static func run(main: Control) -> void:
     push_error('Cannot read native desktop compositor output.')
     tree.quit(1)
     return
-   # Full-mode native corner rounding/shadow is outside the client background.
-   var inset := Vector2i(20,20) if mode == 'full' else Vector2i(2,2)
+   # Probe the empty gutter below the custom titlebar, above LayoutMargin
+   # content. (20,20) is now inside the app icon, not the opaque background.
+   var inset := Vector2i(20,layouts.frame.HEIGHT+12) if mode == 'full' else Vector2i(2,2)
    var sample := root.position+inset-DisplayServer.screen_get_position(root.current_screen)
    var actual := screen.get_pixelv(sample)
    var expected: Color = layouts.background.color if mode == 'full' else color
