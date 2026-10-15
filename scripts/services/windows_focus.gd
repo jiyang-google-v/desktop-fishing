@@ -2,7 +2,7 @@ extends Node
 
 const Sample = preload("res://scripts/core/focus_sample.gd")
 const RETRY_MS := 15000
-const STARTUP_MS := 20000
+const STARTUP_MS := 45000
 const STALL_MS := 10000
 var worker_pid := -1
 var token := ""
