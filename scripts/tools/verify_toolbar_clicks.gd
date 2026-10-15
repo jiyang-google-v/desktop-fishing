@@ -100,9 +100,13 @@ static func run(main: Control) -> void:
    push_error('Physical completed reel failed: '+origin)
    tree.quit(1)
    return
-  await tree.create_timer(2.0).timeout
-  if not layouts.catch_popup.visible:
-   push_error('Floating catch reveal failed: '+origin)
+  # Wait for both the rod animation and the new card reveal; clicks on
+  # the card back are intentionally unable to settle the pending catch.
+  var reveal_deadline: int = Time.get_ticks_msec()+6000
+  while Time.get_ticks_msec() < reveal_deadline and (not layouts.catch_popup.visible or not layouts.catch_popup.is_revealed or layouts.catch_popup.keep_button.disabled):
+   await tree.create_timer(.05).timeout
+  if not layouts.catch_popup.visible or not layouts.catch_popup.is_revealed or layouts.catch_popup.keep_button.disabled:
+   push_error('Floating catch reveal timed out: %s visible=%s revealed=%s disabled=%s' % [origin,layouts.catch_popup.visible,layouts.catch_popup.is_revealed,layouts.catch_popup.keep_button.disabled])
    tree.quit(1)
    return
   if not await click_control(main,layouts.catch_popup.keep_button,layouts.catch_popup,helper) or not game.state.pending_catch.is_empty():
